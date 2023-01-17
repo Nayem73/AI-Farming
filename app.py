@@ -44,11 +44,16 @@ def read_file_as_image(data) -> np.ndarray:
 async def predict(
     file: UploadFile = File(...)
     , crop: str = Form(...)
-):
-    image = read_file_as_image(await file.read())
+):  
+    try:
+        image = read_file_as_image(await file.read())
+    except Exception as e:
+        return {
+            'error': str(e)
+        }
     return {
         'class': crop_disease_ml.predict(image, crop),
     }
 
-if __name__ == "__main__":
-    uvicorn.run(app, host='0.0.0.0', port=8000)
+# if __name__ == "__main__":
+#     uvicorn.run(app, host='0.0.0.0', port=8000)
