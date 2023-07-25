@@ -23,24 +23,44 @@ public class Crop {
     )
     private Long id;
 
+    @Column(
+            name = "disease",
+            nullable = false,
+            columnDefinition = "TEXT"
+    )
+    private String disease;
+
     @Lob
+    @Column(
+            name = "markdownFile"
+    )
     private String markdownFile;
 
-    @OneToOne(
-            cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER
-    )
+//    @ManyToOne(
+//            cascade = CascadeType.ALL,
+//            fetch = FetchType.LAZY
+//    )
+    @ManyToOne
     @JoinColumn(
             name = "crop_id",
-            referencedColumnName = "id"
+            referencedColumnName = "id",
+            nullable = false,
+            foreignKey = @ForeignKey(
+                    name = "crop_foreign_key"
+            )
     )
     private CropCategory cropCategory;
 
     public Crop() {
     }
 
+    public Crop(String disease, String markdownFile) {
+        this.disease = disease;
+        this.markdownFile = markdownFile;
+    }
 
-    public Crop(String markdownFile, CropCategory cropCategory) {
+    public Crop(String disease, String markdownFile, CropCategory cropCategory) {
+        this.disease = disease;
         this.markdownFile = markdownFile;
         this.cropCategory = cropCategory;
     }
@@ -53,12 +73,28 @@ public class Crop {
         this.id = id;
     }
 
+    public String getDisease() {
+        return disease;
+    }
+
+    public void setDisease(String disease) {
+        this.disease = disease;
+    }
+
     public String getMarkdownFile() {
         return markdownFile;
     }
 
     public void setMarkdownFile(String markdownFile) {
         this.markdownFile = markdownFile;
+    }
+
+    public CropCategory getCropCategory() {
+        return cropCategory;
+    }
+
+    public void setCropCategory(CropCategory cropCategory) {
+        this.cropCategory = cropCategory;
     }
 
     @Override
