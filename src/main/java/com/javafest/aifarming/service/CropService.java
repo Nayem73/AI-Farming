@@ -45,7 +45,13 @@ public class CropService {
         cropCategory2.addCrop(crop22);
         cropCategory2.addCrop(crop33);
 
-        cropCategoryRepository.save(cropCategory2);
+        saveCropCategoryIfNotExists(cropCategory2);
     }
 
+    private void saveCropCategoryIfNotExists(CropCategory cropCategory) {
+        CropCategory existingCropCategory = cropCategoryRepository.findByTitle(cropCategory.getTitle());
+        if (existingCropCategory == null) {
+            cropCategoryRepository.save(cropCategory);
+        }
+    }
 }

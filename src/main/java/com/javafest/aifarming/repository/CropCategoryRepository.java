@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CropCategoryRepository extends JpaRepository<CropCategory, Long> {
+    CropCategory findByTitle(String title);
 }
