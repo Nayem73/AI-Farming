@@ -28,16 +28,17 @@ public class CropController {
 //        return cropRepository.findByDisease(disease);
 //    }
 @GetMapping
-public List<Crop> getCropsByDisease(@RequestParam(name = "search") String search) {
-    List<Crop> crops;
-    if (search.contains("&")) {
-        String[] searchParams = search.split("\\&");
-        String categoryTitle = searchParams[0];
-        String disease = searchParams[1];
-        crops = cropRepository.findByCategoryTitleAndDisease(categoryTitle, disease);
-    } else {
-        crops = cropRepository.findByDisease(search);
-    }
+public List<Crop> getCropsByDisease(@RequestParam("search") String categoryTitle,
+                                    @RequestParam("um") String disease) {
+    List<Crop> crops= cropRepository.findByCategoryTitleAndDisease(categoryTitle, disease);
+//    if (search.contains("&")) {
+//        String[] searchParams = search.split("\\&");
+//        String categoryTitle = searchParams[0];
+//        String disease = searchParams[1];
+//        crops = cropRepository.findByCategoryTitleAndDisease(categoryTitle, disease);
+//    } else {
+//        crops = cropRepository.findByDisease(search);
+//    }
     return crops;
 }
 
