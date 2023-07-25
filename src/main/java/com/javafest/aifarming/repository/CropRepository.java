@@ -11,4 +11,7 @@ import java.util.List;
 public interface CropRepository extends JpaRepository<Crop, Long> {
     @Query("SELECT c FROM Crop c JOIN FETCH c.cropCategory cc WHERE c.disease LIKE %?1% OR cc.title LIKE %?1%")
     List<Crop> findByDisease(String keyword);
+
+    @Query("SELECT c FROM Crop c JOIN FETCH c.cropCategory cc WHERE cc.title = ?1 AND c.disease LIKE %?2%")
+    List<Crop> findByCategoryTitleAndDisease(String categoryTitle, String disease);
 }
