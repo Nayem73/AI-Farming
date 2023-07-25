@@ -23,11 +23,11 @@ public class CropService {
 
     @PostConstruct // This annotation ensures that this method is executed after the bean is initialized.
     public void initData() {
-        CropCategory cropCategory = new CropCategory("Some Crop Category");
+        CropCategory cropCategory = new CropCategory("Paddy");
 
-        Crop crop1 = new Crop("pdisease", "md1", cropCategory);
-        Crop crop2 = new Crop("pdisease2", "md2", cropCategory);
-        Crop crop3 = new Crop("pdisease3", "md3", cropCategory);
+        Crop crop1 = new Crop("bad", "md1", cropCategory);
+        Crop crop2 = new Crop("medium", "md2", cropCategory);
+        Crop crop3 = new Crop("worse", "md3", cropCategory);
 
         cropCategory.addCrop(crop1);
         cropCategory.addCrop(crop2);
@@ -36,10 +36,10 @@ public class CropService {
         cropCategoryRepository.save(cropCategory);
 
 
-        CropCategory cropCategory2 = new CropCategory("Some Crop Category");
-        Crop crop11 = new Crop("pdisease", "md1", cropCategory2);
-        Crop crop22 = new Crop("pdisease2", "md2", cropCategory2);
-        Crop crop33 = new Crop("pdisease3", "md3", cropCategory2);
+        CropCategory cropCategory2 = new CropCategory("Jute");
+        Crop crop11 = new Crop("Rog", "md11", cropCategory2);
+        Crop crop22 = new Crop("Kothin", "md22", cropCategory2);
+        Crop crop33 = new Crop("Cholera", "md33", cropCategory2);
 
         cropCategory2.addCrop(crop11);
         cropCategory2.addCrop(crop22);

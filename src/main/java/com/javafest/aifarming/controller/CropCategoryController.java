@@ -24,8 +24,8 @@ public class CropCategoryController {
     }
 
     @GetMapping("/{title}")
-    public CropCategory getCropCategoryByTitle(@PathVariable String title) {
-        return cropCategoryRepository.findByTitle(title);
+    public List<CropCategory> getCropCategoryByTitle(@PathVariable String title) {
+        return cropCategoryRepository.findByString(title);
     }
 
     @PostMapping
