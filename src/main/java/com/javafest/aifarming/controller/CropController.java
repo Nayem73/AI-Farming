@@ -18,13 +18,13 @@ public class CropController {
         this.cropRepository = cropRepository;
     }
 
-    @GetMapping
+    @GetMapping("/")
     public List<Crop> getAllCrops() {
         return cropRepository.findAll();
     }
 
-    @GetMapping("/{disease}")
-    public List<Crop> getCropByDisease(@PathVariable String disease) {
+    @GetMapping()
+    public List<Crop> getCropsByDisease(@RequestParam String disease) {
         return cropRepository.findByDisease(disease);
     }
 
