@@ -5,6 +5,7 @@ import com.javafest.aifarming.repository.CropRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -28,17 +29,20 @@ public class CropController {
 //        return cropRepository.findByDisease(disease);
 //    }
 @GetMapping
-public List<Crop> getCropsByDisease(@RequestParam("search") String categoryTitle,
-                                    @RequestParam("um") String disease) {
-    List<Crop> crops= cropRepository.findByCategoryTitleAndDisease(categoryTitle, disease);
-//    if (search.contains("&")) {
-//        String[] searchParams = search.split("\\&");
-//        String categoryTitle = searchParams[0];
-//        String disease = searchParams[1];
-//        crops = cropRepository.findByCategoryTitleAndDisease(categoryTitle, disease);
-//    } else {
-//        crops = cropRepository.findByDisease(search);
-//    }
+public List<Crop> getCropsByDisease(@RequestParam(value = "title", required = false) String categoryTitle,
+                                    @RequestParam(value = "disease", required = false) String disease) {
+    List<Crop> crops;
+    if (categoryTitle != null && disease != null) {
+        crops = cropRepository.findByCategoryTitleAndDisease(categoryTitle, disease);
+    } else if (categoryTitle != null) {
+        crops = cropRepository.findByDisease(categoryTitle);
+    } else if (disease != null) {
+        crops = cropRepository.findByDisease(disease);
+    } else {
+        // Handle the case when both parameters are missing.
+        // For example, return an error message or an empty list.
+        crops = Collections.emptyList();
+    }
     return crops;
 }
 
