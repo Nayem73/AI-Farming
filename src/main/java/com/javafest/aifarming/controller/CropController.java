@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/crops")
+@RequestMapping("/api")
 public class CropController {
 
     private final CropRepository cropRepository;
@@ -23,12 +23,17 @@ public class CropController {
         this.cropCategoryRepository = cropCategoryRepository;
     }
 
-    @GetMapping("/")
+    @GetMapping("/crops/")
     public List<Crop> getAllCrops() {
         return cropRepository.findAll();
     }
 
-    @GetMapping
+    @GetMapping("/{categoryTitle}/{disease}")
+    public Crop getCropsByCategoryTitleAndDisease(@PathVariable String categoryTitle, @PathVariable String disease) {
+        return cropRepository.findByCategoryTitleAndDiseaseExact(categoryTitle, disease);
+    }
+
+    @GetMapping("/crops")
     public List<Crop> getCropsByDisease(@RequestParam(value = "crop", required = false) String categoryTitle,
                                         @RequestParam(value = "disease", required = false) String disease,
                                         @RequestParam(value = "search", required = false) String search) {
@@ -53,7 +58,7 @@ public class CropController {
     @PostMapping
     public Crop addCrop(@RequestBody Crop crop) {
         // Check if the Crop already exists in the database based on CropCategory ID and disease
-        List<Crop> existingCrops = cropRepository.findByCategoryTitleAndDiseaseExact(
+        List<Crop> existingCrops = cropRepository.findByCategoryIdAndDiseaseExact(
                 crop.getCropCategory().getId(), crop.getDisease()
         );
 

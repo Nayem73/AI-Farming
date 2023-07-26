@@ -16,7 +16,10 @@ public interface CropRepository extends JpaRepository<Crop, Long> {
     List<Crop> findByCategoryTitleAndDisease(String categoryTitle, String disease);
 
     @Query("SELECT c FROM Crop c JOIN FETCH c.cropCategory cc WHERE cc.id = ?1 AND c.disease = ?2")
-    List<Crop> findByCategoryTitleAndDiseaseExact(Long categoryId, String disease);
+    List<Crop> findByCategoryIdAndDiseaseExact(Long categoryId, String disease);
+
+    @Query("SELECT c FROM Crop c JOIN FETCH c.cropCategory cc WHERE cc.title = ?1 AND c.disease = ?2")
+    Crop findByCategoryTitleAndDiseaseExact(String categoryTitle, String disease);
 
     @Query("SELECT c FROM Crop c JOIN FETCH c.cropCategory cc WHERE cc.title = ?1")
     List<Crop> findByTitle(String categoryTitle);
