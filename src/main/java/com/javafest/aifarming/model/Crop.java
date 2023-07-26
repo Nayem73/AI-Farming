@@ -30,11 +30,13 @@ public class Crop {
     )
     private String disease;
 
-    @Lob
     @Column(
             name = "markdownFile"
     )
     private String markdownFile;
+
+    @Column(name = "frontImagePath")
+    private String frontImagePath;
 
 //    @ManyToOne(
 //            cascade = CascadeType.ALL,
@@ -54,14 +56,16 @@ public class Crop {
     public Crop() {
     }
 
-    public Crop(String disease, String markdownFile) {
+    public Crop(String disease, String markdownFile, String frontImagePath) {
         this.disease = disease;
         this.markdownFile = markdownFile;
+        this.frontImagePath = frontImagePath;
     }
 
-    public Crop(String disease, String markdownFile, CropCategory cropCategory) {
+    public Crop(String disease, String markdownFile, String frontImagePath, CropCategory cropCategory) {
         this.disease = disease;
         this.markdownFile = markdownFile;
+        this.frontImagePath = frontImagePath;
         this.cropCategory = cropCategory;
     }
 
@@ -87,6 +91,14 @@ public class Crop {
 
     public void setMarkdownFile(String markdownFile) {
         this.markdownFile = markdownFile;
+    }
+
+    public String getFrontImagePath() {
+        return frontImagePath;
+    }
+
+    public void setFrontImagePath(String frontImagePath) {
+        this.frontImagePath = frontImagePath;
     }
 
     public CropCategory getCropCategory() {

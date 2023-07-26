@@ -25,9 +25,9 @@ public class CropService {
     public void initData() {
         CropCategory cropCategory = new CropCategory("Paddy");
 
-        Crop crop1 = new Crop("bad", "md1", cropCategory);
-        Crop crop2 = new Crop("medium", "md2", cropCategory);
-        Crop crop3 = new Crop("worse", "md3", cropCategory);
+        Crop crop1 = new Crop("bad", "md1", "assets/images/placeholder.png" ,cropCategory);
+        Crop crop2 = new Crop("medium", "md2", "assets/images/placeholder.png", cropCategory);
+        Crop crop3 = new Crop("worse", "md3", "assets/images/placeholder.png", cropCategory);
 
         cropCategory.addCrop(crop1);
         cropCategory.addCrop(crop2);
@@ -37,9 +37,9 @@ public class CropService {
 
 
         CropCategory cropCategory2 = new CropCategory("Jute");
-        Crop crop11 = new Crop("Rog", "md11", cropCategory2);
-        Crop crop22 = new Crop("Kothin", "md22", cropCategory2);
-        Crop crop33 = new Crop("Cholera", "md33", cropCategory2);
+        Crop crop11 = new Crop("Rog", "md11", "assets/images/placeholder.png", cropCategory2);
+        Crop crop22 = new Crop("Kothin", "md22", "assets/images/placeholder.png", cropCategory2);
+        Crop crop33 = new Crop("Cholera", "md33", "assets/images/placeholder.png", cropCategory2);
 
         cropCategory2.addCrop(crop11);
         cropCategory2.addCrop(crop22);
