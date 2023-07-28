@@ -5,6 +5,11 @@ import com.javafest.aifarming.model.CropCategory;
 import com.javafest.aifarming.repository.CropCategoryRepository;
 import com.javafest.aifarming.repository.CropRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -23,6 +28,23 @@ public class CropController {
         this.cropCategoryRepository = cropCategoryRepository;
     }
 
+//    @PostMapping("/login-success")
+//    public ResponseEntity<String> loginSuccess() {
+//        return ResponseEntity.ok("Login successful!");
+//    }
+//
+//    @PostMapping("/login-failure")
+//    public ResponseEntity<String> loginFailure() {
+//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed!");
+//    }
+
+    @GetMapping("/user")
+    public ResponseEntity<String> getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        return ResponseEntity.ok("Logged in as: " + username);
+    }
+
     @GetMapping("/crops/")
     public List<Crop> getAllCrops() {
         return cropRepository.findAll();
@@ -34,6 +56,7 @@ public class CropController {
     }
 
     @GetMapping("/crops")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public List<Crop> getCropsByDisease(@RequestParam(value = "crop", required = false) String categoryTitle,
                                         @RequestParam(value = "disease", required = false) String disease,
                                         @RequestParam(value = "search", required = false) String search) {
@@ -56,6 +79,7 @@ public class CropController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public Crop addCrop(@RequestBody Crop crop) {
         // Check if the Crop already exists in the database based on CropCategory ID and disease
         List<Crop> existingCrops = cropRepository.findByCategoryIdAndDiseaseExact(
@@ -77,6 +101,7 @@ public class CropController {
 
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public Crop updateCrop(@PathVariable Long id, @RequestBody Crop updatedCrop) {
         Crop crop = cropRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Crop ID: " + id));
@@ -87,6 +112,7 @@ public class CropController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public void deleteCrop(@PathVariable Long id) {
         Crop crop = cropRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Crop ID: " + id));
