@@ -78,7 +78,7 @@ public class CropController {
         return crops;
     }
 
-    @PostMapping
+    @PostMapping("/crops/")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public Crop addCrop(@RequestBody Crop crop) {
         // Check if the Crop already exists in the database based on CropCategory ID and disease
@@ -100,7 +100,7 @@ public class CropController {
 
 
 
-    @PutMapping("/{id}")
+    @PutMapping("/crops/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public Crop updateCrop(@PathVariable Long id, @RequestBody Crop updatedCrop) {
         Crop crop = cropRepository.findById(id)
@@ -111,7 +111,7 @@ public class CropController {
         return cropRepository.save(crop);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/crops/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public void deleteCrop(@PathVariable Long id) {
         Crop crop = cropRepository.findById(id)
