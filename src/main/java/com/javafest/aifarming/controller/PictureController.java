@@ -5,6 +5,8 @@ import com.javafest.aifarming.model.Picture;
 import com.javafest.aifarming.repository.CropRepository;
 import com.javafest.aifarming.repository.PictureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/api/pictures")
@@ -60,13 +63,28 @@ public class PictureController {
         //String responseMessage = "Picture uploaded successfully. Picture ID: " + picture.getId() + "";
         Map<String, Object> response = new HashMap<>();
         response.put("message", "Picture uploaded successfully.");
-        response.put("pictureId", picture.getId());
         response.put("link", picture.getImagePath());
 
         //return ResponseEntity.ok(responseMessage);
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(response.toString());
+    }
+
+    @GetMapping("/view")
+    public ResponseEntity<Resource> showPicture(@RequestParam("imagePath") String imagePath) throws IOException {
+        Path imageFilePath = Paths.get(imagePath);
+        if (!Files.exists(imageFilePath)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Read the image file as a Resource and set appropriate headers
+        Resource imageResource = new UrlResource(imageFilePath.toUri());
+        String contentType = Files.probeContentType(imageFilePath);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .body(imageResource);
     }
 
 }
