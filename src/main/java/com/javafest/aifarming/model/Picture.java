@@ -22,23 +22,12 @@ public class Picture {
     @Column(name = "imagePath", nullable = false)
     private String imagePath;
 
-    @ManyToOne
-    @JoinColumn(
-            name = "crop_id",
-            referencedColumnName = "id",
-            nullable = false,
-            foreignKey = @ForeignKey(
-                    name = "picture_crop_foreign_key"
-            )
-    )
-    private Crop crop;
 
     public Picture() {
     }
 
-    public Picture(String imagePath, Crop crop) {
+    public Picture(String imagePath) {
         this.imagePath = imagePath;
-        this.crop = crop;
     }
 
     public Long getId() {
@@ -55,13 +44,5 @@ public class Picture {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
-    }
-
-    public Crop getCrop() {
-        return crop;
-    }
-
-    public void setCrop(Crop crop) {
-        this.crop = crop;
     }
 }

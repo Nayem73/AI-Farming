@@ -56,9 +56,6 @@ public class Crop {
     )
     private CropCategory cropCategory;
 
-    @OneToMany(mappedBy = "crop", orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<Picture> pictures = new ArrayList<>();
-
     public Crop() {
     }
 
@@ -113,14 +110,6 @@ public class Crop {
 
     public void setCropCategory(CropCategory cropCategory) {
         this.cropCategory = cropCategory;
-    }
-
-    public List<Picture> getPictures() {
-        return pictures;
-    }
-
-    public void setPictures(List<Picture> pictures) {
-        this.pictures = pictures;
     }
 
     @Override

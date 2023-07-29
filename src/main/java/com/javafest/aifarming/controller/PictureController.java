@@ -6,6 +6,7 @@ import com.javafest.aifarming.repository.CropRepository;
 import com.javafest.aifarming.repository.PictureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -15,28 +16,28 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/api/pictures")
 public class PictureController {
     private final PictureRepository pictureRepository;
-    private final CropRepository cropRepository;
 
     @Autowired
-    public PictureController(PictureRepository pictureRepository, CropRepository cropRepository) {
+    public PictureController(PictureRepository pictureRepository) {
         this.pictureRepository = pictureRepository;
-        this.cropRepository = cropRepository;
     }
 
-    @PostMapping("/{cropId}")
-    public ResponseEntity<String> uploadPicture(@PathVariable Long cropId, @RequestParam("image") MultipartFile file) throws IOException {
-        Crop crop = cropRepository.findById(cropId).orElse(null);
-        if (crop == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Crop not found");
+    @PostMapping
+    public ResponseEntity<String> uploadPicture(@RequestParam("image") MultipartFile file) throws IOException {
+
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest().body("Please select a file to upload.");
         }
 
-        // Set the appropriate path to store the image
+        // Set the appropriate path to store the image (adjust this to your needs)
         String imagePath = "\\Users\\nayem\\OneDrive\\Desktop\\images";
 
         // Create the directory if it doesn't exist
@@ -52,20 +53,20 @@ public class PictureController {
         Path targetPath = imageDir.resolve(fileName);
         Files.copy(file.getInputStream(), targetPath);
 
-        Picture picture = new Picture(targetPath.toString(), crop);
+        Picture picture = new Picture(targetPath.toString());
         pictureRepository.save(picture);
 
-        return ResponseEntity.ok("Picture uploaded successfully");
+        // Create a response with the picture ID and image URL
+        //String responseMessage = "Picture uploaded successfully. Picture ID: " + picture.getId() + "";
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Picture uploaded successfully.");
+        response.put("pictureId", picture.getId());
+        response.put("link", picture.getImagePath());
+
+        //return ResponseEntity.ok(responseMessage);
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response.toString());
     }
 
-    @GetMapping("/{cropId}")
-    public ResponseEntity<List<Picture>> getPicturesByCropId(@PathVariable Long cropId) {
-        Crop crop = cropRepository.findById(cropId).orElse(null);
-        if (crop == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        List<Picture> pictures = pictureRepository.findByCropId(cropId);
-        return ResponseEntity.ok(pictures);
-    }
 }
