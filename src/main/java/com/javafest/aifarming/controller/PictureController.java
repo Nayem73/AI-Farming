@@ -34,10 +34,12 @@ public class PictureController {
     }
 
     @PostMapping
-    public ResponseEntity<String> uploadPicture(@RequestParam("image") MultipartFile file) throws IOException {
+    public ResponseEntity<Map<String, Object>> uploadPicture(@RequestParam("image") MultipartFile file) throws IOException {
 
         if (file.isEmpty()) {
-            return ResponseEntity.badRequest().body("Please select a file to upload.");
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Please select a file to upload.");
+            return ResponseEntity.badRequest().body(errorResponse);
         }
 
         // Set the appropriate path to store the image (adjust this to your needs)
@@ -63,17 +65,20 @@ public class PictureController {
         //String responseMessage = "Picture uploaded successfully. Picture ID: " + picture.getId() + "";
         Map<String, Object> response = new HashMap<>();
         response.put("message", "Picture uploaded successfully.");
-        response.put("link", picture.getImagePath());
+        response.put("link", "images/" + fileName);
 
         //return ResponseEntity.ok(responseMessage);
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(response.toString());
+                .body(response);
     }
 
-    @GetMapping("/view")
-    public ResponseEntity<Resource> showPicture(@RequestParam("imagePath") String imagePath) throws IOException {
-        Path imageFilePath = Paths.get(imagePath);
+    @GetMapping
+    public ResponseEntity<Resource> showPicture(@RequestParam("link") String imagePath) throws IOException {
+        // Concatenate the base image path with the relative image path from the request parameter
+        String baseImagePath = "/Users/nayem/OneDrive/Desktop/";
+        Path imageFilePath = Paths.get(baseImagePath, imagePath);
+
         if (!Files.exists(imageFilePath)) {
             return ResponseEntity.notFound().build();
         }
@@ -86,5 +91,4 @@ public class PictureController {
                 .contentType(MediaType.parseMediaType(contentType))
                 .body(imageResource);
     }
-
 }
