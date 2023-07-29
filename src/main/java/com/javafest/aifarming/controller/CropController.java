@@ -108,6 +108,8 @@ public class CropController {
 
         crop.setDisease(updatedCrop.getDisease());
         crop.setMarkdownFile(updatedCrop.getMarkdownFile());
+        crop.setFrontImagePath(updatedCrop.getFrontImagePath());
+        //crop.setId(updatedCrop.getId());
         return cropRepository.save(crop);
     }
 
