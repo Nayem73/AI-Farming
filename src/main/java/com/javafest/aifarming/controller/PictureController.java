@@ -28,12 +28,18 @@ public class PictureController {
         this.pictureRepository = pictureRepository;
     }
 
-    @PostMapping
+    @PostMapping("/")
     public ResponseEntity<Map<String, Object>> uploadPicture(@RequestParam("image") MultipartFile file) throws IOException {
 
         if (file.isEmpty()) {
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("error", "Please select a file to upload.");
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
+        // Check if the uploaded file is an image
+        if (!isImageFile(file)) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Only image files are allowed.");
             return ResponseEntity.badRequest().body(errorResponse);
         }
 
@@ -66,6 +72,11 @@ public class PictureController {
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(response);
+    }
+
+    private boolean isImageFile(MultipartFile file) {
+        String fileName = file.getOriginalFilename();
+        return fileName != null && (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") || fileName.endsWith(".png"));
     }
 
     @GetMapping

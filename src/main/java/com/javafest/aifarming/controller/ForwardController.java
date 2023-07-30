@@ -16,6 +16,9 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -31,8 +34,8 @@ public class ForwardController {
         this.diseaseRepository = diseaseRepository;
     }
 
-    @PostMapping("/forward-predict")
-    public ResponseEntity<Disease> forwardPredictRequest(
+    @PostMapping("/search/")
+    public ResponseEntity<Map<String, Object>> forwardPredictRequest(
             @RequestParam("crop") String text,
             @RequestParam("file") MultipartFile image
     ) throws IOException {
@@ -66,14 +69,22 @@ public class ForwardController {
         // Step 7: Print the response
         System.out.println("???????????????????????" + text);
         System.out.println("???????????????????????" + predictionClass);
+        Map<String, Object> returnResponse = new LinkedHashMap<>();
+        returnResponse.put("crop",  text);
+        returnResponse.put("disease", predictionClass);
 
-        Disease disease = diseaseRepository.findByCropTitleAndDiseaseTitleExact(text, predictionClass);
-        if (disease != null) {
-            return ResponseEntity.ok(disease);
-        } else {
-            // Handle the case where the Crop is not found
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(returnResponse);
+
+
+//        Disease disease = diseaseRepository.findByCropTitleAndDiseaseTitleExact(text, predictionClass);
+//        if (disease != null) {
+//            return ResponseEntity.ok(disease);
+//        } else {
+//            // Handle the case where the Crop is not found
+//            return ResponseEntity.notFound().build();
+//        }
 
         // Step 6: Return the response from the other server
         //return response;

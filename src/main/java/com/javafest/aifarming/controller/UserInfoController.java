@@ -32,7 +32,7 @@ public class UserInfoController {
         this.authenticationManager = authenticationManager;
     }
 
-    @PostMapping("/signup")
+    @PostMapping("/signup/")
     public String addNewUser(@RequestBody UserInfo userInfo) {
         Optional<UserInfo> existingUser = userInfoRepository.findByUserName(userInfo.getUserName());
         Optional<UserInfo> existingUserByEmail = userInfoRepository.findByEmail(userInfo.getEmail());
@@ -74,7 +74,7 @@ public class UserInfoController {
 //        }
 //    }
 
-    @PostMapping("/signin")
+    @PostMapping("/signin/")
     public String authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUserName(), authRequest.getPassword()));
         if (authentication.isAuthenticated()) {
@@ -85,7 +85,7 @@ public class UserInfoController {
 
     }
 
-    @PostMapping("/signout")
+    @PostMapping("/signout/")
     public String logout(HttpServletRequest request) {
         String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer")) {
