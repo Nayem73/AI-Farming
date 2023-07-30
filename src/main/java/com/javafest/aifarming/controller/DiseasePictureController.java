@@ -14,10 +14,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api")
@@ -32,7 +29,7 @@ public class DiseasePictureController {
     }
 
     @GetMapping("/disease/{diseaseId}/picture/")
-    public ResponseEntity<List<DiseasePicture>> getAllDiseasePicturesByDiseaseId(@PathVariable Long diseaseId) {
+    public ResponseEntity<List<Map<String, Object>>> getAllDiseasePicturesByDiseaseId(@PathVariable Long diseaseId) {
         // Fetch the corresponding Disease object from the database using the diseaseId
         List<DiseasePicture> existingDiseasePictures = diseasePictureRepository.findByAllDiseasePictureById(diseaseId);
         if (existingDiseasePictures.isEmpty()) {
@@ -40,7 +37,18 @@ public class DiseasePictureController {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok().body(existingDiseasePictures);
+        // Create a list to store the simplified representations of DiseasePicture objects
+        List<Map<String, Object>> simplifiedDiseasePictures = new ArrayList<>();
+
+        // Iterate through the DiseasePicture entities and extract the specific fields to include in the response
+        for (DiseasePicture diseasePicture : existingDiseasePictures) {
+            Map<String, Object> simplifiedPicture = new LinkedHashMap<>();
+            simplifiedPicture.put("id", diseasePicture.getDisease().getId());
+            simplifiedPicture.put("img", diseasePicture.getImg());
+            simplifiedDiseasePictures.add(simplifiedPicture);
+        }
+
+        return ResponseEntity.ok().body(simplifiedDiseasePictures);
     }
 
     @PostMapping("/disease/picture/")
@@ -89,7 +97,7 @@ public class DiseasePictureController {
         Disease disease = optionalDisease.get();
 
         // Create a new DiseasePicture object with the image path and the fetched Disease object
-        DiseasePicture diseasePicture = new DiseasePicture(targetPath.toString(), disease);
+        DiseasePicture diseasePicture = new DiseasePicture("/api/picture?link=images/" + fileName, disease);
         diseasePictureRepository.save(diseasePicture);
 
         // Create a response with the picture ID and image URL
