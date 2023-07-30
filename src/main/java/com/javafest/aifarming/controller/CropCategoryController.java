@@ -30,7 +30,7 @@ public class CropCategoryController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public CropCategory addCropCategory(@RequestBody CropCategory cropCategory) {
         CropCategory existingCropCategory = cropCategoryRepository.findByTitle(cropCategory.getTitle());
         if (existingCropCategory == null) {
@@ -43,7 +43,7 @@ public class CropCategoryController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public CropCategory updateCropCategory(@PathVariable Long id, @RequestBody CropCategory updatedCropCategory) {
         CropCategory cropCategory = cropCategoryRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid CropCategory ID: " + id));
@@ -53,7 +53,7 @@ public class CropCategoryController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public void deleteCropCategory(@PathVariable Long id) {
         CropCategory cropCategory = cropCategoryRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid CropCategory ID: " + id));

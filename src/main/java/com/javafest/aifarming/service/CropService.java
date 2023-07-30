@@ -23,11 +23,11 @@ public class CropService {
 
     @PostConstruct // This annotation ensures that this method is executed after the bean is initialized.
     public void initData() {
-        CropCategory cropCategory = new CropCategory("Paddy");
+        CropCategory cropCategory = new CropCategory("Potato");
 
         Crop crop1 = new Crop("bad", "md1", "assets/images/placeholder.png" ,cropCategory);
         Crop crop2 = new Crop("medium", "md2", "assets/images/placeholder.png", cropCategory);
-        Crop crop3 = new Crop("worse", "md3", "assets/images/placeholder.png", cropCategory);
+        Crop crop3 = new Crop("potato late blight", "md3", "http://localhost:8080/api/pictures?link=images/1690681620188_star.png", cropCategory);
 
         cropCategory.addCrop(crop1);
         cropCategory.addCrop(crop2);
@@ -37,9 +37,9 @@ public class CropService {
 
 
         CropCategory cropCategory2 = new CropCategory("Jute");
-        Crop crop11 = new Crop("Rog", "md11", "assets/images/placeholder.png", cropCategory2);
+        Crop crop11 = new Crop("rog", "md11", "http://localhost:8080/api/pictures?link=images/1690681620188_star.png", cropCategory2);
         Crop crop22 = new Crop("Kothin", "md22", "assets/images/placeholder.png", cropCategory2);
-        Crop crop33 = new Crop("Cholera", "md33", "assets/images/placeholder.png", cropCategory2);
+        Crop crop33 = new Crop("Cholera", "md33", "http://localhost:8080/api/pictures?link=images/1690681620188_star.png", cropCategory2);
 
         cropCategory2.addCrop(crop11);
         cropCategory2.addCrop(crop22);
