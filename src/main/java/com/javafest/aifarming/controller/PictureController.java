@@ -1,13 +1,10 @@
 package com.javafest.aifarming.controller;
 
-import com.javafest.aifarming.model.Crop;
 import com.javafest.aifarming.model.Picture;
-import com.javafest.aifarming.repository.CropRepository;
 import com.javafest.aifarming.repository.PictureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,12 +16,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Controller
-@RequestMapping("/api/pictures")
+@RequestMapping("/api/picture")
 public class PictureController {
     private final PictureRepository pictureRepository;
 
@@ -64,8 +59,8 @@ public class PictureController {
         // Create a response with the picture ID and image URL
         //String responseMessage = "Picture uploaded successfully. Picture ID: " + picture.getId() + "";
         Map<String, Object> response = new HashMap<>();
-        response.put("message", "Picture uploaded successfully.");
-        response.put("link", "images/" + fileName);
+        //response.put("message", "Picture uploaded successfully.");
+        response.put("link", "/api/picture?link=images/" + fileName);
 
         //return ResponseEntity.ok(responseMessage);
         return ResponseEntity.ok()

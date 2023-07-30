@@ -2,8 +2,8 @@ package com.javafest.aifarming.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.javafest.aifarming.model.Crop;
-import com.javafest.aifarming.repository.CropRepository;
+import com.javafest.aifarming.model.Disease;
+import com.javafest.aifarming.repository.DiseaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
@@ -16,24 +16,23 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api")
 public class ForwardController {
     private final RestTemplate restTemplate;
     private ObjectMapper objectMapper;
-    private CropRepository cropRepository;
+    private DiseaseRepository diseaseRepository;
 
     @Autowired
-    public ForwardController(RestTemplate restTemplate, ObjectMapper objectMapper, CropRepository cropRepository) {
+    public ForwardController(RestTemplate restTemplate, ObjectMapper objectMapper, DiseaseRepository diseaseRepository) {
         this.restTemplate = restTemplate;
         this.objectMapper = objectMapper;
-        this.cropRepository = cropRepository;
+        this.diseaseRepository = diseaseRepository;
     }
 
     @PostMapping("/forward-predict")
-    public ResponseEntity<Crop> forwardPredictRequest(
+    public ResponseEntity<Disease> forwardPredictRequest(
             @RequestParam("crop") String text,
             @RequestParam("file") MultipartFile image
     ) throws IOException {
@@ -68,9 +67,9 @@ public class ForwardController {
         System.out.println("???????????????????????" + text);
         System.out.println("???????????????????????" + predictionClass);
 
-        Crop crop = cropRepository.findByCategoryTitleAndDiseaseExact(text, predictionClass);
-        if (crop != null) {
-            return ResponseEntity.ok(crop);
+        Disease disease = diseaseRepository.findByCropTitleAndDiseaseTitleExact(text, predictionClass);
+        if (disease != null) {
+            return ResponseEntity.ok(disease);
         } else {
             // Handle the case where the Crop is not found
             return ResponseEntity.notFound().build();

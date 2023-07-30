@@ -8,8 +8,14 @@ import java.util.List;
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 @Entity(name = "Crop")
-@Table(name = "crop")
+@Table(
+        name = "crop",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "title_unique", columnNames = "title")
+        }
+)
 public class Crop {
+
     @Id
     @SequenceGenerator(
             name = "crop_sequence",
@@ -27,49 +33,23 @@ public class Crop {
     private Long id;
 
     @Column(
-            name = "disease",
+            name = "title",
             nullable = false,
             columnDefinition = "TEXT"
     )
-    private String disease;
+    private String title;
 
-    @Column(
-            name = "markdownFile"
+    @OneToMany(
+            mappedBy = "crop",
+            orphanRemoval = true,
+            cascade = CascadeType.ALL
     )
-    private String markdownFile;
-
-    @Column(name = "frontImagePath")
-    private String frontImagePath;
-
-//    @ManyToOne(
-//            cascade = CascadeType.ALL,
-//            fetch = FetchType.LAZY
-//    )
-    @ManyToOne
-    @JoinColumn(
-            name = "crop_id",
-            referencedColumnName = "id",
-            nullable = false,
-            foreignKey = @ForeignKey(
-                    name = "crop_foreign_key"
-            )
-    )
-    private CropCategory cropCategory;
-
+    private List<Disease> diseases = new ArrayList<>();
     public Crop() {
     }
 
-    public Crop(String disease, String markdownFile, String frontImagePath) {
-        this.disease = disease;
-        this.markdownFile = markdownFile;
-        this.frontImagePath = frontImagePath;
-    }
-
-    public Crop(String disease, String markdownFile, String frontImagePath, CropCategory cropCategory) {
-        this.disease = disease;
-        this.markdownFile = markdownFile;
-        this.frontImagePath = frontImagePath;
-        this.cropCategory = cropCategory;
+    public Crop(String title) {
+        this.title = title;
     }
 
     public Long getId() {
@@ -80,44 +60,35 @@ public class Crop {
         this.id = id;
     }
 
-    public String getDisease() {
-        return disease;
+    public String getTitle() {
+        return title;
     }
 
-    public void setDisease(String disease) {
-        this.disease = disease;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getMarkdownFile() {
-        return markdownFile;
+    //bidirectional relationship, so we add a Crop here
+    //also on the Crop class, we set CropCategory back for that crop
+    public void addDisease(Disease disease) {
+        if (!this.diseases.contains(disease)) {
+            this.diseases.add(disease);
+            disease.setCrop(this);
+        }
     }
 
-    public void setMarkdownFile(String markdownFile) {
-        this.markdownFile = markdownFile;
+    public void removeDisease(Disease disease) {
+        if (this.diseases.contains(disease)) {
+            this.diseases.remove(disease);
+            disease.setCrop(null);
+        }
     }
 
-    public String getFrontImagePath() {
-        return frontImagePath;
-    }
-
-    public void setFrontImagePath(String frontImagePath) {
-        this.frontImagePath = frontImagePath;
-    }
-
-    public CropCategory getCropCategory() {
-        return cropCategory;
-    }
-
-    public void setCropCategory(CropCategory cropCategory) {
-        this.cropCategory = cropCategory;
-    }
-
-    @Override
-    public String toString() {
-        return "Crop{" +
-                "id=" + id +
-                ", markdownFile='" + markdownFile + '\'' +
-                ", cropCategory=" + cropCategory +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "CropCategory{" +
+//                "id=" + id +
+//                ", title='" + title + '\'' +
+//                '}';
+//    }
 }

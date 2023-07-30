@@ -1,19 +1,55 @@
 package com.javafest.aifarming.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
-@Entity
+import static jakarta.persistence.GenerationType.SEQUENCE;
+
+@Entity(name = "UserInfo")
+@Table(name = "user_info")
 public class UserInfo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(
+            name = "user_info_sequence",
+            sequenceName = "user_info_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = SEQUENCE,
+            generator = "user_info_sequence"
+    )
+    @Column(
+            name = "id",
+            updatable = false
+    )
     private int id;
+
+    @Column(
+            name = "userName",
+            nullable = false,
+            columnDefinition = "TEXT"
+    )
     private String userName;
+
+    @Column(
+            name = "email",
+            nullable = false,
+            columnDefinition = "TEXT"
+    )
     private String email;
+
+    @Column(
+            name = "password",
+            nullable = false,
+            columnDefinition = "TEXT"
+    )
     private String password;
+
+    @Column(
+            name = "role",
+            nullable = false,
+            columnDefinition = "TEXT"
+    )
     private String role;
 
     public UserInfo() {
