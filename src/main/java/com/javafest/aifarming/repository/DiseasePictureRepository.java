@@ -11,7 +11,7 @@ import java.util.List;
 public interface DiseasePictureRepository extends JpaRepository<DiseasePicture, Long> {
 
     @Query("SELECT c FROM DiseasePicture c JOIN FETCH c.disease cc WHERE cc.id = ?1")
-    List<DiseasePicture> findByAllDiseasePictureById(String diseaseId);
+    List<DiseasePicture> findByAllDiseasePictureById(Long diseaseId);
 
     @Query("SELECT c FROM DiseasePicture c JOIN FETCH c.disease cc WHERE cc.id = ?1 AND c.img = ?2")
     List<DiseasePicture> findByDiseaseIdAndDiseasePictureExact(Long id, String img);
