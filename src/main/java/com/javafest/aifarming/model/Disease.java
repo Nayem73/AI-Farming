@@ -2,6 +2,8 @@ package com.javafest.aifarming.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 @Entity(name = "Disease")
@@ -55,6 +57,13 @@ public class Disease {
             )
     )
     private Crop crop;
+
+    @OneToMany(
+            mappedBy = "disease",
+            orphanRemoval = true,
+            cascade = CascadeType.ALL
+    )
+    private List<DiseasePicture> diseasePictures;
 
     public Disease() {
     }
