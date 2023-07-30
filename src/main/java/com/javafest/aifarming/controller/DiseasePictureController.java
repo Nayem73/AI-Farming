@@ -114,4 +114,87 @@ public class DiseasePictureController {
         String fileName = file.getOriginalFilename();
         return fileName != null && (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") || fileName.endsWith(".png"));
     }
+
+    @PutMapping("/disease/picture/{pictureId}")
+    public ResponseEntity<Map<String, Object>> updateDiseasePicture(
+            @PathVariable Long pictureId,
+            @RequestParam("image") MultipartFile file) throws IOException {
+
+        if (file.isEmpty()) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Please select an image file.");
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
+
+        // Check if the uploaded file is an image
+        if (!isImageFile(file)) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Only image files are allowed.");
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
+
+        // Fetch the existing DiseasePicture object from the database using the pictureId
+        Optional<DiseasePicture> optionalDiseasePicture = diseasePictureRepository.findById(pictureId);
+        if (!optionalDiseasePicture.isPresent()) {
+            // If the pictureId does not match any existing DiseasePicture, return an error response
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Invalid pictureId. No matching DiseasePicture found.");
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
+
+        DiseasePicture existingDiseasePicture = optionalDiseasePicture.get();
+
+        // Set the appropriate path to store the image (adjust this to your needs)
+        String imagePath = "\\Users\\nayem\\OneDrive\\Desktop\\images";
+
+        // Create the directory if it doesn't exist
+        Path imageDir = Paths.get(imagePath);
+        if (!Files.exists(imageDir)) {
+            Files.createDirectories(imageDir);
+        }
+
+        // Generate a unique file name for the image
+        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+
+        // Save the image file using the provided path
+        Path targetPath = imageDir.resolve(fileName);
+        Files.copy(file.getInputStream(), targetPath);
+
+        // Update the DiseasePicture object with the new image path
+        existingDiseasePicture.setImg("/api/picture?link=images/" + fileName);
+
+        // Save the updated DiseasePicture object
+        diseasePictureRepository.save(existingDiseasePicture);
+
+        // Create a response with the updated image URL
+        Map<String, Object> response = new HashMap<>();
+        response.put("link", "/api/picture?link=images/" + fileName);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response);
+    }
+
+    @DeleteMapping("/disease/picture/{pictureId}")
+    public ResponseEntity<Map<String, Object>> deleteDiseasePicture(@PathVariable Long pictureId) {
+        // Fetch the existing DiseasePicture object from the database using the pictureId
+        Optional<DiseasePicture> optionalDiseasePicture = diseasePictureRepository.findById(pictureId);
+        if (!optionalDiseasePicture.isPresent()) {
+            // If the pictureId does not match any existing DiseasePicture, return an error response
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Invalid pictureId. No matching DiseasePicture found.");
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
+
+        // Delete the DiseasePicture object from the database
+        diseasePictureRepository.deleteById(pictureId);
+
+        // Create a response indicating successful deletion
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "DiseasePicture deleted successfully.");
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response);
+    }
 }
