@@ -1,16 +1,27 @@
 package com.javafest.aifarming.controller;
 
+import com.javafest.aifarming.model.Crop;
 import com.javafest.aifarming.model.Disease;
 import com.javafest.aifarming.repository.CropRepository;
 import com.javafest.aifarming.repository.DiseaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins = "http://localhost:3000")
 public class DiseaseController {
 
     private final DiseaseRepository diseaseRepository;
@@ -45,8 +56,14 @@ public class DiseaseController {
                                            @RequestParam(value = "disease", required = false) String diseaseTitle,
                                            @RequestParam(value = "search", required = false) String search) {
         List<Disease> diseases;
-        if (cropTitle != null && search != null) {
-            diseases = diseaseRepository.findByCategoryTitleAndDisease(cropTitle, search);
+        if (cropTitle != null) {
+            // Case 1: crop is provided, search is optional
+            if (cropTitle.isEmpty()) {
+                diseases = diseaseRepository.findBySearch(search);
+            }
+            else {
+                diseases = diseaseRepository.findByCategoryTitleAndDisease(cropTitle, search);
+            }
         } else if (cropTitle != null) {
             diseases = diseaseRepository.findByTitle(cropTitle);
         } else if (diseaseTitle != null) {
@@ -62,24 +79,87 @@ public class DiseaseController {
         return diseases;
     }
 
-    @PostMapping("/disease/")
-//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public Disease addDisease(@RequestBody Disease disease) {
-        // Check if the Crop already exists in the database based on CropCategory ID and disease
-        List<Disease> existingDiseases = diseaseRepository.findByCropIdAndDiseaseExact(
-                disease.getCrop().getId(), disease.getTitle()
-        );
+//    @PostMapping("/disease/")
+////    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+//    public Disease addDisease(@RequestBody Disease disease) {
+//        // Check if the Crop already exists in the database based on CropCategory ID and disease
+//        List<Disease> existingDiseases = diseaseRepository.findByCropIdAndDiseaseExact(
+//                disease.getCrop().getId(), disease.getTitle()
+//        );
+//
+//        if (existingDiseases.isEmpty()) {
+//            // No Crop with the same CropCategory ID and disease found, so add the new Crop
+//            return diseaseRepository.save(disease);
+//        } else {
+//            // A Crop with the same CropCategory ID and disease already exists
+//            // You can choose to handle this situation as you desire, e.g., return an error message or update the existing Crop.
+//            // For simplicity, let's just return null here.
+//            return null;
+////            throw new IllegalArgumentException("Crop with the same CropCategory and disease already exists.");
+//        }
+//    }
 
-        if (existingDiseases.isEmpty()) {
-            // No Crop with the same CropCategory ID and disease found, so add the new Crop
-            return diseaseRepository.save(disease);
-        } else {
-            // A Crop with the same CropCategory ID and disease already exists
-            // You can choose to handle this situation as you desire, e.g., return an error message or update the existing Crop.
-            // For simplicity, let's just return null here.
-            return null;
-//            throw new IllegalArgumentException("Crop with the same CropCategory and disease already exists.");
+    @PostMapping("/disease/")
+    public ResponseEntity<Map<String, Object>> addDisease(
+            @RequestParam("title") String title,
+            @RequestParam("img") MultipartFile file,
+            @RequestParam("description") String description,
+            @RequestParam("cropId") Long cropId
+    ) throws IOException {
+        Crop crop = cropRepository.findById(cropId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid Crop ID: " + cropId));
+
+
+
+        if (file.isEmpty()) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Please select a file to upload.");
+            return ResponseEntity.badRequest().body(errorResponse);
         }
+
+        // Check if the uploaded file is an image
+        if (!isImageFile(file)) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Only image files are allowed.");
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
+
+        // Set the appropriate path to store the image (adjust this to your needs)
+        String imagePath = "\\Users\\nayem\\OneDrive\\Desktop\\images";
+
+        // Create the directory if it doesn't exist
+        Path imageDir = Paths.get(imagePath);
+        if (!Files.exists(imageDir)) {
+            Files.createDirectories(imageDir);
+        }
+
+        // Generate a unique file name for the image
+        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+
+        // Save the image file using the provided path
+        Path targetPath = imageDir.resolve(fileName);
+        Files.copy(file.getInputStream(), targetPath);
+
+        // Set the image path to the Disease object
+//        disease.setImg(targetPath.toString());
+        Disease disease = new Disease(title, "/api/picture?link=images/" + fileName, description, crop);
+
+
+        // Save the Disease object to the database
+        diseaseRepository.save(disease);
+
+        // Create a response with the link to the uploaded image
+        Map<String, Object> response = new HashMap<>();
+        response.put("successfully added!", disease);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response);
+    }
+
+    private boolean isImageFile(MultipartFile file) {
+        String fileName = file.getOriginalFilename();
+        return fileName != null && (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") || fileName.endsWith(".png"));
     }
 
 

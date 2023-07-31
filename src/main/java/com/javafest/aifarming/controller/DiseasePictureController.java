@@ -15,7 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api")
 public class DiseasePictureController {
@@ -53,7 +53,7 @@ public class DiseasePictureController {
 
     @PostMapping("/disease/picture/")
     public ResponseEntity<Map<String, Object>> addDiseasePicture(
-            @RequestParam("image") MultipartFile file,
+            @RequestParam("img") MultipartFile file,
             @RequestParam("diseaseId") Long diseaseId) throws IOException {
 
         if (file.isEmpty()) {

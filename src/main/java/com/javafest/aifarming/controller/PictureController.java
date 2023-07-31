@@ -17,7 +17,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
-
+@CrossOrigin(origins = "http://localhost:3000")
 @Controller
 @RequestMapping("/api/picture")
 public class PictureController {
