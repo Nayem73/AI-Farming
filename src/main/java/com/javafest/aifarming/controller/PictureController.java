@@ -29,7 +29,7 @@ public class PictureController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Map<String, Object>> uploadPicture(@RequestParam("image") MultipartFile file) throws IOException {
+    public ResponseEntity<Map<String, Object>> uploadPicture(@RequestParam("img") MultipartFile file) throws IOException {
 
         if (file.isEmpty()) {
             Map<String, Object> errorResponse = new HashMap<>();
