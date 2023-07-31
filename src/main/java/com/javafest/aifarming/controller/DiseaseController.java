@@ -164,18 +164,76 @@ public class DiseaseController {
 
 
 
-    @PutMapping("/disease/{id}")
-//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public Disease updateDisease(@PathVariable Long id, @RequestBody Disease updatedDisease) {
+//    @PutMapping("/disease/{id}")
+////    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+//    public Disease updateDisease(@PathVariable Long id, @RequestBody Disease updatedDisease) {
+//        Disease disease = diseaseRepository.findById(id)
+//                .orElseThrow(() -> new IllegalArgumentException("Invalid Disease ID: " + id));
+//
+//        disease.setTitle(updatedDisease.getTitle());
+//        disease.setImg(updatedDisease.getImg());
+//        disease.setDescription(updatedDisease.getDescription());
+//        //crop.setId(updatedCrop.getId());
+//        return diseaseRepository.save(disease);
+//    }
+
+    @PutMapping("/disease/{diseaseId}")
+    public ResponseEntity<Map<String, Object>> updateDisease(
+            @PathVariable("diseaseId") Long id,
+            @RequestParam(value = "title", required = false) String title,
+            @RequestParam(value = "img", required = false) MultipartFile file,
+            @RequestParam(value = "description", required = false) String description,
+            @RequestParam(value = "cropId", required = false) Long cropId
+    ) throws IOException {
         Disease disease = diseaseRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Disease ID: " + id));
 
-        disease.setTitle(updatedDisease.getTitle());
-        disease.setImg(updatedDisease.getImg());
-        disease.setDescription(updatedDisease.getDescription());
-        //crop.setId(updatedCrop.getId());
-        return diseaseRepository.save(disease);
+        if (title != null) {
+            disease.setTitle(title);
+        }
+
+        if (file != null && !file.isEmpty()) {
+            if (!isImageFile(file)) {
+                Map<String, Object> errorResponse = new HashMap<>();
+                errorResponse.put("error", "Only image files are allowed.");
+                return ResponseEntity.badRequest().body(errorResponse);
+            }
+
+            String imagePath = "\\Users\\nayem\\OneDrive\\Desktop\\images";
+            Path imageDir = Paths.get(imagePath);
+            if (!Files.exists(imageDir)) {
+                Files.createDirectories(imageDir);
+            }
+
+            String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+            Path targetPath = imageDir.resolve(fileName);
+            Files.copy(file.getInputStream(), targetPath);
+
+            disease.setImg("/api/picture?link=images/" + fileName);
+        }
+
+        if (description != null) {
+            disease.setDescription(description);
+        }
+
+        if (cropId != null) {
+            Crop crop = cropRepository.findById(cropId)
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid Crop ID: " + cropId));
+            disease.setCrop(crop);
+        }
+
+        // Save the updated Disease object to the database
+        diseaseRepository.save(disease);
+
+        // Create a response with the updated disease details
+        Map<String, Object> response = new HashMap<>();
+        response.put("successfully updated!", disease);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response);
     }
+
 
     @DeleteMapping("/disease/{id}")
 //    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
