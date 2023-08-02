@@ -64,7 +64,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers("/api/**", "/signup/", "/signin/", "/signout/").permitAll()
                 .and()
-                .authorizeHttpRequests().requestMatchers("/api/search/").authenticated()
+                .authorizeHttpRequests().requestMatchers("/api/search/", "/api/profile/").authenticated()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

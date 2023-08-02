@@ -41,7 +41,7 @@ public class ForwardController {
         this.userInfoRepository = userInfoRepository;
     }
 
-    private final int maxRequestCountPerDay = 3;
+    public final int maxRequestCountPerDay = 10;
 
     @PostMapping("/search/")
     public ResponseEntity<Map<String, Object>> forwardPredictRequest(
