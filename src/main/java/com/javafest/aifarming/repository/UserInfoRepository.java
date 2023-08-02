@@ -12,4 +12,7 @@ public interface UserInfoRepository extends JpaRepository<UserInfo, Integer> {
 
     @Query("SELECT c FROM UserInfo c WHERE c.email = ?1")
     UserInfo getUserNameByEmail(String email);
+
+    @Query("SELECT c FROM UserInfo c WHERE c.userName = ?1")
+    UserInfo getByUserName(String userName);
 }

@@ -54,6 +54,10 @@ public class UserInfo {
     )
     private String role;
 
+
+    @OneToOne(mappedBy = "userInfo", cascade = CascadeType.ALL, orphanRemoval = true)
+    private SearchCount searchCount;
+
     public UserInfo() {
     }
     public UserInfo(int id, String userName, String email, String password, String role) {
@@ -102,5 +106,13 @@ public class UserInfo {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public SearchCount getSearchCount() {
+        return searchCount;
+    }
+
+    public void setSearchCount(SearchCount searchCount) {
+        this.searchCount = searchCount;
     }
 }

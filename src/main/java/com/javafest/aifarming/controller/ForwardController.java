@@ -2,8 +2,11 @@ package com.javafest.aifarming.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.javafest.aifarming.model.Disease;
+import com.javafest.aifarming.model.SearchCount;
+import com.javafest.aifarming.model.UserInfo;
 import com.javafest.aifarming.repository.DiseaseRepository;
+import com.javafest.aifarming.repository.SearchCountRepository;
+import com.javafest.aifarming.repository.UserInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
@@ -15,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,17 +29,18 @@ public class ForwardController {
     private final RestTemplate restTemplate;
     private ObjectMapper objectMapper;
     private DiseaseRepository diseaseRepository;
+    private SearchCountRepository searchCountRepository;
+    private UserInfoRepository userInfoRepository;
 
     @Autowired
-    public ForwardController(RestTemplate restTemplate, ObjectMapper objectMapper, DiseaseRepository diseaseRepository) {
+    public ForwardController(RestTemplate restTemplate, ObjectMapper objectMapper, DiseaseRepository diseaseRepository, SearchCountRepository searchCountRepository, UserInfoRepository userInfoRepository) {
         this.restTemplate = restTemplate;
         this.objectMapper = objectMapper;
         this.diseaseRepository = diseaseRepository;
+        this.searchCountRepository = searchCountRepository;
+        this.userInfoRepository = userInfoRepository;
     }
 
-    // Create a map to store user request counts with the user's email as the key and the count as the value
-    private final Map<String, Integer> userRequestCounts = new ConcurrentHashMap<>();
-    // Define the maximum allowed request count per user per day
     private final int maxRequestCountPerDay = 3;
 
     @PostMapping("/search/")
@@ -47,14 +50,36 @@ public class ForwardController {
             Authentication authentication
     ) throws IOException {
 
-        if (new Date().getHours() == 0) {
-            userRequestCounts.clear();
+        // Check if the user is authenticated (logged in)
+        if (authentication == null) {
+            Map<String, Object> response = new LinkedHashMap<>();
+            response.put("error", "Please login first.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
         // Retrieve the email of the logged-in user from the Authentication object
-        String userEmail = authentication.getName();
+        String userName = authentication.getName();
+        // Retrieve the UserInfo entity for the logged-in user
+        UserInfo userInfo = userInfoRepository.getByUserName(userName);
+        // Check if UserInfo entity exists for the user
+        if (userInfo == null) {
+            Map<String, Object> response = new LinkedHashMap<>();
+            response.put("error", "Please login first.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+        // Retrieve the SearchCount entity for the logged-in user
+        SearchCount searchCount = searchCountRepository.findByUserInfo(userInfo);
+
+        // Check if SearchCount entity exists for the user, if not create it
+        if (searchCount == null) {
+            searchCount = new SearchCount(userInfo, 0);
+        }
+        if (new Date().getHours() == 0) {
+            searchCount.setCount(0);
+            searchCountRepository.save(searchCount);
+        }
 
         // Check if the user has exceeded the maximum allowed request count
-        int requestCount = userRequestCounts.getOrDefault(userEmail, 0);
+        int requestCount = searchCount.getCount();
         if (requestCount >= maxRequestCountPerDay) {
             // If the user has exceeded the request limit, return an error response
             Map<String, Object> response = new LinkedHashMap<>();
@@ -63,7 +88,8 @@ public class ForwardController {
         }
 
         // Increment the user's request count for today
-        userRequestCounts.put(userEmail, requestCount + 1);
+        searchCount.setCount(requestCount + 1);
+        searchCountRepository.save(searchCount);
 
 
         // Step 1: Prepare the request body as form-data
