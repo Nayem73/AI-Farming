@@ -47,13 +47,12 @@ export const deleteCrop= (id) => async (dispatch, getState) => {
         })
 
         const { userLogin: { userInfo } } = getState();
-
         const config = {
             headers: {
                 Authorization: `Bearer ${userInfo.token}`
             }
         }
-        await axios.delete(`/api/crops/${id}`, config)
+        await axios.delete(`${root_url}/api/crops/${id}`, config)
         dispatch({
             type: CROP_DELETE_SUCCESS,
         })
@@ -65,7 +64,7 @@ export const deleteCrop= (id) => async (dispatch, getState) => {
     }
 }
 
-export const createCrop = () => async (dispatch, getState) => {
+export const createCrop = (FormData) => async (dispatch, getState) => {
     try {
         dispatch({
             type: CROP_CREATE_REQUEST
@@ -78,7 +77,7 @@ export const createCrop = () => async (dispatch, getState) => {
                 Authorization: `Bearer ${userInfo.token}`
             }
         }
-        const { data } = await axios.post(`/api/crops`, {}, config)
+        const { data } = await axios.post(`${root_url}/api/crops/`, FormData, config)
         dispatch({
             type: CROP_CREATE_SUCCESS,
             payload: data
@@ -105,7 +104,7 @@ export const updateCrop = (crop) => async (dispatch, getState) => {
                 Authorization: `Bearer ${userInfo.token}`
             }
         }
-        const { data } = await axios.put(`/api/crops/${crop.id}`, crop, config)
+        const { data } = await axios.put(`${root_url}/api/crops/${crop.id}`, crop, config)
         dispatch({
             type: CROP_UPDATE_SUCCESS,
             success: true,

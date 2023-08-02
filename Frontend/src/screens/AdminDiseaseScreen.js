@@ -1,13 +1,17 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom';
 import { listDiseases, deleteDisease, createDisease } from '../actions/diseaseActions';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import { DISEASE_CREATE_RESET } from '../constants/diseaseConstants';
 
 const DiseaseListScreen = () => {
     const dispatch = useDispatch();
+
+    const [delete_disease_bool, setDelete_disease_bool] = useState(false);
+    const [delete_disease_id, setDelete_disease_id] = useState('');
+
+
     const diseaseList = useSelector(state => state.diseaseList);
     const { loading, error, diseases } = diseaseList;
     const history = useNavigate();
@@ -24,6 +28,9 @@ const DiseaseListScreen = () => {
             dispatch(listDiseases())
         }
         dispatch(listDiseases())
+        if (successDelete) {
+            setDelete_disease_bool(false)
+        }
     }, [dispatch, history, userInfo, successDelete])
 
     const deleteHandler = (id) => {
@@ -31,10 +38,15 @@ const DiseaseListScreen = () => {
         dispatch(deleteDisease(id))
     }
 
-    const createDiseaseHandler = () => {
-        //creaet a new disease
-        dispatch(createDisease())
+    const deleteButtonHandler = (id) => {
+        if (delete_disease_bool){
+            setDelete_disease_bool(false)
+        }else{
+            setDelete_disease_bool(true)
+        }
+        setDelete_disease_id(id)
     }
+
 
     return (
         <div className='px-5'>
@@ -67,10 +79,25 @@ const DiseaseListScreen = () => {
                                 {/* <td>{disease.isAdmin ? (<i className='fas fa-check' style={{ color: 'green' }}> </i>) : (<i className='fas fa-items' style={{ color: 'red' }}></i>)}</td> */}
 
                                 <td>
+                                    
+                                    
+                                    {(delete_disease_bool && delete_disease_id==disease.id) ?
+                                    <><button onClick={() => deleteHandler(disease.id)} className='btn ml-4'> <i class="fa-solid fa-check"></i> </button>
+                                    <button onClick={() => deleteButtonHandler(disease.id)} className='btn ml-2'> <i class="fa-solid fa-xmark"></i></button></>
+                                    :<></>
+
+                                    }
+
+
+                                    {(delete_disease_bool && delete_disease_id==disease.id)?
+                                    <></>
+                                    :<>
                                     <Link to={`/admin/disease/edit/${disease.crop.title}/${disease.title}`}>
                                         <button className='btn mx-3'> <i className='fas fa-edit'></i> </button>
                                     </Link>
-                                    <button onClick={() => deleteHandler(disease.id)} className='btn'> <i className='fas fa-trash'></i> </button>
+                                    <button onClick={() => deleteButtonHandler(disease.id)} className='btn'> <i className='fas fa-trash'></i> </button></>
+                                    }
+                                
                                 </td>
                             </tr>
                         ))}

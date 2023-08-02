@@ -1,11 +1,11 @@
 import { React, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, Route } from 'react-router-dom';
+import { Link, Route,useNavigate } from 'react-router-dom';
 import { logout } from '../actions/userActions';
 import SearchBox from './SearchBox';
 
 function Header() {
-
+    const history = useNavigate();
 
     const userLogin = useSelector(state => state.userLogin);
 
@@ -16,6 +16,7 @@ function Header() {
 
     const logOutHandler = () => {
         dispatch(logout())
+        history('/')
     }
 
     // return (
@@ -118,6 +119,9 @@ function Header() {
                                     </li>}
                                     {userInfo && userInfo.isAdmin === true && <li>
                                         <Link to={'/admin/disease/'}>Diseases</Link>
+                                    </li>}
+                                    {userInfo && userInfo.isAdmin === true && <li>
+                                        <Link to={'/admin/crop/'}>Crops</Link>
                                     </li>}
 
                                     <li onClick={logOutHandler}><a>Logout</a></li>
