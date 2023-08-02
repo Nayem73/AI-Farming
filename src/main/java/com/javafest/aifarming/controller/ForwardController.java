@@ -6,6 +6,7 @@ import com.javafest.aifarming.model.Disease;
 import com.javafest.aifarming.repository.DiseaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.security.core.Authentication;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
@@ -13,9 +14,12 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api")
@@ -31,11 +35,36 @@ public class ForwardController {
         this.diseaseRepository = diseaseRepository;
     }
 
+    // Create a map to store user request counts with the user's email as the key and the count as the value
+    private final Map<String, Integer> userRequestCounts = new ConcurrentHashMap<>();
+    // Define the maximum allowed request count per user per day
+    private final int maxRequestCountPerDay = 3;
+
     @PostMapping("/search/")
     public ResponseEntity<Map<String, Object>> forwardPredictRequest(
             @RequestParam("crop") String text,
-            @RequestParam("file") MultipartFile image
+            @RequestParam("file") MultipartFile image,
+            Authentication authentication
     ) throws IOException {
+
+        if (new Date().getHours() == 0) {
+            userRequestCounts.clear();
+        }
+        // Retrieve the email of the logged-in user from the Authentication object
+        String userEmail = authentication.getName();
+
+        // Check if the user has exceeded the maximum allowed request count
+        int requestCount = userRequestCounts.getOrDefault(userEmail, 0);
+        if (requestCount >= maxRequestCountPerDay) {
+            // If the user has exceeded the request limit, return an error response
+            Map<String, Object> response = new LinkedHashMap<>();
+            response.put("error", "You have exceeded your search limit for today. Please try again tomorrow.");
+            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(response);
+        }
+
+        // Increment the user's request count for today
+        userRequestCounts.put(userEmail, requestCount + 1);
+
 
         // Step 1: Prepare the request body as form-data
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
