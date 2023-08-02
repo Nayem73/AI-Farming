@@ -14,7 +14,7 @@ import RegisterScreen from './screens/RegisterScreen';
 import DiseaseDetailsScreen from './screens/DiseaseDetailsScreen';
 import DiseaseCreateScreen from './screens/DiseaseCreateScreen';
 import DiseaseEditScreeen from './screens/DiseaseEditScreen';
-import DiseaseListScreen from './screens/DiseaseListScreen';
+import DiseaseListScreen from './screens/AdminDiseaseScreen';
 import AISearchScreen from './screens/AISearchScreen';
 
 function App() {
