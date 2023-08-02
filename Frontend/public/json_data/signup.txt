@@ -1,0 +1,9 @@
+post request:
+http://localhost:8080/signup
+
+{
+    "userName": "himel",
+    "password": "root",
+    "email": "himel@gmail.com",
+    "role": "ROLE_USER"
+}
