@@ -60,9 +60,9 @@ public class UserInfoController {
             @RequestParam("userName") String userName,
             @RequestParam("email") String email,
             @RequestParam("password") String password,
-            @RequestParam("isAdmin") Boolean isAdmin) {
+            @RequestParam(value = "isAdmin", required = false) Boolean isAdmin) {
         String role;
-        if (isAdmin) {
+        if (isAdmin != null && isAdmin) {
             role = "ROLE_ADMIN";
         } else {
             role = "ROLE_USER";
