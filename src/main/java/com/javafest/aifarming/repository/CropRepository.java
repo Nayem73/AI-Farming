@@ -10,6 +10,7 @@ import java.util.List;
 @Repository
 public interface CropRepository extends JpaRepository<Crop, Long> {
     Crop findByTitle(String title);
+    Crop findCropById(Long id);
 
     @Query("SELECT cc FROM Crop cc WHERE cc.title LIKE %?1%")
     List<Crop> findByString(String title);

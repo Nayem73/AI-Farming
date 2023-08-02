@@ -7,6 +7,7 @@ import com.javafest.aifarming.repository.DiseaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -100,6 +101,7 @@ public class DiseaseController {
 //    }
 
     @PostMapping("/disease/")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Map<String, Object>> addDisease(
             @RequestParam("title") String title,
             @RequestParam("img") MultipartFile file,
@@ -178,6 +180,7 @@ public class DiseaseController {
 //    }
 
     @PutMapping("/disease/{diseaseId}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Map<String, Object>> updateDisease(
             @PathVariable("diseaseId") Long id,
             @RequestParam(value = "title", required = false) String title,
@@ -236,7 +239,7 @@ public class DiseaseController {
 
 
     @DeleteMapping("/disease/{id}")
-//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public void deleteDisease(@PathVariable Long id) {
         Disease disease = diseaseRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Disease ID: " + id));

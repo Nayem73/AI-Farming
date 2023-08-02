@@ -3,9 +3,14 @@ package com.javafest.aifarming.controller;
 import com.javafest.aifarming.model.Crop;
 import com.javafest.aifarming.repository.CropRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/crops")
@@ -29,34 +34,64 @@ public class CropController {
 //    }
 
     @PostMapping("/")
-//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public Crop addCrop(@RequestBody Crop crop) {
-        Crop existingCrop = cropRepository.findByTitle(crop.getTitle());
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<Map<String, Object>> addCrop(@RequestParam String title) {
+        Crop existingCrop = cropRepository.findByTitle(title);
+        Map<String, Object> response = new HashMap<>();
+
         if (existingCrop == null) {
-            return cropRepository.save(crop);
+            Crop newCrop = new Crop();
+            newCrop.setTitle(title);
+            Crop savedCrop = cropRepository.save(newCrop);
+
+            response.put("message", "Crop added successfully");
+            response.put("crop", savedCrop);
+            return ResponseEntity.ok(response);
         } else {
-            // You may handle the situation when the CropCategory already exists.
-            // For now, let's just return the existing CropCategory without saving.
-            return existingCrop; //// need to throw some error here showing crop already exists.
+            response.put("message", "Crop with title '" + title + "' already exists.");
+            return ResponseEntity.badRequest().body(response);
         }
     }
 
-    @PutMapping("/{id}")
-//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public Crop updateCrop(@PathVariable Long id, @RequestBody Crop updatedCrop) {
-        Crop crop = cropRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid Crop ID: " + id));
 
-        crop.setTitle(updatedCrop.getTitle());
-        return cropRepository.save(crop);
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<Map<String, Object>> updateCrop(@PathVariable Long id, @RequestParam String title) {
+        Crop crop = cropRepository.findCropById(id);
+        Crop existingCrop = cropRepository.findByTitle(title);
+        Map<String, Object> response = new HashMap<>();
+        if (crop == null) {
+            response.put("message", "Invalid Crop Id");
+            return ResponseEntity.badRequest().body(response);
+        } else if (existingCrop != null) {
+            response.put("message", "Crop with title '" + title + "' already exists.");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        crop.setTitle(title);
+        Crop updatedCrop = cropRepository.save(crop);
+
+        response.put("message", "Crop updated successfully");
+        response.put("crop", updatedCrop);
+
+        return ResponseEntity.ok(response);
     }
+
 
     @DeleteMapping("/{id}")
-//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public void deleteCrop(@PathVariable Long id) {
-        Crop crop = cropRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid Crop ID: " + id));
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<Map<String, Object>> deleteCrop(@PathVariable Long id) {
+        Crop crop = cropRepository.findCropById(id);
+        Map<String, Object> response = new HashMap<>();
 
-        cropRepository.delete(crop);
+        if (crop == null) {
+            response.put("message", "Invalid Crop Id");
+            return ResponseEntity.badRequest().body(response);
+        } else {
+            cropRepository.delete(crop);
+            response.put("message", "Crop deleted successfully");
+            return ResponseEntity.ok(response);
+        }
     }
+
 }
