@@ -7,9 +7,13 @@ import MDEditor from '@uiw/react-md-editor';
 import { listCrops } from '../actions/cropActions.js';
 import { createDisease, updateDisease} from '../actions/diseaseActions.js';
 import { DISEASE_CREATE_RESET, DISEASE_UPDATE_RESET } from '../constants/diseaseConstants.js';
+import { listPictures } from '../actions/pictureActions';
+import Loader from '../components/Loader.js';
+import Message from '../components/Message.js';
+import ClipboardJS from 'clipboard';
 
 const FormDisease = ({ existingData }) => {
-    console.log('form page', existingData)
+    // console.log('form page', existingData)
     const dispatch = useDispatch();
     const params = useParams();
     const history = useNavigate();
@@ -22,17 +26,17 @@ const FormDisease = ({ existingData }) => {
             id: '',
         },
     });
+    const [isCopied, setIsCopied] = useState(false);
 
     const cropList = useSelector(state => state.cropList);
     const diseaseCreate = useSelector(state => state.diseaseCreate);
     
-
+    const pictureList = useSelector(state => state.pictureList);
     
 
     const { loading, error, crops } = cropList;
     const { loading: loadingCreate, error: errorCreate, success: successCreate } = diseaseCreate;
-    
-
+    const { loading:loadingPicture, error:errorPicture, pictures } = pictureList;
     
 
     useEffect(() => {
@@ -46,6 +50,7 @@ const FormDisease = ({ existingData }) => {
                 id: existingData.crop.id,
             },
             });
+            dispatch(listPictures(existingData.id))
         }
         if (successCreate) {
             dispatch({ type: DISEASE_CREATE_RESET });
@@ -54,6 +59,15 @@ const FormDisease = ({ existingData }) => {
         
     }, [dispatch, existingData, successCreate, errorCreate]);
 
+    // mark down link copy and picture show
+    let picMdFile = ``;
+    pictures.map((picture) => {
+        picMdFile += "```"
+        picMdFile += `${picture.img}`
+        picMdFile += "```<br>"
+        picMdFile += `<img className='h-20 w-20' src="${picture.img}" alt="${picture.img}" /><br>`
+
+    })
 
     const cropOptions = []
     crops.map((crop) => cropOptions.push(
@@ -121,7 +135,23 @@ const FormDisease = ({ existingData }) => {
         }
     }
 
-
+    const handleCopyClick = () => {
+        const clipboard = new ClipboardJS('.copy-button');
+        
+        clipboard.on('success', (e) => {
+            e.clearSelection();
+            setIsCopied(true);
+        
+            setTimeout(() => {
+                setIsCopied(false);
+            }, 1500);
+        });
+    
+        clipboard.on('error', (e) => {
+        console.error('Action:', e.action);
+        console.error('Trigger:', e.trigger);
+        });
+    };
 
     
 
@@ -171,6 +201,49 @@ const FormDisease = ({ existingData }) => {
         </div>
         </form>
 
+
+        {loading ? (<Loader />) : error ? (<Message message={error} />) : <div className="container md_div" data-color-mode="light">
+        <table className="table w-full">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th></th>
+                            <th></th>
+                            <th>Image</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+
+                        {pictures.map(picture => (
+                            <tr key={picture.id}>
+                                <td>{picture.id}</td>
+                                <td></td>
+                                <td></td>
+                                <td><img className='h-20 w-20' src={picture.img} alt={picture.img} /></td>
+                                
+                                <td></td>
+                                {/* <td>{disease.isAdmin ? (<i className='fas fa-check' style={{ color: 'green' }}> </i>) : (<i className='fas fa-items' style={{ color: 'red' }}></i>)}</td> */}
+
+                                <td>
+                                    
+                                    <button
+                                        className="copy-button"
+                                        data-clipboard-text={picture.img}
+                                        onClick={handleCopyClick}
+                                    >
+                                        <i class="fa-solid fa-copy mx-2"></i>
+                                    </button>
+                                    
+                                    </td>
+                            </tr>
+                        ))}
+
+                    </tbody>
+                </table>
+        </div>}
     </>
     );
     

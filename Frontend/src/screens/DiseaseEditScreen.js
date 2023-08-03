@@ -14,6 +14,8 @@ const DiseaseEditScreeen = () => {
     const disease_title = params.disease_title
     const redirect_url = '/admin/disease/'
 
+    const userLogin = useSelector(state => state.userLogin);
+    const { userInfo } = userLogin;
 
 
     const dispatch = useDispatch();
@@ -29,6 +31,9 @@ const DiseaseEditScreeen = () => {
 
 
     useEffect(() => {
+        if (!userInfo.isAdmin) {
+            history('/login')
+        }
         dispatch(listDiseaseDetails(crop_title, disease_title))
         if (successUpdate) {
             dispatch({ type: DISEASE_UPDATE_RESET });
