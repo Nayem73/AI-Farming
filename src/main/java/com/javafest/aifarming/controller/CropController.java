@@ -34,7 +34,7 @@ public class CropController {
 //    }
 
     @PostMapping("/")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') OR hasAuthority('ROLE_SUPER_ADMIN')")
     public ResponseEntity<Map<String, Object>> addCrop(@RequestParam String title) {
         Crop existingCrop = cropRepository.findByTitle(title);
         Map<String, Object> response = new HashMap<>();
@@ -55,7 +55,7 @@ public class CropController {
 
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') OR hasAuthority('ROLE_SUPER_ADMIN')")
     public ResponseEntity<Map<String, Object>> updateCrop(@PathVariable Long id, @RequestParam String title) {
         Crop crop = cropRepository.findCropById(id);
         Crop existingCrop = cropRepository.findByTitle(title);
@@ -79,7 +79,7 @@ public class CropController {
 
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') OR hasAuthority('ROLE_SUPER_ADMIN')")
     public ResponseEntity<Map<String, Object>> deleteCrop(@PathVariable Long id) {
         Crop crop = cropRepository.findCropById(id);
         Map<String, Object> response = new HashMap<>();

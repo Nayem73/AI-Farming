@@ -45,15 +45,7 @@ public class UserInfoController {
     public ResponseEntity<String> addNewUser(
             @RequestParam("userName") String userName,
             @RequestParam("email") String email,
-            @RequestParam("password") String password,
-            @RequestParam(value = "isAdmin", required = false) Boolean isAdmin,
-            @RequestParam(value = "isSuperAdmin", required = false) Boolean isSuperAdmin) {
-        String role = "ROLE_SUPER_ADMIN";
-        if (isAdmin != null && isAdmin) {
-            role = "ROLE_ADMIN";
-        } else if (isSuperAdmin == null || !isSuperAdmin) {
-            role = "ROLE_USER";
-        }
+            @RequestParam("password") String password) {
 
         Optional<UserInfo> existingUser = userInfoRepository.findByUserName(userName);
         Optional<UserInfo> existingUserByEmail = userInfoRepository.findByEmail(email);
@@ -72,7 +64,7 @@ public class UserInfoController {
             newUser.setUserName(userName);
             newUser.setEmail(email);
             newUser.setPassword(encodedPassword);
-            newUser.setRole(role);
+//            newUser.setRole(role);
 
             userInfoRepository.save(newUser);
             return ResponseEntity.ok("User added successfully");
@@ -113,8 +105,12 @@ public class UserInfoController {
                 Map<String, Object> response = new LinkedHashMap<>();
                 response.put("token", token);
                 response.put("username", userName);
-                response.put("isAdmin", isAdmin);
                 response.put("isSuperAdmin", isSuperAdmin);
+                if (isSuperAdmin) {
+                    response.put("isAdmin", true);
+                } else {
+                    response.put("isAdmin", isAdmin);
+                }
 
                 return ResponseEntity.ok(response);
             } else {
@@ -189,8 +185,12 @@ public class UserInfoController {
             userResponse.put("id", user.getId());
             userResponse.put("userName", user.getUserName());
             userResponse.put("email", user.getEmail());
-            userResponse.put("isAdmin", "ROLE_ADMIN".equals(user.getRole()));
             userResponse.put("isSuperAdmin", "ROLE_SUPER_ADMIN".equals(user.getRole()));
+            if ("ROLE_SUPER_ADMIN".equals(user.getRole())) {
+                userResponse.put("isAdmin", true);
+            } else {
+                userResponse.put("isAdmin", "ROLE_ADMIN".equals(user.getRole()));
+            }
             userResponseList.add(userResponse);
         }
 
@@ -210,8 +210,11 @@ public class UserInfoController {
         if (userInfo == null) {
             response.put("error", "User not found.");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        } else if (userInfo.getRole().equals("ROLE_ADMIN")) {
-            response.put("error", userInfo.getUserName() + " is an Admin and can not be modified");
+        } else if (userInfo.getRole().equals("ROLE_ADMIN") && isAdmin) {
+            response.put("error", userInfo.getUserName() + " is already an Admin");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        } else if (userInfo.getRole().equals("ROLE_USER") && !isAdmin) {
+            response.put("error", "isAdmin is provided false and " +userInfo.getUserName() + " is already a User.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
 
@@ -221,8 +224,11 @@ public class UserInfoController {
             response.put("Success", "User " + userInfo.getUserName() + " is now Admin");
             return ResponseEntity.ok(response);
         }
-        response.put("Error", "isAdmin must be true to update a user");
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+
+        userInfo.setRole("ROLE_USER");
+        userInfoRepository.save(userInfo); // Save the changes
+        response.put("Success", "User " + userInfo.getUserName() + " is no longer an Admin");
+        return ResponseEntity.ok(response);
     }
 
 }

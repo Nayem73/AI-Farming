@@ -115,4 +115,6 @@ public class UserInfo {
     public void setSearchCount(SearchCount searchCount) {
         this.searchCount = searchCount;
     }
+
+
 }
