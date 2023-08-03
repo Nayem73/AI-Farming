@@ -1,5 +1,6 @@
 package com.javafest.aifarming.controller;
 
+import com.javafest.aifarming.model.Disease;
 import com.javafest.aifarming.model.SearchCount;
 import com.javafest.aifarming.model.UserInfo;
 import com.javafest.aifarming.repository.SearchCountRepository;
@@ -17,9 +18,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api")
@@ -46,11 +46,12 @@ public class UserInfoController {
             @RequestParam("userName") String userName,
             @RequestParam("email") String email,
             @RequestParam("password") String password,
-            @RequestParam(value = "isAdmin", required = false) Boolean isAdmin) {
-        String role;
+            @RequestParam(value = "isAdmin", required = false) Boolean isAdmin,
+            @RequestParam(value = "isSuperAdmin", required = false) Boolean isSuperAdmin) {
+        String role = "ROLE_SUPER_ADMIN";
         if (isAdmin != null && isAdmin) {
             role = "ROLE_ADMIN";
-        } else {
+        } else if (isSuperAdmin == null || !isSuperAdmin) {
             role = "ROLE_USER";
         }
 
@@ -99,6 +100,7 @@ public class UserInfoController {
         String userName = userInfo.getUserName();
         String role = userInfo.getRole();
         boolean isAdmin = "ROLE_ADMIN".equals(role); // Using .equals() for String comparison
+        boolean isSuperAdmin = "ROLE_SUPER_ADMIN".equals(role);
 
         try {
             Authentication authentication = authenticationManager.authenticate(
@@ -112,6 +114,7 @@ public class UserInfoController {
                 response.put("token", token);
                 response.put("username", userName);
                 response.put("isAdmin", isAdmin);
+                response.put("isSuperAdmin", isSuperAdmin);
 
                 return ResponseEntity.ok(response);
             } else {
@@ -173,6 +176,53 @@ public class UserInfoController {
         response.put("searchLeft", forwardController.maxRequestCountPerDay - searchCount);
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/userlist/")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') OR hasAuthority('ROLE_SUPER_ADMIN')")
+    public ResponseEntity<List<Map<String, Object>>> getAllUsers() {
+        List<UserInfo> users = userInfoRepository.findAll();
+
+        List<Map<String, Object>> userResponseList = new ArrayList<>();
+        for (UserInfo user : users) {
+            Map<String, Object> userResponse = new LinkedHashMap<>();
+            userResponse.put("id", user.getId());
+            userResponse.put("userName", user.getUserName());
+            userResponse.put("email", user.getEmail());
+            userResponse.put("isAdmin", "ROLE_ADMIN".equals(user.getRole()));
+            userResponse.put("isSuperAdmin", "ROLE_SUPER_ADMIN".equals(user.getRole()));
+            userResponseList.add(userResponse);
+        }
+
+        return ResponseEntity.ok(userResponseList);
+    }
+
+
+    @PatchMapping("/userlist/{id}")
+    @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
+    public ResponseEntity<Map<String, Object>> userUpdate(
+            @PathVariable Long id,
+            @RequestParam(value="isAdmin") Boolean isAdmin) {
+
+        UserInfo userInfo = userInfoRepository.findById(id);
+        System.out.println("~~~~~~~~~~~~~"+ userInfo.getRole());
+        Map<String, Object> response = new LinkedHashMap<>();
+        if (userInfo == null) {
+            response.put("error", "User not found.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        } else if (userInfo.getRole().equals("ROLE_ADMIN")) {
+            response.put("error", userInfo.getUserName() + " is an Admin and can not be modified");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+
+        if (isAdmin) {
+            userInfo.setRole("ROLE_ADMIN");
+            userInfoRepository.save(userInfo); // Save the changes
+            response.put("Success", "User " + userInfo.getUserName() + " is now Admin");
+            return ResponseEntity.ok(response);
+        }
+        response.put("Error", "isAdmin must be true to update a user");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }
 
 }

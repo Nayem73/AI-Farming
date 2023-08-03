@@ -80,26 +80,6 @@ public class DiseaseController {
         return diseases;
     }
 
-//    @PostMapping("/disease/")
-////    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-//    public Disease addDisease(@RequestBody Disease disease) {
-//        // Check if the Crop already exists in the database based on CropCategory ID and disease
-//        List<Disease> existingDiseases = diseaseRepository.findByCropIdAndDiseaseExact(
-//                disease.getCrop().getId(), disease.getTitle()
-//        );
-//
-//        if (existingDiseases.isEmpty()) {
-//            // No Crop with the same CropCategory ID and disease found, so add the new Crop
-//            return diseaseRepository.save(disease);
-//        } else {
-//            // A Crop with the same CropCategory ID and disease already exists
-//            // You can choose to handle this situation as you desire, e.g., return an error message or update the existing Crop.
-//            // For simplicity, let's just return null here.
-//            return null;
-////            throw new IllegalArgumentException("Crop with the same CropCategory and disease already exists.");
-//        }
-//    }
-
     @PostMapping("/disease/")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Map<String, Object>> addDisease(
