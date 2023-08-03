@@ -21,6 +21,12 @@ import {
     cropUpdateReducer } from './reducers/cropReducers';
 
 import {
+    pictureCreateReducer,
+    pictureDeleteReducer,
+    pictureListReducer,
+    pictureUpdateReducer } from './reducers/pictureReducers';
+
+import {
     diseaseCreateReducer,
     diseaseDeleteReducer,
     diseaseDetailReducer,
@@ -34,6 +40,11 @@ const reducer = combineReducers({
     cropDelete: cropDeleteReducer,
     cropCreate: cropCreateReducer,
     cropUpdate: cropUpdateReducer,
+
+    pictureList : pictureListReducer,
+    pictureDelete: pictureDeleteReducer,
+    pictureCreate: pictureCreateReducer,
+    pictureUpdate: pictureUpdateReducer,
 
     diseaseList : diseaseListReducer,
     diseaseDetails: diseaseDetailReducer,

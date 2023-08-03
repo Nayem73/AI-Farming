@@ -18,6 +18,7 @@ import DiseaseCreateScreen from './screens/DiseaseCreateScreen';
 import DiseaseEditScreeen from './screens/DiseaseEditScreen';
 import DiseaseListScreen from './screens/AdminDiseaseScreen';
 import AdminCropScreen from './screens/AdminCropScreen';
+import AdminPictureScreen from './screens/AdminPictureScreen';
 import AISearchScreen from './screens/AISearchScreen';
 
 
@@ -42,6 +43,7 @@ function App() {
         <Route path='/admin/disease/' element={<DiseaseListScreen />} />
         <Route path='/admin/disease/create' element={<DiseaseCreateScreen />} />
         <Route path='/admin/disease/edit/:crop_title/:disease_title' element={<DiseaseEditScreeen />} />
+        <Route path='/admin/picture/:crop_title/:disease_title/:disease_id/' element={<AdminPictureScreen />} />
       </Routes>
       <Footer />
     </BrowserRouter>
