@@ -43,7 +43,7 @@ public class DiseasePictureController {
         // Iterate through the DiseasePicture entities and extract the specific fields to include in the response
         for (DiseasePicture diseasePicture : existingDiseasePictures) {
             Map<String, Object> simplifiedPicture = new LinkedHashMap<>();
-            simplifiedPicture.put("id", diseasePicture.getDisease().getId());
+            simplifiedPicture.put("id", diseasePicture.getId());
             simplifiedPicture.put("img", diseasePicture.getImg());
             simplifiedDiseasePictures.add(simplifiedPicture);
         }
