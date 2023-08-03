@@ -16,6 +16,7 @@ function HomeScreen() {
 
     const params = useParams();
     const keyword = params.keyword;
+    console.log('params', params);
 
     const diseaseList = useSelector(state => state.diseaseList);
 
