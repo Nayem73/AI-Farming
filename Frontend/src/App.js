@@ -9,7 +9,7 @@ import RegisterScreen from './screens/RegisterScreen';
 
 
 import ProfileScreen from './screens/ProfileScreen';
-// import UserListScreen from './screens/UserLIstScreen';
+import UserListScreen from './screens/AdminUserListScreen';
 // import UserEditScreen from './screens/UserEditScreen';
 
 
@@ -38,6 +38,7 @@ function App() {
         <Route path='/profile/' element={<ProfileScreen />} />
         <Route path='/disease/:crop_title/:disease_title' element={<DiseaseDetailsScreen />} />
         <Route path='/admin/crop/' element={<AdminCropScreen />} />
+        <Route path='/admin/userlist/' element={<UserListScreen />} />
         <Route path='/admin/disease/' element={<DiseaseListScreen />} />
         <Route path='/admin/disease/create' element={<DiseaseCreateScreen />} />
         <Route path='/admin/disease/edit/:crop_title/:disease_title' element={<DiseaseEditScreeen />} />

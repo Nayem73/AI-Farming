@@ -147,7 +147,7 @@ export const updateUerProfile = (user_id, FormData) => async (dispatch, getState
             }
         }
 
-        const { data } = await axios.put(`${root_url}/users/userlist/${user_id}`, FormData, config)
+        const { data } = await axios.patch(`${root_url}/api/userlist/${user_id}`, FormData, config)
 
         localStorage.setItem('userInfo', JSON.stringify(data))
 
@@ -178,7 +178,7 @@ export const listUsers = () => async (dispatch, getState) => {
             }
         }
 
-        const { data } = await axios.get(`${root_url}/users/userlist/`, config)
+        const { data } = await axios.get(`${root_url}/api/userlist/`, config)
 
         dispatch({
             type: USER_LIST_SUCCESS,

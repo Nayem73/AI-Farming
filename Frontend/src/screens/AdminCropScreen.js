@@ -27,7 +27,7 @@ const AdminCropScreen = () => {
     const cropList = useSelector(state => state.cropList);
     const { loading, error, crops } = cropList;
 
-    const cropDelete = useSelector(state => state.cropList);
+    const cropDelete = useSelector(state => state.cropDelete);
     const { loading: loadingDelete, error: errorDelete, success: successDelete } = cropDelete;
 
     const cropCreate = useSelector(state => state.cropCreate);
@@ -36,7 +36,7 @@ const AdminCropScreen = () => {
     const cropUpdate = useSelector(state => state.cropUpdate);
     const { loading: loadingUpdate, error: errorUpdate, success: successUpdate } = cropUpdate;
 
-   
+
 
     useEffect(() => {
         if (!userInfo.isAdmin) {
