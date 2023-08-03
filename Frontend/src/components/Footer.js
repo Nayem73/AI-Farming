@@ -1,8 +1,18 @@
 import React from 'react'
+var style = {
+  borderTop: "1px solid #E7E7E7",
+  textAlign: "center",
+  padding: "20px",
+  position: "fixed",
+  left: "0",
+  bottom: "0",
+  width: "100%",
+}
+
 
 function Footer() {
     return (
-        <footer className="footer p-10 bg-base-200 text-base-content">
+        <footer className="footer p-10 bg-base-200 text-base-content" style={style}>
   <div>
     <span className="footer-title">Services</span> 
     <a className="link link-hover">Branding</a> 
@@ -27,7 +37,7 @@ function Footer() {
     <span className="footer-title">Newsletter</span> 
     <div className="form-control w-80">
       <label className="label">
-        <span className="label-text">miminhaz33@gmail.com</span>
+        <span className="label-text">hemelakash472@gmail.com</span>
       </label> 
       <div className="relative">
         <input type="text" placeholder="username@site.com" className="input input-bordered w-full pr-16" /> 
