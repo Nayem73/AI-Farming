@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import java.util.List;
 
 import static jakarta.persistence.GenerationType.SEQUENCE;
-@CrossOrigin(origins = "http://localhost:3000")
 @Entity(name = "Disease")
 @Table(name = "disease")
 public class Disease {

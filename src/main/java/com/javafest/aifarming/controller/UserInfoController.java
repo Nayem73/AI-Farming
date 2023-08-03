@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
-@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api")
 public class UserInfoController {
@@ -169,7 +168,7 @@ public class UserInfoController {
         response.put("id", userInfo.getId());
         response.put("userName", userInfo.getUserName());
         response.put("email", userInfo.getEmail());
-        response.put("searchLeft", forwardController.maxRequestCountPerDay - searchCount);
+        response.put("searchLeft", forwardController.maxRequestCountPerMonth - searchCount);
 
         return ResponseEntity.ok(response);
     }
@@ -205,7 +204,7 @@ public class UserInfoController {
             @RequestParam(value="isAdmin") Boolean isAdmin) {
 
         UserInfo userInfo = userInfoRepository.findById(id);
-        System.out.println("~~~~~~~~~~~~~"+ userInfo.getRole());
+//        System.out.println("~~~~~~~~~~~~~"+ userInfo.getRole());
         Map<String, Object> response = new LinkedHashMap<>();
         if (userInfo == null) {
             response.put("error", "User not found.");

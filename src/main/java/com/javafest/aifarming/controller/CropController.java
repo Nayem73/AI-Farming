@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/crops")
 public class CropController {
@@ -28,10 +27,6 @@ public class CropController {
         return cropRepository.findAll();
     }
 
-//    @GetMapping("/{title}")
-//    public List<Crop> getCropByTitle(@PathVariable String title) {
-//        return cropRepository.findByString(title);
-//    }
 
     @PostMapping("/")
     @PreAuthorize("hasAuthority('ROLE_ADMIN') OR hasAuthority('ROLE_SUPER_ADMIN')")

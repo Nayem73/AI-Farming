@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
-@CrossOrigin(origins = "http://localhost:3000")
 @Repository
 public interface DiseaseRepository extends JpaRepository<Disease, Long> {
     @Query("SELECT c FROM Disease c WHERE c.title = ?1")

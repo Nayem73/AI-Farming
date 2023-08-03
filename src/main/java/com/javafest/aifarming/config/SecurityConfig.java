@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-@CrossOrigin(origins = "http://localhost:3000")
 public class SecurityConfig {
     private JwtAuthFilter jwtAuthFilter;
 
@@ -62,9 +61,9 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/**", "/signup/", "/signin/", "/signout/").permitAll()
+                .requestMatchers("/api/**", "/signup/", "/signin/").permitAll()
                 .and()
-                .authorizeHttpRequests().requestMatchers("/api/search/", "/api/profile/").authenticated()
+                .authorizeHttpRequests().requestMatchers("/api/search/", "/api/profile/", "/signout/").authenticated()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

@@ -21,8 +21,8 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
-@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api")
 public class ForwardController {
@@ -41,7 +41,7 @@ public class ForwardController {
         this.userInfoRepository = userInfoRepository;
     }
 
-    public final int maxRequestCountPerDay = 10;
+    public final int maxRequestCountPerMonth = 20;
 
     @PostMapping("/search/")
     public ResponseEntity<Map<String, Object>> forwardPredictRequest(
@@ -70,17 +70,22 @@ public class ForwardController {
         SearchCount searchCount = searchCountRepository.findByUserInfo(userInfo);
 
         // Check if SearchCount entity exists for the user, if not create it
+        Date currentDate = new Date();
         if (searchCount == null) {
             searchCount = new SearchCount(userInfo, 0);
-        }
-        if (new Date().getHours() == 0) {
-            searchCount.setCount(0);
+            searchCount.setLastResetDate(currentDate);
             searchCountRepository.save(searchCount);
+        } else {
+            if (is30DaysAgo(searchCount.getLastResetDate(), currentDate)) {
+                searchCount.setCount(0);
+                searchCount.setLastResetDate(currentDate);
+                searchCountRepository.save(searchCount);
+            }
         }
 
         // Check if the user has exceeded the maximum allowed request count
         int requestCount = searchCount.getCount();
-        if (requestCount >= maxRequestCountPerDay) {
+        if (requestCount >= maxRequestCountPerMonth) {
             // If the user has exceeded the request limit, return an error response
             Map<String, Object> response = new LinkedHashMap<>();
             response.put("error", "You have exceeded your search limit for today. Please try again tomorrow.");
@@ -140,5 +145,11 @@ public class ForwardController {
 
         // Step 6: Return the response from the other server
         //return response;
+    }
+
+    private boolean is30DaysAgo(Date startDate, Date endDate) {
+        long differenceMillis = endDate.getTime() - startDate.getTime();
+        long days = TimeUnit.MILLISECONDS.toDays(differenceMillis);
+        return days >= 30;
     }
 }

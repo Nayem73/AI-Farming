@@ -2,6 +2,8 @@ package com.javafest.aifarming.model;
 
 import jakarta.persistence.*;
 
+import java.util.Date;
+
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 @Entity(name = "SearchCount")
@@ -33,6 +35,9 @@ public class SearchCount {
     @Column(name = "count")
     private int count;
 
+    @Column(name = "last_reset_date")
+    private Date lastResetDate;
+
     public SearchCount() {
     }
 
@@ -40,6 +45,12 @@ public class SearchCount {
         this.userInfo = userInfo;
         this.count = count;
     }
+
+//    public SearchCount(UserInfo userInfo, int count, Date lastResetDate) {
+//        this.userInfo = userInfo;
+//        this.count = count;
+//        this.lastResetDate = lastResetDate;
+//    }
 
     public Long getId() {
         return id;
@@ -63,5 +74,13 @@ public class SearchCount {
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public Date getLastResetDate() {
+        return lastResetDate;
+    }
+
+    public void setLastResetDate(Date lastResetDate) {
+        this.lastResetDate = lastResetDate;
     }
 }

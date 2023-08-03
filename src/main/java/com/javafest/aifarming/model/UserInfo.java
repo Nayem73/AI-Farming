@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import static jakarta.persistence.GenerationType.SEQUENCE;
-@CrossOrigin(origins = "http://localhost:3000")
 
 @Entity(name = "UserInfo")
 @Table(name = "user_info")
