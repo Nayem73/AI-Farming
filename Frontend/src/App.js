@@ -6,7 +6,9 @@ import Footer from './components/Footer';
 import HomeScreen from './screens/HomeScreen';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
-// import ProfileScreen from './screens/ProfileScreen';
+
+
+import ProfileScreen from './screens/ProfileScreen';
 // import UserListScreen from './screens/UserLIstScreen';
 // import UserEditScreen from './screens/UserEditScreen';
 
@@ -17,6 +19,7 @@ import DiseaseEditScreeen from './screens/DiseaseEditScreen';
 import DiseaseListScreen from './screens/AdminDiseaseScreen';
 import AdminCropScreen from './screens/AdminCropScreen';
 import AISearchScreen from './screens/AISearchScreen';
+
 
 
 function App() {
@@ -32,6 +35,7 @@ function App() {
         <Route path='/admin/user/:id/edit' element={<UserEditScreen />} /> */}
 
         <Route path='/aisearch/' element={<AISearchScreen />} />
+        <Route path='/profile/' element={<ProfileScreen />} />
         <Route path='/disease/:crop_title/:disease_title' element={<DiseaseDetailsScreen />} />
         <Route path='/admin/crop/' element={<AdminCropScreen />} />
         <Route path='/admin/disease/' element={<DiseaseListScreen />} />

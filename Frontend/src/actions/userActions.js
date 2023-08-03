@@ -28,6 +28,9 @@ import {
     USER_UPDATE_REQUEST,
     USER_UPDATE_SUCCESS } from "../constants/userConstants"
 
+
+const root_url = "http://192.168.77.4:8080";
+
 export const login = (formData) => async (dispatch) => {
     console.log('signin')
     try {
@@ -41,7 +44,7 @@ export const login = (formData) => async (dispatch) => {
             }
         }
 
-        const { data } = await axios.post('http://192.168.77.4:8080/api/signin/', formData)
+        const { data } = await axios.post(`${root_url}/api/signin/`, formData)
 
         dispatch({
             type: USER_LOGIN_SUCCESS,
@@ -77,7 +80,7 @@ export const register = (formData) => async (dispatch) => {
         //     }
         // }
 
-        const { data } = await axios.post('http://192.168.77.4:8080/api/signup/', formData)
+        const { data } = await axios.post(`${root_url}/api/signup/`, formData)
         console.log('register action', data)
         dispatch({
             type: USER_REGISTER_SUCCESS,
@@ -100,7 +103,7 @@ export const register = (formData) => async (dispatch) => {
 }
 
 
-export const getUserDetails = (id) => async (dispatch, getState) => {
+export const getUserDetails = () => async (dispatch, getState) => {
     try {
         dispatch({
             type: USER_DETAILS_REQUEST
@@ -115,8 +118,7 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
             }
         }
 
-        const { data } = await axios.get(`/users/${id}`, config)
-
+        const { data } = await axios.get(`${root_url}/api/profile/`, config)
         dispatch({
             type: USER_DETAILS_SUCCESS,
             payload: data
@@ -130,7 +132,7 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
 }
 
 
-export const updateUerProfile = (user) => async (dispatch, getState) => {
+export const updateUerProfile = (user_id, FormData) => async (dispatch, getState) => {
     try {
         dispatch({
             type: USER_UPDATE_REQUEST
@@ -145,7 +147,7 @@ export const updateUerProfile = (user) => async (dispatch, getState) => {
             }
         }
 
-        const { data } = await axios.put(`/users/profile`, user, config)
+        const { data } = await axios.put(`${root_url}/users/userlist/${user_id}`, FormData, config)
 
         localStorage.setItem('userInfo', JSON.stringify(data))
 
@@ -176,7 +178,7 @@ export const listUsers = () => async (dispatch, getState) => {
             }
         }
 
-        const { data } = await axios.get(`/users`, config)
+        const { data } = await axios.get(`${root_url}/users/userlist/`, config)
 
         dispatch({
             type: USER_LIST_SUCCESS,
