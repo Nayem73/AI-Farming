@@ -10,13 +10,13 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Configuration
 @EnableWebSecurity
@@ -59,19 +59,16 @@ public class SecurityConfig {
     //authorization stuff
     //which endpoints
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.csrf().disable()
-                .authorizeHttpRequests()
-                .requestMatchers("/api/**", "/signup/", "/signin/").permitAll()
-                .and()
-                .authorizeHttpRequests().requestMatchers("/api/search/", "/api/profile/", "/signout/").authenticated()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authenticationProvider(authenticationProvider())
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class).build();
-                //telling spring boot to use my own class JwtAuthFilter first before using your filter with username and password
-
+        http.csrf(AbstractHttpConfigurer::disable);
+        http.authorizeHttpRequests(rQ -> {
+            rQ.requestMatchers("/api/**", "/signup/", "/signin/").permitAll();
+            rQ.requestMatchers("/api/search/", "/api/profile/", "/signout/").authenticated();
+        });
+        http.sessionManagement(sessionAuthenticationStrategy ->
+                sessionAuthenticationStrategy.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        http.authenticationProvider(authenticationProvider());
+        http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
     }
 
 //    @Bean
