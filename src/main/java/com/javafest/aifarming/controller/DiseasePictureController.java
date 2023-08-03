@@ -7,6 +7,7 @@ import com.javafest.aifarming.repository.DiseaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -51,6 +52,7 @@ public class DiseasePictureController {
     }
 
     @PostMapping("/disease/picture/")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') OR hasAuthority('ROLE_SUPER_ADMIN')")
     public ResponseEntity<Map<String, Object>> addDiseasePicture(
             @RequestParam("img") MultipartFile file,
             @RequestParam("diseaseId") Long diseaseId) throws IOException {
@@ -115,6 +117,7 @@ public class DiseasePictureController {
     }
 
     @PutMapping("/disease/picture/{pictureId}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') OR hasAuthority('ROLE_SUPER_ADMIN')")
     public ResponseEntity<Map<String, Object>> updateDiseasePicture(
             @PathVariable Long pictureId,
             @RequestParam("image") MultipartFile file) throws IOException {
@@ -175,6 +178,7 @@ public class DiseasePictureController {
     }
 
     @DeleteMapping("/disease/picture/{pictureId}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') OR hasAuthority('ROLE_SUPER_ADMIN')")
     public ResponseEntity<Map<String, Object>> deleteDiseasePicture(@PathVariable Long pictureId) {
         // Fetch the existing DiseasePicture object from the database using the pictureId
         Optional<DiseasePicture> optionalDiseasePicture = diseasePictureRepository.findById(pictureId);
