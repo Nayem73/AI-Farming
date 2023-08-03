@@ -23,7 +23,8 @@ import {
     
     AI_SEARCH_REQUEST,
     AI_SEARCH_SUCCESS,
-    AI_SEARCH_FAILED } from "../constants/diseaseConstants";
+    AI_SEARCH_FAILED,
+    AI_SEARCH_RESET } from "../constants/diseaseConstants";
 
 export const diseaseListReducer = (state = {diseases: []}, action) => {
     switch (action.type) {
@@ -46,6 +47,8 @@ export const aiSearchReducer = (state = {crop:'', disease:''}, action) => {
             return { loading: false, disease: action.payload.disease, crop: action.payload.crop }
         case AI_SEARCH_FAILED:
             return { loading: false, error: action.payload }
+        case AI_SEARCH_RESET:
+            return { crop:'', disease:'' }
         default:
             return state;
     }

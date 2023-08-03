@@ -10,6 +10,7 @@ import DiseaseCard from '../components/DiseaseCard';
 import CategoryName from '../components/CategoryName';
 
 
+
 function HomeScreen() {
 
     const dispatch = useDispatch();

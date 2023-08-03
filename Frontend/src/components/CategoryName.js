@@ -14,7 +14,7 @@ const CategoryName = () => {
     //_______________________my code______________________//
     const params = useParams();
 
-    const keyword = params.keyword;
+    // const keyword = params.keyword;
 
     const cropList = useSelector(state => state.cropList);
 
@@ -22,8 +22,8 @@ const CategoryName = () => {
     //_______________________my code______________________//
 
     useEffect(() => {
-        dispatch(listCrops(keyword))
-    }, [dispatch, keyword])
+        dispatch(listCrops())
+    }, [dispatch])
 
 
 

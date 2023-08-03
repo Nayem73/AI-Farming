@@ -14,7 +14,7 @@ const AISearchScreen = () => {
         <div className='lg:px-20 mt-10 mr-5 ml-5'>
         
             <div className='py-4 flex justify-left'>
-                <Link to={'/admin/productlist'}>
+                <Link to={'/'}>
                     <button className=' btn btn-primary w-24'>Back</button>
                 </Link>
             </div>

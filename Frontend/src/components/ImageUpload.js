@@ -4,6 +4,7 @@ import Select from 'react-select';
 import { listCrops } from '../actions/cropActions.js';
 import { aiSearch } from '../actions/diseaseActions.js';
 import { useNavigate } from 'react-router-dom'
+import {AI_SEARCH_RESET} from '../constants/diseaseConstants.js'
 
 const ImageUpload = () => {
     const dispatch = useDispatch();
@@ -57,8 +58,16 @@ const ImageUpload = () => {
     useEffect(() => {
         dispatch(listCrops());
         if (crop!=='' && disease!=='') {
-        console.log('AI Search Results:', crop, disease);
-        navigate(`/disease/${crop}/${disease}`);
+        let crop_titles = crop
+        let disease_titles = disease
+        
+        // reset crop and disease
+        dispatch({
+            type: AI_SEARCH_RESET
+        })
+
+
+        navigate(`/disease/${crop_titles}/${disease_titles}`);
         }
     }, [aiLoading, aiError, crop, disease]);
 
