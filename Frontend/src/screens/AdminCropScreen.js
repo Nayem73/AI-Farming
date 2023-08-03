@@ -102,7 +102,7 @@ const AdminCropScreen = () => {
 
     return (
         <div className='px-5'>
-            <h1 className='text-xl font-bold py-3'>diseases</h1>
+            <h1 className='text-xl font-bold py-3'>Crops</h1>
             {loading ? <Loader /> : error ? <Message message={error} /> : <div className="overflow-x-auto">
 
            
