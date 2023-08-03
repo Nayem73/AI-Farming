@@ -90,7 +90,7 @@ export const createCrop = (FormData) => async (dispatch, getState) => {
     }
 }
 
-export const updateCrop = (crop) => async (dispatch, getState) => {
+export const updateCrop = (crop_id, formData) => async (dispatch, getState) => {
     try {
         dispatch({
             type: CROP_UPDATE_REQUEST
@@ -104,7 +104,7 @@ export const updateCrop = (crop) => async (dispatch, getState) => {
                 Authorization: `Bearer ${userInfo.token}`
             }
         }
-        const { data } = await axios.put(`${root_url}/api/crops/${crop.id}`, crop, config)
+        const { data } = await axios.put(`${root_url}/api/crops/${crop_id}`, formData, config)
         dispatch({
             type: CROP_UPDATE_SUCCESS,
             success: true,

@@ -65,7 +65,7 @@ const AdminCropScreen = () => {
     }
 
     const deleteHandler = (id) => {
-        // dispatch(deleteCrop(id))
+        dispatch(deleteCrop(id))
     }
 
     const editButtonHandler = (id) => {
@@ -75,10 +75,13 @@ const AdminCropScreen = () => {
             setEdit_crop_bool(true)
         }
         setEdit_crop_id(id)
+        setCrop_title(crops.find(crop => crop.id == id).title)
     }
 
     const editHandler = (id) => {
-        // dispatch(updateCrop(id))
+        const formDataToSend = new FormData();
+        formDataToSend.append('title', crop_title);
+        dispatch(updateCrop(id, formDataToSend));
     }
 
     const createButtonHandler = () => {
@@ -123,7 +126,10 @@ const AdminCropScreen = () => {
                                 <td>{crop.id}</td>
                                 <td></td>
                                 <td></td>
-                                <td>{crop.title}</td>
+                                {edit_crop_bool && (edit_crop_id == crop.id) ?
+                                <td><input value={crop_title} placeholder="Crop Title" className="input input-bordered w-full max-w-xs" onChange={(e) => setCrop_title(e.target.value)} /></td>:
+                                <td>{crop.title}</td>}
+                                
                                 <td></td>
                                 {/* <td>{disease.isAdmin ? (<i className='fas fa-check' style={{ color: 'green' }}> </i>) : (<i className='fas fa-items' style={{ color: 'red' }}></i>)}</td> */}
 
@@ -158,11 +164,11 @@ const AdminCropScreen = () => {
                 
                 {create_crop_bool ?<>
                     <form className='py-4 px-2' onSubmit={createDiseaseHandler}>
-                        <div className="form-control w-full  ">
+                        <div className="form-control w-full">
                             <input  placeholder="Crop Title" className="input input-bordered w-full max-w-xs" onChange={(e) => setCrop_title(e.target.value)} />
                         </div>
                         <div className='my-4 flex justify-left items-left'>
-                            <button type='submit' className=' btn'> Add </button>
+                            <button type='submit' className='btn'> Add </button>
                             <button  onClick={() => createButtonHandler()} className='btn mx-2'> Cancle</button>
                         </div>
                     </form>
