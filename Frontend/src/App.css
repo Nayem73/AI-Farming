@@ -185,7 +185,7 @@ input[type=submit]:hover {
   display: none;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 650px) {
   .searchBox_id1 {
     display: none;
   }
