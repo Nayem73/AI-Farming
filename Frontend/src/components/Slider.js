@@ -1,18 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { listDiseases } from '../actions/diseaseActions';
-import Loader from '../components/Loader';
-import Message from '../components/Message';
+import { Link } from 'react-router-dom';
 
-const Slider = () => {
-    const diseaseList = useSelector(state => state.diseaseList);
-    const { loading, error, diseases } = diseaseList;
-
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        dispatch(listDiseases())
-    }, [dispatch])
+const Slider = ({items}) => {
 
     const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -27,43 +16,45 @@ const Slider = () => {
     }, [currentIndex]);
 
     const prevSlide = () => {
-        const prevIndex = (currentIndex - 1 + diseases.length) % diseases.length;
+        const prevIndex = (currentIndex - 1 + items.length) % items.length;
         setCurrentIndex(prevIndex);
     };
 
     const nextSlide = () => {
-        const nextIndex = (currentIndex + 1) % diseases.length;
+        const nextIndex = (currentIndex + 1) % items.length;
         setCurrentIndex(nextIndex);
     };
 
     return (
-        <>{loading ? (<Loader />) : error ? (<Message message={error} />) :
         <div className="carousel w-full h-96 relative overflow-hidden">
-            {diseases.map((disease, index) => (
+            {items.map((item, index) => (
                 <div
-                    key={disease.id}
+                    key={item.id}
                     id={`slide${index}`}
                     className={`carousel-item absolute w-full h-full flex justify-center ${
                         index === currentIndex ? 'opacity-100' : 'opacity-0'
                     }`}
                 >
                     <div className="aspect-w-16 aspect-h-9 max-h-full">
-                        <img src={disease.img} alt={disease.title} className="object-cover h-96" />
+                        <img src={item.img} alt={item.title} className="object-cover h-96" />
+                        {item.title?
                         <div className="absolute mb-2 inset-x-0 bottom-0 flex flex-col justify-center items-center ">
-                            <h3 className="text-xl mb-2 text-white">{disease.title}</h3>
-                            <button className="btn btn-primary mt-2">Details</button>
-                        </div>
+                            <h3 className="text-xl mb-2 text-white">{item.title}</h3>
+                            <Link to={`/disease/${item.crop.title}/${item.title}/`}>
+                                <button className="btn btn-primary mt-2">Details</button>
+                            </Link>
+                        </div>:<></>}
                     </div>
                     <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
                         <a
-                            href={`#slide${(index - 1 + diseases.length) % diseases.length}`}
+                            href={`#slide${(index - 1 + items.length) % items.length}`}
                             className="btn btn-circle"
                             onClick={prevSlide}
                         >
                             ❮
                         </a>
                         <a
-                            href={`#slide${(index + 1) % diseases.length}`}
+                            href={`#slide${(index + 1) % items.length}`}
                             className="btn btn-circle"
                             onClick={nextSlide}
                         >
@@ -73,7 +64,7 @@ const Slider = () => {
                 </div>
             ))}
         </div>
-        }</>
+        
     );
 };
 

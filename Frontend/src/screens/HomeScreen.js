@@ -35,7 +35,8 @@ function HomeScreen() {
     return (
         <>
             <div className='lg:px-20 mt-10'>
-            <Slider/>
+            {loading ? (<Loader />) : error ? (<Message message={error} />) :<Slider items={diseases}/>}
+            
             </div>
             
             <div className='centered-select py-5'>
