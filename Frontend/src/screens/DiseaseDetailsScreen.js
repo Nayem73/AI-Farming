@@ -6,6 +6,8 @@ import { listDiseaseDetails } from '../actions/diseaseActions.js';
 import Loader from '../components/Loader.js';
 import Message from '../components/Message.js';
 import MDEditor from '@uiw/react-md-editor';
+import Slider from '../components/Slider';
+import { listPictures } from '../actions/pictureActions';
 
 const DiseaseDetailsScreen = () => {
     const params = useParams();
@@ -20,35 +22,31 @@ const DiseaseDetailsScreen = () => {
 
     const { loading, error, disease } = diseaseDetails;
 
+    const pictureList = useSelector(state => state.pictureList);
+    const { loading:loadingPicture, error:errorPicture, pictures } = pictureList;
+
 
     useEffect(() => {
         dispatch(listDiseaseDetails(crop_title, disease_title))
     }, [dispatch, crop_title, disease_title])
 
-    // console.log('details',disease)
-    // const value = `hemel
-    // akash
-    // sharker`;
-    // console.log(value)
+    useEffect(() => {
+        if (disease) {
+            dispatch(listPictures(disease.id))
+        }
+    }, [disease])
 
-
-    // return (
     
-    // <div className="container md_div" data-color-mode="light">
-        
-    //     <MDEditor.Markdown source={value} style={{ whiteSpace: 'pre-wrap' }} className='md_show_div'/>
-    // </div>
-    // );
+    console.log('pictures',)
+    
     return (
     
         <>
-        <div className='lg:px-20 mt-10'>
+        <div className='mt-10'>
+        {loading ? (<Loader />) : error ? (<Message message={error} />) : pictures.length>0? <Slider items={pictures}/>:<></>}
+        </div>
         
-            
-                {/* {loading ? (<Loader />) : error ? (<Message message={error} />) : <div className=' grid lg:grid-cols-5 md:grid-cols-3  gap-2 flex-col items-center justify-center '>
-                    {products.map((product) => <ProductCard key={product._id} props={product} />)}
-                </div>} */}
-
+        <div className='lg:px-20 mt-10'>
 
                 {loading ? (<Loader />) : error ? (<Message message={error} />) : <div className="container md_div" data-color-mode="light">
                 <MDEditor.Markdown source={disease.description} style={{ whiteSpace: 'pre-wrap' }} className='md_show_div'/>
@@ -63,10 +61,6 @@ const DiseaseDetailsScreen = () => {
             </>
 
 
-    // <div className="container md_div" data-color-mode="light">
-        
-    //     <MDEditor.Markdown source={value} style={{ whiteSpace: 'pre-wrap' }} className='md_show_div'/>
-    // </div>
     );
 }
 
