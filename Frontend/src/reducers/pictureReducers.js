@@ -15,7 +15,11 @@ import {
     PICTURE_UPDATE_REQUEST,
     PICTURE_UPDATE_SUCCESS,
     PICTURE_UPDATE_FAILED,
-    PICTURE_UPDATE_RESET 
+    PICTURE_UPDATE_RESET ,
+
+    PICTURE_SLIDER_REQUEST,
+    PICTURE_SLIDER_SUCCESS,
+    PICTURE_SLIDER_FAILED
 } from "../constants/pictureConstants";
 
 export const pictureListReducer = (state = {pictures: []}, action) => {
@@ -25,6 +29,19 @@ export const pictureListReducer = (state = {pictures: []}, action) => {
         case PICTURE_LIST_SUCCESS:
             return { loading: false, pictures: action.payload }
         case PICTURE_LIST_FAILED:
+            return { loading: false, error: action.payload }
+        default:
+            return state;
+    }
+}
+
+export const pictureSliderReducer = (state = {diseases: []}, action) => {
+    switch (action.type) {
+        case PICTURE_SLIDER_REQUEST:
+            return { loading: true, diseases: [] }
+        case PICTURE_SLIDER_SUCCESS:
+            return { loading: false, diseases: action.payload }
+        case PICTURE_SLIDER_FAILED:
             return { loading: false, error: action.payload }
         default:
             return state;

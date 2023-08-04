@@ -1,20 +1,20 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { listDiseases } from '../actions/diseaseActions.js';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-const SearchBox = () => {
-    const dispatch = useDispatch();
+const SearchBox = ({crop}) => {
     const [keyword, setKeyword] = useState("");
     const navigate = useNavigate();
-  
+    console.log('search', crop)
     const searchHandler = (e) => {
       e.preventDefault();
-  
-      if (keyword.trim()) {
+      if (crop.value && keyword.trim()) {
+        navigate(`?search=${keyword}&crop=${crop.value}`);
+      }else if(crop.value){
+        navigate(`?crop=${crop.value}`);
+      } else if (keyword.trim()) {
         navigate(`?search=${keyword}`);
-        dispatch(listDiseases({search:keyword}));
-      } else {
+      }else {
         navigate("/");
       }
     };

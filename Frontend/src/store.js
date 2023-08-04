@@ -24,7 +24,8 @@ import {
     pictureCreateReducer,
     pictureDeleteReducer,
     pictureListReducer,
-    pictureUpdateReducer } from './reducers/pictureReducers';
+    pictureUpdateReducer,
+    pictureSliderReducer } from './reducers/pictureReducers';
 
 import {
     diseaseCreateReducer,
@@ -45,6 +46,7 @@ const reducer = combineReducers({
     pictureDelete: pictureDeleteReducer,
     pictureCreate: pictureCreateReducer,
     pictureUpdate: pictureUpdateReducer,
+    pictureSlider: pictureSliderReducer,
 
     diseaseList : diseaseListReducer,
     diseaseDetails: diseaseDetailReducer,
