@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 const Slider = ({items}) => {
 
     const [currentIndex, setCurrentIndex] = useState(0);
+    
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -16,12 +17,18 @@ const Slider = ({items}) => {
     }, [currentIndex]);
 
     const prevSlide = () => {
-        const prevIndex = (currentIndex - 1 + items.length) % items.length;
+        let prevIndex = (currentIndex - 1 + items.length) % items.length;
+        if (isNaN(prevIndex)) {
+            prevIndex = 0;
+        }
         setCurrentIndex(prevIndex);
     };
 
     const nextSlide = () => {
-        const nextIndex = (currentIndex + 1) % items.length;
+        let nextIndex = (currentIndex + 1) % items.length;
+        if (isNaN(nextIndex)) {
+            nextIndex = 0;
+        }
         setCurrentIndex(nextIndex);
     };
 
@@ -36,7 +43,7 @@ const Slider = ({items}) => {
                     }`}
                 >
                     <div className="aspect-w-16 aspect-h-9 max-h-full">
-                        <img src={item.img} alt={item.title} className="object-cover h-96" />
+                        <img src={item.img} alt={item.img} className="object-cover h-96" />
                         {item.title?
                         <div className="absolute mb-2 inset-x-0 bottom-0 flex flex-col justify-center items-center ">
                             <h3 className="text-xl mb-2 text-white">{item.title}</h3>
@@ -45,7 +52,7 @@ const Slider = ({items}) => {
                             </Link>
                         </div>:<></>}
                     </div>
-                    <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+                    <div className="absolute flex justify-between transform-translate-y-1/2 left-5 right-5 top-1/2">
                         <a
                             href={`#slide${(index - 1 + items.length) % items.length}`}
                             className="btn btn-circle"

@@ -5,7 +5,6 @@ import { useDispatch } from 'react-redux';
 const SearchBox = ({crop}) => {
     const [keyword, setKeyword] = useState("");
     const navigate = useNavigate();
-    console.log('search', crop)
     const searchHandler = (e) => {
       e.preventDefault();
       if (crop.value && keyword.trim()) {
