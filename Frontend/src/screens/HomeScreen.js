@@ -2,12 +2,16 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-import { listDiseases } from '../actions/diseaseActions';
+
 
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import DiseaseCard from '../components/DiseaseCard';
 import CategoryName from '../components/CategoryName';
+import { listDiseases } from '../actions/diseaseActions';
+
+
+import Slider from '../components/Slider';
 
 
 
@@ -30,7 +34,12 @@ function HomeScreen() {
 
     return (
         <>
+            <div className='lg:px-20 mt-10'>
+            <Slider/>
+            </div>
+            
             <div className='centered-select py-5'>
+                
                     <div>
                         <CategoryName />
                     </div>

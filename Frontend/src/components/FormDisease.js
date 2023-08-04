@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import Select from 'react-select';
 import MDEditor from '@uiw/react-md-editor';
 import { listCrops } from '../actions/cropActions.js';
@@ -201,8 +200,8 @@ const FormDisease = ({ existingData }) => {
         </div>
         </form>
 
-
-        {loading ? (<Loader />) : error ? (<Message message={error} />) : <div className="container md_div" data-color-mode="light">
+        
+        { existingData? loading ? (<Loader />) : error ? (<Message message={error} />) : <div className="container md_div mb-5" data-color-mode="light">
         <table className="table w-full">
                     <thead>
                         <tr>
@@ -243,7 +242,7 @@ const FormDisease = ({ existingData }) => {
 
                     </tbody>
                 </table>
-        </div>}
+        </div>:<></>}
     </>
     );
     
