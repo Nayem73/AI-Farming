@@ -5,10 +5,16 @@ import { listCrops } from '../actions/cropActions.js';
 import { aiSearch } from '../actions/diseaseActions.js';
 import { useNavigate } from 'react-router-dom'
 import {AI_SEARCH_RESET} from '../constants/diseaseConstants.js'
+import Message from '../components/Message';
+import Loader from '../components/Loader';
+import SuccessMessage from '../components/SuccessMessage';
 
 const ImageUpload = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    const [message, setMassage] = useState(null)
+
     const cropList = useSelector((state) => state.cropList);
     const { loading: cropLoading, error: cropError, crops } = cropList;
 
@@ -57,7 +63,7 @@ const ImageUpload = () => {
 
     useEffect(() => {
         dispatch(listCrops());
-        if (crop!=='' && disease!=='') {
+        if (crop!=='' && disease!=='' && crop!==undefined && disease!==undefined) {
         let crop_titles = crop
         let disease_titles = disease
         
@@ -65,14 +71,20 @@ const ImageUpload = () => {
         dispatch({
             type: AI_SEARCH_RESET
         })
-
+        // console.log('aierror', aiError)
 
         navigate(`/disease/${crop_titles}/${disease_titles}`);
+        }
+        if(aiError){
+            setMassage(aiError)
         }
     }, [aiLoading, aiError, crop, disease]);
 
     return (
         <>
+        {/* {message && <SuccessMessage message={message} />} */}
+            {message && <Message message={message} />}
+            {aiLoading && <Loader />}
         <form onSubmit={handleSubmit}>
             <div>
             <label htmlFor="crop">Crop ID:</label>

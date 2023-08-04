@@ -29,14 +29,7 @@ export const listPictures = (id) => async (dispatch, getState) => {
             type: PICTURE_LIST_REQUEST
         })
 
-        const { userLogin: { userInfo } } = getState();
-        const config = {
-            headers: {
-                Authorization: `Bearer ${userInfo.token}`
-            }
-        }
-
-        const { data } = await axios.get(`${root_url}/api/disease/${id}/picture/`, config);
+        const { data } = await axios.get(`${root_url}/api/disease/${id}/picture/`);
         // console.log(data);
         dispatch({
             type: PICTURE_LIST_SUCCESS,

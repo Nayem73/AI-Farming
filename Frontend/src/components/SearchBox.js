@@ -8,11 +8,11 @@ const SearchBox = ({crop}) => {
     const searchHandler = (e) => {
       e.preventDefault();
       if (crop.value && keyword.trim()) {
-        navigate(`?search=${keyword}&crop=${crop.value}`);
+        navigate(`/?search=${keyword}&crop=${crop.value}`);
       }else if(crop.value){
-        navigate(`?crop=${crop.value}`);
+        navigate(`/?crop=${crop.value}`);
       } else if (keyword.trim()) {
-        navigate(`?search=${keyword}`);
+        navigate(`/?search=${keyword}`);
       }else {
         navigate("/");
       }

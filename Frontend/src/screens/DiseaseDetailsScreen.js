@@ -8,6 +8,7 @@ import Message from '../components/Message.js';
 import MDEditor from '@uiw/react-md-editor';
 import Slider from '../components/Slider';
 import { listPictures } from '../actions/pictureActions';
+import {AI_SEARCH_RESET} from '../constants/diseaseConstants.js'
 
 const DiseaseDetailsScreen = () => {
     const params = useParams();
@@ -27,11 +28,12 @@ const DiseaseDetailsScreen = () => {
 
 
     useEffect(() => {
+        dispatch({type: AI_SEARCH_RESET})
         dispatch(listDiseaseDetails(crop_title, disease_title))
     }, [dispatch, crop_title, disease_title])
 
     useEffect(() => {
-        if (disease) {
+        if (disease.id !== undefined) {
             dispatch(listPictures(disease.id))
         }
     }, [disease])

@@ -46,7 +46,7 @@ export const aiSearchReducer = (state = {crop:'', disease:''}, action) => {
         case AI_SEARCH_SUCCESS:
             return { loading: false, disease: action.payload.disease, crop: action.payload.crop }
         case AI_SEARCH_FAILED:
-            return { loading: false, error: action.payload }
+            return { loading: false, error: action.payload}
         case AI_SEARCH_RESET:
             return { crop:'', disease:'' }
         default:

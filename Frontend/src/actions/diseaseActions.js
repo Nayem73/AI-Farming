@@ -87,7 +87,6 @@ export const aiSearch = (formData) => async (dispatch, getState) => {
             type: AI_SEARCH_REQUEST
         })
         const { userLogin: { userInfo } } = getState();
-
         
         const config = {
             headers: {
@@ -95,16 +94,25 @@ export const aiSearch = (formData) => async (dispatch, getState) => {
             }
         }
         const { data } = await axios.post(`${root_url}/api/search/`, formData, config);
-        
+        console.log('data',data)
         dispatch({
             type: AI_SEARCH_SUCCESS,
             payload: data
         })
     } catch (error) {
-        dispatch({
-            type: AI_SEARCH_FAILED,
-            payload: error.response && error.response.data.message ? error.response.data.message : error.message
-        })
+        if (error instanceof TypeError){
+            dispatch({
+                type: AI_SEARCH_FAILED,
+                payload: 'user not login or token expired or invalid token'
+            })
+
+        }else{
+            dispatch({
+                type: AI_SEARCH_FAILED,
+                payload: error.response && error.response.data.message ? error.response.data.message : error.message
+            })
+        }
+        
     }
 }
 
