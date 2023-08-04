@@ -54,7 +54,7 @@ export const listDiseases = (params) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: DISEASE_LIST_FAILED,
-            payload: error.response && error.response.data.message ? error.response.data.message : error.message
+            payload: error.response? error.message :error.response.data.message ? error.response.data.message : 'error'
         })
     }
 }
@@ -75,7 +75,7 @@ export const listDiseaseDetails = (crop, disease) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: DISEASE_DETAIL_FAILED,
-            payload: error.response && error.response.data.message ? error.response.data.message : error.message
+            payload: error.response? error.message :error.response.data.message ? error.response.data.message : 'error'
         })
     }
 }
@@ -109,7 +109,7 @@ export const aiSearch = (formData) => async (dispatch, getState) => {
         }else{
             dispatch({
                 type: AI_SEARCH_FAILED,
-                payload: error.response && error.response.data.message ? error.response.data.message : error.message
+                payload: error.response? error.message :error.response.data.message ? error.response.data.message : 'error'
             })
         }
         
@@ -139,7 +139,7 @@ export const deleteDisease= (id) => async (dispatch, getState) => {
     } catch (error) {
         dispatch({
             type: DISEASE_DELETE_FAILED,
-            payload: error.response && error.response.data.message ? error.response.data.message : error.message
+            payload: error.response? error.message :error.response.data.message ? error.response.data.message : 'error'
         })
     }
 }
@@ -167,7 +167,7 @@ export const createDisease = (formData) => async (dispatch, getState) => {
     } catch (error) {
         dispatch({
             type: DISEASE_CREATE_FAILED,
-            payload: error.response && error.response.data.message ? error.response.data.message : error.message
+            payload: error.response? error.message :error.response.data.message ? error.response.data.message : 'error'
         })
     }
 }
@@ -196,7 +196,7 @@ export const updateDisease = (disease_id, formData) => async (dispatch, getState
     } catch (error) {
         dispatch({
             type: DISEASE_UPDATE_FAILED,
-            payload: error.response && error.response.data.message ? error.response.data.message : error.message
+            payload: error.response? error.message :error.response.data.message ? error.response.data.message : 'error'
         })
     }
 }

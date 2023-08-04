@@ -38,7 +38,7 @@ export const listPictures = (id) => async (dispatch, getState) => {
     } catch (error) {
         dispatch({
             type: PICTURE_LIST_FAILED,
-            payload: error.response && error.response.data.message ? error.response.data.message : error.message
+            payload: error.response? error.message :error.response.data.message ? error.response.data.message : 'error'
         })
     }
 }
@@ -58,7 +58,7 @@ export const sliderPicture = () => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: PICTURE_SLIDER_FAILED,
-            payload: error.response && error.response.data.message ? error.response.data.message : error.message
+            payload: error.response? error.message :error.response.data.message ? error.response.data.message : 'error'
         })
     }
 }
@@ -84,7 +84,7 @@ export const deletePicture= (id) => async (dispatch, getState) => {
     } catch (error) {
         dispatch({
             type: PICTURE_DELETE_FAILED,
-            payload: error.response && error.response.data.message ? error.response.data.message : error.message
+            payload: error.response? error.message :error.response.data.message ? error.response.data.message : 'error'
         })
     }
 }
@@ -110,7 +110,7 @@ export const createPicture = (FormData) => async (dispatch, getState) => {
     } catch (error) {
         dispatch({
             type: PICTURE_CREATE_FAILED,
-            payload: error.response && error.response.data.message ? error.response.data.message : error.message
+            payload: error.response? error.message :error.response.data.message ? error.response.data.message : 'error'
         })
     }
 }
@@ -138,7 +138,7 @@ export const updatePicture = (id, formData) => async (dispatch, getState) => {
     } catch (error) {
         dispatch({
             type: PICTURE_UPDATE_FAILED,
-            payload: error.response && error.response.data.message ? error.response.data.message : error.message
+            payload: error.response? error.message :error.response.data.message ? error.response.data.message : 'error'
         })
     }
 }
