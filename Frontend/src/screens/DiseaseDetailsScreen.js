@@ -1,7 +1,7 @@
 
-import React, { useState, useEffect } from 'react'
+import React, {useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import {useParams } from 'react-router-dom'
 import { listDiseaseDetails } from '../actions/diseaseActions.js';
 import Loader from '../components/Loader.js';
 import Message from '../components/Message.js';
