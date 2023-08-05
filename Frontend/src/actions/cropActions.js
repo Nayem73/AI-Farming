@@ -32,7 +32,7 @@ export const listCrops = (keyword = ' ') => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: CROP_LIST_FAILED,
-            payload: error.response? error.message :error.response.data.message ? error.response.data.message : 'error'
+            payload: error.response.data.message ? error.response.data.message :error.response? error.message : 'error'
         })
     }
 }
@@ -58,7 +58,7 @@ export const deleteCrop= (id) => async (dispatch, getState) => {
     } catch (error) {
         dispatch({
             type: CROP_DELETE_FAILED,
-            payload: error.response? error.message :error.response.data.message ? error.response.data.message : 'error'
+            payload: error.response.data.message ? error.response.data.message :error.response? error.message : 'error'
         })
     }
 }
@@ -84,7 +84,7 @@ export const createCrop = (FormData) => async (dispatch, getState) => {
     } catch (error) {
         dispatch({
             type: CROP_CREATE_FAILED,
-            payload: error.response? error.message :error.response.data.message ? error.response.data.message : 'error'
+            payload: error.response.data.message ? error.response.data.message :error.response? error.message : 'error'
         })
     }
 }
@@ -112,7 +112,7 @@ export const updateCrop = (crop_id, formData) => async (dispatch, getState) => {
     } catch (error) {
         dispatch({
             type: CROP_UPDATE_FAILED,
-            payload: error.response? error.message :error.response.data.message ? error.response.data.message : 'error'
+            payload: error.response.data.message ? error.response.data.message :error.response? error.message : 'error'
         })
     }
 }

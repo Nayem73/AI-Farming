@@ -54,7 +54,7 @@ export const login = (formData) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: USER_LOGIN_FAILED,
-            payload: error.response? error.message :error.response.data.message ? error.response.data.message : 'error'
+            payload: error.response.data.message ? error.response.data.message :error.response? error.message : 'error'
         })
     }
 }
@@ -95,7 +95,7 @@ export const register = (formData) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: USER_REGISTER_FAILED,
-            payload: error.response? error.message :error.response.data.message ? error.response.data.message : 'error'
+            payload: error.response.data.message ? error.response.data.message :error.response? error.message : 'error'
         })
     }
 }
@@ -124,7 +124,7 @@ export const getUserDetails = () => async (dispatch, getState) => {
     } catch (error) {
         dispatch({
             type: USER_DETAILS_FAILED,
-            payload: error.response? error.message :error.response.data.message ? error.response.data.message : 'error'
+            payload: error.response.data.message ? error.response.data.message :error.response? error.message : 'error'
         })
     }
 }
@@ -156,7 +156,7 @@ export const updateUerProfile = (user_id, FormData) => async (dispatch, getState
     } catch (error) {
         dispatch({
             type: USER_UPDATE_FAILED,
-            payload: error.response? error.message :error.response.data.message ? error.response.data.message : 'error'
+            payload: error.response.data.message ? error.response.data.message :error.response? error.message : 'error'
         })
     }
 }
@@ -185,7 +185,7 @@ export const listUsers = () => async (dispatch, getState) => {
     } catch (error) {
         dispatch({
             type: USER_LIST_FAILED,
-            payload: error.response? error.message :error.response.data.message ? error.response.data.message : 'error'
+            payload: error.response.data.message ? error.response.data.message :error.response? error.message : 'error'
         })
     }
 }
@@ -212,7 +212,7 @@ export const deleteUser = (id) => async (dispatch, getState) => {
     } catch (error) {
         dispatch({
             type: USER_DELETE_FAILED,
-            payload: error.response? error.message :error.response.data.message ? error.response.data.message : 'error'
+            payload: error.response.data.message ? error.response.data.message :error.response? error.message : 'error'
         })
     }
 }
@@ -244,7 +244,7 @@ export const deleteUser = (id) => async (dispatch, getState) => {
 //     } catch (error) {
 //         dispatch({
 //             type: USER_EDIT_FAILED,
-//             payload: error.response? error.message :error.response.data.message ? error.response.data.message : 'error'
+//             payload: error.response.data.message ? error.response.data.message :error.response? error.message : 'error'
 //         })
 //     }
 // }

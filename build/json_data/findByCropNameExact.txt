@@ -1,0 +1,13 @@
+get request:
+http://localhost:8080/api/jute/cholera
+
+{
+    "id": 6,
+    "disease": "Cholera",
+    "markdownFile": "md33",
+    "frontImagePath": "assets/images/placeholder.png",
+    "cropCategory": {
+        "id": 2,
+        "title": "Jute"
+    }
+}
