@@ -39,7 +39,7 @@ const DiseaseDetailsScreen = () => {
     }, [disease])
 
     
-    console.log('pictures',)
+    // console.log('pictures',)
     
     return (
     
