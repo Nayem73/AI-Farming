@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link,useParams, useNavigate } from 'react-router-dom';
 
-import { listDiseaseDetails, updateDisease } from '../actions/diseaseActions.js';
+import { listDiseaseDetails } from '../actions/diseaseActions.js';
 import Loader from '../components/Loader.js';
 import Message from '../components/Message.js';
 import FormDisease from '../components/FormDisease.js';
-import { DISEASE_CREATE_RESET, DISEASE_UPDATE_RESET } from '../constants/diseaseConstants.js';
+import { DISEASE_UPDATE_RESET } from '../constants/diseaseConstants.js';
 
 const DiseaseEditScreeen = () => {
     const params = useParams();
@@ -25,7 +25,7 @@ const DiseaseEditScreeen = () => {
     const diseaseUpdate = useSelector(state => state.diseaseUpdate);
 
     const { loading, error, disease } = diseaseDetails;
-    const { loading: loadingUpdate, error: errorUpdate, success: successUpdate } = diseaseUpdate;
+    const { error: errorUpdate, success: successUpdate } = diseaseUpdate;
 
 
 
@@ -34,19 +34,22 @@ const DiseaseEditScreeen = () => {
         if (!userInfo.isAdmin) {
             history('/login')
         }
-        dispatch(listDiseaseDetails(crop_title, disease_title))
+        if(crop_title && disease_title){
+            dispatch(listDiseaseDetails(crop_title, disease_title))
+        }
         if (successUpdate) {
             dispatch({ type: DISEASE_UPDATE_RESET });
             history(redirect_url)
 
         }
-    }, [ dispatch, successUpdate, successUpdate])
+    }, [ dispatch, successUpdate, successUpdate ,crop_title, disease_title])
     
     // console.log('edit page',disease)
 
 
     return (
         <div className='lg:px-20 mt-10 mr-5 ml-5'>
+            {errorUpdate && <Message message={errorUpdate} />}
         <div className='py-4 flex justify-left'>
             <Link to={'/admin/disease/'}>
                 <button className=' btn btn-primary w-24'>Back</button>
