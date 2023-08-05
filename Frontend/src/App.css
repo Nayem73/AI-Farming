@@ -63,11 +63,11 @@
 }
 
 /* for lg mode card height fix */
-@media (min-width: 992px) {
+/* @media (min-width: 992px) {
   .card {
     height: 20em;
   }
-}
+} */
 
 
 
@@ -102,6 +102,14 @@
   }
 }
 
+
+/* .md_div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1em;
+  margin-left: 5ex;
+} */
 
 .md_show_div{
   display: flex;
