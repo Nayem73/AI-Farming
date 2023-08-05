@@ -48,10 +48,7 @@ function HomeScreen() {
 
     return (
         <>
-            <div className='lg:px-20 mt-10'>
             {loading ? (<Loader />) : errorSliser ? (<Message message={errorSliser} />) :<Slider items={diseaseSlider}/>}
-            
-            </div>
             
 
             <div className='lg:px-20 mt-10'>
