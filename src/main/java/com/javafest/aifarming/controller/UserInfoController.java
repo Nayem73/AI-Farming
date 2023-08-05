@@ -63,7 +63,7 @@ public class UserInfoController {
             newUser.setUserName(userName);
             newUser.setEmail(email);
             newUser.setPassword(encodedPassword);
-//            newUser.setRole(role);
+            newUser.setRole("ROLE_USER");
 
             userInfoRepository.save(newUser);
             return ResponseEntity.ok("User added successfully");

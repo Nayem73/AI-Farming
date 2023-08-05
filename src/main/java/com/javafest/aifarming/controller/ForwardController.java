@@ -53,7 +53,7 @@ public class ForwardController {
         // Check if the user is authenticated (logged in)
         if (authentication == null) {
             Map<String, Object> response = new LinkedHashMap<>();
-            response.put("error", "Please login first.");
+            response.put("message", "Please login first.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
         // Retrieve the email of the logged-in user from the Authentication object
@@ -63,7 +63,7 @@ public class ForwardController {
         // Check if UserInfo entity exists for the user
         if (userInfo == null) {
             Map<String, Object> response = new LinkedHashMap<>();
-            response.put("error", "Please login first.");
+            response.put("message", "Please login first.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
         // Retrieve the SearchCount entity for the logged-in user
@@ -88,7 +88,7 @@ public class ForwardController {
         if (requestCount >= maxRequestCountPerMonth) {
             // If the user has exceeded the request limit, return an error response
             Map<String, Object> response = new LinkedHashMap<>();
-            response.put("error", "You have exceeded your search limit for today. Please try again tomorrow.");
+            response.put("message", "You have exceeded your search limit. Please try again later.");
             return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(response);
         }
 

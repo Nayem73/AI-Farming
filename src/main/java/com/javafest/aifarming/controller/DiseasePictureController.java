@@ -120,7 +120,7 @@ public class DiseasePictureController {
     @PreAuthorize("hasAuthority('ROLE_ADMIN') OR hasAuthority('ROLE_SUPER_ADMIN')")
     public ResponseEntity<Map<String, Object>> updateDiseasePicture(
             @PathVariable Long pictureId,
-            @RequestParam("image") MultipartFile file) throws IOException {
+            @RequestParam("img") MultipartFile file) throws IOException {
 
         if (file.isEmpty()) {
             Map<String, Object> errorResponse = new HashMap<>();
