@@ -103,14 +103,6 @@
 }
 
 
-/* .md_div {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 1em;
-  margin-left: 5ex;
-} */
-
 .md_show_div{
   display: flex;
   flex-direction: column;
