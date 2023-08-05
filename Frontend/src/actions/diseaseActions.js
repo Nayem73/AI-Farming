@@ -92,7 +92,7 @@ export const aiSearch = (formData) => async (dispatch, getState) => {
             }
         }
         const { data } = await axios.post(`/api/search/`, formData, config);
-        console.log('data',data)
+        // console.log('data',data)
         dispatch({
             type: AI_SEARCH_SUCCESS,
             payload: data

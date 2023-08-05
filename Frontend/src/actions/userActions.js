@@ -30,7 +30,7 @@ import {
 
 
 export const login = (formData) => async (dispatch) => {
-    console.log('signin')
+    // console.log('signin')
     try {
         dispatch({
             type: USER_LOGIN_REQUEST
@@ -79,7 +79,7 @@ export const register = (formData) => async (dispatch) => {
         }
 
         const { data } = await axios.post(`/api/signup/`, formData)
-        console.log('register action', data)
+        // console.log('register action', data)
         dispatch({
             type: USER_REGISTER_SUCCESS,
             payload: data
