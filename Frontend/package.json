@@ -1,5 +1,5 @@
 {
-  "name": "multi-vendor-eshop",
+  "name": "ai-farming",
   "proxy": "http://192.168.77.4:8080",
   "version": "0.1.0",
   "private": true,
@@ -24,7 +24,8 @@
     "redux": "^4.2.0",
     "redux-devtools-extension": "^2.13.9",
     "redux-thunk": "^2.4.1",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "fsevents": "2.3.2"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -54,5 +55,8 @@
     "autoprefixer": "^10.4.11",
     "postcss": "^8.4.16",
     "tailwindcss": "^3.1.8"
+  },
+  "optionalDependencies": {
+    "fsevents": "2.3.2"
   }
 }
