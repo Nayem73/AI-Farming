@@ -1,36 +1,40 @@
 import { React, useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, Route,useNavigate, useParams } from 'react-router-dom';
-import { logout } from '../actions/userActions';
-import SearchBox from './SearchBox';
-import { listCrops } from '../actions/cropActions.js';
+import { Link,useNavigate } from 'react-router-dom';
 import Select from 'react-select';
+
+// Actions
+import { logout } from '../actions/userActions';
+import { listCrops } from '../actions/cropActions';
+
+// Components
+import SearchBox from './SearchBox';
+
 
 function Header() {
     const history = useNavigate();
-
-    const userLogin = useSelector(state => state.userLogin);
-
-    const { userInfo } = userLogin;
-
-
     const dispatch = useDispatch();
 
-    const params = useParams();
 
-
-    const cropList = useSelector(state => state.cropList);
-
-    const { loading, error, crops } = cropList;
-    //_______________________my code______________________//
+    // __________________User INformations_____________________//
+    const userLogin = useSelector(state => state.userLogin);
+    const { userInfo } = userLogin;
 
     
-
+    // __________________Log out handler_____________________//
     const logOutHandler = () => {
         dispatch(logout())
         history('/')
     }
 
+
+    // __________________Crop list for option slector_____________________//
+    const cropList = useSelector(state => state.cropList);
+    const { crops } = cropList;
+
+    useEffect(() => {
+        dispatch(listCrops())
+    }, [dispatch])
 
     const options = [
         {
@@ -38,23 +42,22 @@ function Header() {
             label: 'select'
         }
     ]
-    crops.map((crop) => options.push(
-        {
-            value: crop.title,
-            label: crop.title
-        }
-    ))
-
-    useEffect(() => {
-        dispatch(listCrops())
-    }, [dispatch])
+    if(crops){
+        crops.map((crop) => options.push(
+            {
+                value: crop.title,
+                label: crop.title
+            }
+        ))
+    }
 
     const [selectedOption, setSelectedOption] = useState(null);
-
+    
     const selectedCrop = (selected) => {
         setSelectedOption(selected);
     }
 
+    //___________________________Header_______________________//
 
     return (
         <nav className='navbar bg-base-100 top-0 shadow-xl'>
@@ -137,11 +140,6 @@ function Header() {
                                     </li>
                                     <li className='searchBox_id2'><SearchBox  crop={selectedOption}/></li>
                                 </ul>
-
-
-
-                                
-                                
                             </div>
                             
                             }
