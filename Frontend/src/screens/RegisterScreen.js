@@ -21,7 +21,6 @@ const RegisterScreen = () => {
     const dispatch = useDispatch();
     const userRegister = useSelector(state => state.userRegister);
     const { loading, error, userInfo } = userRegister;
-    const balance = 0;
 
     useEffect(() => {
         if (userInfo) {

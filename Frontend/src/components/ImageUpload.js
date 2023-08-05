@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom'
 import {AI_SEARCH_RESET} from '../constants/diseaseConstants.js'
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import SuccessMessage from '../components/SuccessMessage';
 
 const ImageUpload = () => {
     const dispatch = useDispatch();
@@ -21,10 +20,39 @@ const ImageUpload = () => {
     const aiSearchData = useSelector((state) => state.aiSearch);
     const { loading: aiLoading, error: aiError, crop, disease } = aiSearchData;
 
-    const cropOptions = crops.map((crop) => ({
-        value: crop.title,
-        label: crop.title,
-    }));
+    
+
+    useEffect(() => {
+        dispatch(listCrops());
+        if (crop!=='' && disease!=='' && crop!==undefined && disease!==undefined) {
+        let crop_titles = crop
+        let disease_titles = disease
+        
+        // reset crop and disease
+        dispatch({
+            type: AI_SEARCH_RESET
+        })
+        // console.log('aierror', aiError)
+
+        navigate(`/disease/${crop_titles}/${disease_titles}`);
+        }
+        if(aiError){
+            setMassage(aiError)
+        }
+    }, [aiLoading, aiError, crop, disease]);
+
+    const cropOptions = []
+
+    if(crops){
+        crops.map((crop) => cropOptions.push(
+            {
+                value: crop.title,
+                label: crop.title
+            }
+        ))
+
+    }
+    
 
     const [formData, setFormData] = useState({
         crop: '',
@@ -60,25 +88,6 @@ const ImageUpload = () => {
         formDataToSend.append('file', formData.file);
         dispatch(aiSearch(formDataToSend));
     };
-
-    useEffect(() => {
-        dispatch(listCrops());
-        if (crop!=='' && disease!=='' && crop!==undefined && disease!==undefined) {
-        let crop_titles = crop
-        let disease_titles = disease
-        
-        // reset crop and disease
-        dispatch({
-            type: AI_SEARCH_RESET
-        })
-        // console.log('aierror', aiError)
-
-        navigate(`/disease/${crop_titles}/${disease_titles}`);
-        }
-        if(aiError){
-            setMassage(aiError)
-        }
-    }, [aiLoading, aiError, crop, disease]);
 
     return (
         <>

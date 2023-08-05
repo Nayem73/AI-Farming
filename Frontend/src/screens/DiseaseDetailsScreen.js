@@ -32,7 +32,7 @@ const DiseaseDetailsScreen = () => {
     const { loading, error, disease } = diseaseDetails;
 
     const pictureList = useSelector(state => state.pictureList);
-    const { loading:loadingPicture, error:errorPicture, pictures } = pictureList;
+    const { error:errorPicture, pictures } = pictureList;
 
 
     useEffect(() => {

@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { listCrops, deleteCrop, createCrop, updateCrop } from '../actions/cropActions';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import FormContainer from '../components/FormContainer'
 
 const AdminCropScreen = () => {
     const dispatch = useDispatch();
@@ -28,13 +27,13 @@ const AdminCropScreen = () => {
     const { loading, error, crops } = cropList;
 
     const cropDelete = useSelector(state => state.cropDelete);
-    const { loading: loadingDelete, error: errorDelete, success: successDelete } = cropDelete;
+    const {  success: successDelete } = cropDelete;
 
     const cropCreate = useSelector(state => state.cropCreate);
-    const { loading: loadingCreate, error: errorCreate, success: successCreate } = cropCreate;
+    const { success: successCreate } = cropCreate;
 
     const cropUpdate = useSelector(state => state.cropUpdate);
-    const { loading: loadingUpdate, error: errorUpdate, success: successUpdate } = cropUpdate;
+    const {  success: successUpdate } = cropUpdate;
 
 
 
@@ -75,7 +74,7 @@ const AdminCropScreen = () => {
             setEdit_crop_bool(true)
         }
         setEdit_crop_id(id)
-        setCrop_title(crops.find(crop => crop.id == id).title)
+        setCrop_title(crops.find(crop => crop.id === id).title)
     }
 
     const editHandler = (id) => {
@@ -126,7 +125,7 @@ const AdminCropScreen = () => {
                                 <td>{crop.id}</td>
                                 <td></td>
                                 <td></td>
-                                {edit_crop_bool && (edit_crop_id == crop.id) ?
+                                {edit_crop_bool && (edit_crop_id === crop.id) ?
                                 <td><input value={crop_title} placeholder="Crop Title" className="input input-bordered w-full max-w-xs" onChange={(e) => setCrop_title(e.target.value)} /></td>:
                                 <td>{crop.title}</td>}
                                 
@@ -136,20 +135,20 @@ const AdminCropScreen = () => {
                                 <td>
                                     
                                     
-                                    {(delete_crop_bool && (delete_crop_id == crop.id)) ?
+                                    {(delete_crop_bool && (delete_crop_id === crop.id)) ?
                                     <><button onClick={() => deleteHandler(crop.id)} className='btn ml-3'> <i class="fa-solid fa-check"></i> </button>
                                     <button onClick={() => deleteButtonHandler(crop.id)} className='btn ml-3'> <i class="fa-solid fa-xmark"></i></button></>
                                     :<></>
 
                                     }
 
-                                    {(edit_crop_bool && (edit_crop_id ==crop.id )) ?
+                                    {(edit_crop_bool && (edit_crop_id ===crop.id )) ?
                                     <><button onClick={() => editHandler(crop.id)} className='btn ml-3'> <i class="fa-solid fa-check"></i> </button>
                                     <button onClick={() => editButtonHandler(crop.id)} className='btn ml-3'> <i class="fa-solid fa-xmark"></i></button></>
                                     :<></>
                                     }
 
-                                    {((delete_crop_bool && (delete_crop_id== crop.id)) || (edit_crop_bool && (edit_crop_id==crop.id)))?
+                                    {((delete_crop_bool && (delete_crop_id=== crop.id)) || (edit_crop_bool && (edit_crop_id===crop.id)))?
                                     <></>
                                     :<><button onClick={() => editButtonHandler(crop.id)} className='btn mx-3'> <i className='fas fa-edit'></i> </button>
                                     <button onClick={() => deleteButtonHandler(crop.id)} className='btn'> <i className='fas fa-trash'></i> </button></>

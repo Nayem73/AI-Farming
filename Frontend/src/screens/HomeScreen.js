@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 
 
@@ -27,7 +27,7 @@ function HomeScreen() {
     const { loading, error, diseases } = diseaseList;
 
     const pictureSlider = useSelector(state => state.pictureSlider);
-    const { loading:loadingSlider, error:errorSliser, diseases:diseaseSlider } = pictureSlider;
+    const { error:errorSliser, diseases:diseaseSlider } = pictureSlider;
 
 
     useEffect(() => {
@@ -49,7 +49,7 @@ function HomeScreen() {
     return (
         <>
             <div className='lg:px-20 mt-10'>
-            {loading ? (<Loader />) : error ? (<Message message={error} />) :<Slider items={diseaseSlider}/>}
+            {loading ? (<Loader />) : errorSliser ? (<Message message={errorSliser} />) :<Slider items={diseaseSlider}/>}
             
             </div>
             

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { updateUerProfile, listUsers } from '../actions/userActions';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const UserListScreen = () => {
     const dispatch = useDispatch();
@@ -31,7 +31,7 @@ const UserListScreen = () => {
         if (successUpdate) {
             setEdit_user_bool(false)
         }
-    }, [dispatch, successUpdate], )
+    }, [dispatch, successUpdate])
 
 
 
@@ -44,7 +44,7 @@ const UserListScreen = () => {
             setEdit_user_bool(true)
         }
         setEdit_user_id(id)
-        setIsAdmin(users.find(user => user.id == id).isAdmin)
+        setIsAdmin(users.find(user => user.id === id).isAdmin)
     }
 
     const editHandler = (id) => {
@@ -82,7 +82,7 @@ const UserListScreen = () => {
                                     <td>{  user.userName }</td>
                                     <td>{  user.email }</td>
                                     <td>{(user.isAdmin === true && !edit_user_bool) ? (<i className='fa-regular fa-circle-check' style={{ color: 'green' }}> </i>) 
-                                    : (edit_user_bool && edit_user_id==user.id)?<>
+                                    : (edit_user_bool && edit_user_id===user.id)?<>
 
                                     <label>
                                             <input
@@ -96,7 +96,7 @@ const UserListScreen = () => {
                                     <td>
                                     {userInfo.isSuperAdmin && !edit_user_bool?<button onClick={()=>editButtonHandler(user.id)} className='btn mx-2'> <i className='fas fa-edit'></i> </button>
                                     :<>
-                                    {(edit_user_bool && (edit_user_id ==user.id )) ?
+                                    {(edit_user_bool && (edit_user_id === user.id )) ?
                                     <><button onClick={() => editHandler(user.id)} className='btn ml-3'> <i class="fa-solid fa-check"></i> </button>
                                     <button onClick={() => editButtonHandler(user.id)} className='btn ml-3'> <i class="fa-solid fa-xmark"></i></button></>
                                     :<></>

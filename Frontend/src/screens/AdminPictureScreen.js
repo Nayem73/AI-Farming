@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import {  useNavigate, useParams } from 'react-router-dom';
 import { listPictures, deletePicture, createPicture, updatePicture } from '../actions/pictureActions';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import FormContainer from '../components/FormContainer'
 
 const AdminPictureScreen = () => {
     const dispatch = useDispatch();
@@ -33,13 +32,13 @@ const AdminPictureScreen = () => {
     const { loading, error, pictures } = pictureList;
 
     const pictureDelete = useSelector(state => state.pictureDelete);
-    const { loading: loadingDelete, error: errorDelete, success: successDelete } = pictureDelete;
+    const {  success: successDelete } = pictureDelete;
 
     const pictureCreate = useSelector(state => state.pictureCreate);
-    const { loading: loadingCreate, error: errorCreate, success: successCreate } = pictureCreate;
+    const {  success: successCreate } = pictureCreate;
 
     const pictureUpdate = useSelector(state => state.pictureUpdate);
-    const { loading: loadingUpdate, error: errorUpdate, success: successUpdate } = pictureUpdate;
+    const {  success: successUpdate } = pictureUpdate;
 
 
 
@@ -137,7 +136,7 @@ const AdminPictureScreen = () => {
                                 <td>{picture.id}</td>
                                 <td></td>
                                 <td></td>
-                                {edit_picture_bool && (edit_picture_id == picture.id) ?
+                                {edit_picture_bool && (edit_picture_id === picture.id) ?
                                 <td><input
                                     type="file"
                                     id="img"
@@ -153,20 +152,20 @@ const AdminPictureScreen = () => {
                                 <td>
                                     
                                     
-                                    {(delete_picture_bool && (delete_picture_id == picture.id)) ?
+                                    {(delete_picture_bool && (delete_picture_id === picture.id)) ?
                                     <><button onClick={() => deleteHandler(picture.id)} className='btn ml-3'> <i class="fa-solid fa-check"></i> </button>
                                     <button onClick={() => deleteButtonHandler(picture.id)} className='btn ml-3'> <i class="fa-solid fa-xmark"></i></button></>
                                     :<></>
 
                                     }
 
-                                    {(edit_picture_bool && (edit_picture_id ==picture.id )) ?
+                                    {(edit_picture_bool && (edit_picture_id ===picture.id )) ?
                                     <><button onClick={() => editHandler(picture.id)} className='btn ml-3'> <i class="fa-solid fa-check"></i> </button>
                                     <button onClick={() => editButtonHandler(picture.id)} className='btn ml-3'> <i class="fa-solid fa-xmark"></i></button></>
                                     :<></>
                                     }
 
-                                    {((delete_picture_bool && (delete_picture_id== picture.id)) || (edit_picture_bool && (edit_picture_id==picture.id)))?
+                                    {((delete_picture_bool && (delete_picture_id=== picture.id)) || (edit_picture_bool && (edit_picture_id===picture.id)))?
                                     <></>
                                     :<><button onClick={() => editButtonHandler(picture.id)} className='btn mx-3'> <i className='fas fa-edit'></i> </button>
                                     <button onClick={() => deleteButtonHandler(picture.id)} className='btn'> <i className='fas fa-trash'></i> </button></>

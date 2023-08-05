@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom';
-import { listDiseases, deleteDisease, createDisease } from '../actions/diseaseActions';
+import { listDiseases, deleteDisease } from '../actions/diseaseActions';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 
@@ -19,7 +19,7 @@ const DiseaseListScreen = () => {
     const userLogin = useSelector(state => state.userLogin);
     const { userInfo } = userLogin;
     const diseaseDelete = useSelector(state => state.diseaseDelete);
-    const { loading: loadingDelete, error: errorDelete, success: successDelete } = diseaseDelete;
+    const {  success: successDelete } = diseaseDelete;
 
 
     useEffect(() => {
@@ -81,7 +81,7 @@ const DiseaseListScreen = () => {
                                 <td>
                                     
                                     
-                                    {(delete_disease_bool && delete_disease_id==disease.id) ?
+                                    {(delete_disease_bool && delete_disease_id===disease.id) ?
                                     <><button onClick={() => deleteHandler(disease.id)} className='btn ml-4'> <i class="fa-solid fa-check"></i> </button>
                                     <button onClick={() => deleteButtonHandler(disease.id)} className='btn ml-2'> <i class="fa-solid fa-xmark"></i></button></>
                                     :<></>
@@ -89,7 +89,7 @@ const DiseaseListScreen = () => {
                                     }
 
 
-                                    {(delete_disease_bool && delete_disease_id==disease.id)?
+                                    {(delete_disease_bool && delete_disease_id===disease.id)?
                                     <></>
                                     :<>
                                     <Link to={`/admin/disease/edit/${disease.crop.title}/${disease.title}`}>
