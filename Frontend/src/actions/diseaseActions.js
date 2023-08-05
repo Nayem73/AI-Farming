@@ -25,20 +25,18 @@ import {
     AI_SEARCH_SUCCESS,
     AI_SEARCH_FAILED } from "../constants/diseaseConstants";
 
-const root_url = "http://192.168.77.4:8080";
-
 export const listDiseases = (params) => async (dispatch) => {
     let crop = '';
     let search = '';
-    let url = `${root_url}/api/disease/`
+    let url = `/api/disease/`
     if (params){
         if (params.crop){
             crop = params.crop;
-            url = `${root_url}/api/disease?crop=${crop}&search=${search}`
+            url = `/api/disease?crop=${crop}&search=${search}`
         }
         if (params.search){
             search = params.search;
-            url = `${root_url}/api/disease?crop=${crop}&search=${search}`
+            url = `/api/disease?crop=${crop}&search=${search}`
         }
     }
     try {
@@ -65,7 +63,7 @@ export const listDiseaseDetails = (crop, disease) => async (dispatch) => {
         dispatch({
             type: DISEASE_DETAIL_REQUEST
         })
-        let url = `${root_url}/api/disease/${crop}/${disease}`;
+        let url = `/api/disease/${crop}/${disease}`;
         const { data } = await axios.get(url);
 
         dispatch({
@@ -93,7 +91,7 @@ export const aiSearch = (formData) => async (dispatch, getState) => {
                 Authorization: `Bearer ${userInfo.token}`
             }
         }
-        const { data } = await axios.post(`${root_url}/api/search/`, formData, config);
+        const { data } = await axios.post(`/api/search/`, formData, config);
         console.log('data',data)
         dispatch({
             type: AI_SEARCH_SUCCESS,
@@ -132,7 +130,7 @@ export const deleteDisease= (id) => async (dispatch, getState) => {
                 Authorization: `Bearer ${userInfo.token}`
             }
         }
-        await axios.delete(`${root_url}/api/disease/${id}`, config)
+        await axios.delete(`/api/disease/${id}`, config)
         dispatch({
             type: DISEASE_DELETE_SUCCESS,
         })
@@ -158,7 +156,7 @@ export const createDisease = (formData) => async (dispatch, getState) => {
                 Authorization: `Bearer ${userInfo.token}`
             }
         }
-        const { data } = await axios.post(`${root_url}/api/disease/`, formData, config)
+        const { data } = await axios.post(`/api/disease/`, formData, config)
         
         dispatch({
             type: DISEASE_CREATE_SUCCESS,
@@ -186,7 +184,7 @@ export const updateDisease = (disease_id, formData) => async (dispatch, getState
                 Authorization: `Bearer ${userInfo.token}`
             }
         }
-        const { data } = await axios.put(`${root_url}/api/disease/${disease_id}`, formData, config)
+        const { data } = await axios.put(`/api/disease/${disease_id}`, formData, config)
         dispatch({
             type: DISEASE_UPDATE_SUCCESS,
             success: true,

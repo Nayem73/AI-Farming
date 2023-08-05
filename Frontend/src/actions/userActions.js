@@ -29,8 +29,6 @@ import {
     USER_UPDATE_SUCCESS } from "../constants/userConstants"
 
 
-const root_url = "http://192.168.77.4:8080";
-
 export const login = (formData) => async (dispatch) => {
     console.log('signin')
     try {
@@ -44,7 +42,7 @@ export const login = (formData) => async (dispatch) => {
             }
         }
 
-        const { data } = await axios.post(`${root_url}/api/signin/`, formData)
+        const { data } = await axios.post(`/api/signin/`, formData)
 
         dispatch({
             type: USER_LOGIN_SUCCESS,
@@ -74,13 +72,13 @@ export const register = (formData) => async (dispatch) => {
             type: USER_REGISTER_REQUEST
         })
 
-        // const config = {
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     }
-        // }
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
 
-        const { data } = await axios.post(`${root_url}/api/signup/`, formData)
+        const { data } = await axios.post(`/api/signup/`, formData)
         console.log('register action', data)
         dispatch({
             type: USER_REGISTER_SUCCESS,
@@ -118,7 +116,7 @@ export const getUserDetails = () => async (dispatch, getState) => {
             }
         }
 
-        const { data } = await axios.get(`${root_url}/api/profile/`, config)
+        const { data } = await axios.get(`/api/profile/`, config)
         dispatch({
             type: USER_DETAILS_SUCCESS,
             payload: data
@@ -147,7 +145,7 @@ export const updateUerProfile = (user_id, FormData) => async (dispatch, getState
             }
         }
 
-        const { data } = await axios.patch(`${root_url}/api/userlist/${user_id}`, FormData, config)
+        const { data } = await axios.patch(`/api/userlist/${user_id}`, FormData, config)
 
         localStorage.setItem('userInfo', JSON.stringify(data))
 
@@ -178,7 +176,7 @@ export const listUsers = () => async (dispatch, getState) => {
             }
         }
 
-        const { data } = await axios.get(`${root_url}/api/userlist/`, config)
+        const { data } = await axios.get(`/api/userlist/`, config)
 
         dispatch({
             type: USER_LIST_SUCCESS,

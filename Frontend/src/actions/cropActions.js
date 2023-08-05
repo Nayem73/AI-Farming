@@ -16,7 +16,6 @@ import {
     CROP_UPDATE_REQUEST,
     CROP_UPDATE_SUCCESS } from "../constants/cropConstants";
 
-const root_url = "http://192.168.77.4:8080";
 
 export const listCrops = (keyword = ' ') => async (dispatch) => {
     try {
@@ -24,7 +23,7 @@ export const listCrops = (keyword = ' ') => async (dispatch) => {
             type: CROP_LIST_REQUEST
         })
 
-        const { data } = await axios.get(`${root_url}/api/crops/`);
+        const { data } = await axios.get(`/api/crops/`);
 
         dispatch({
             type: CROP_LIST_SUCCESS,
@@ -52,7 +51,7 @@ export const deleteCrop= (id) => async (dispatch, getState) => {
                 Authorization: `Bearer ${userInfo.token}`
             }
         }
-        await axios.delete(`${root_url}/api/crops/${id}`, config)
+        await axios.delete(`/api/crops/${id}`, config)
         dispatch({
             type: CROP_DELETE_SUCCESS,
         })
@@ -77,7 +76,7 @@ export const createCrop = (FormData) => async (dispatch, getState) => {
                 Authorization: `Bearer ${userInfo.token}`
             }
         }
-        const { data } = await axios.post(`${root_url}/api/crops/`, FormData, config)
+        const { data } = await axios.post(`/api/crops/`, FormData, config)
         dispatch({
             type: CROP_CREATE_SUCCESS,
             payload: data
@@ -104,7 +103,7 @@ export const updateCrop = (crop_id, formData) => async (dispatch, getState) => {
                 Authorization: `Bearer ${userInfo.token}`
             }
         }
-        const { data } = await axios.put(`${root_url}/api/crops/${crop_id}`, formData, config)
+        const { data } = await axios.put(`/api/crops/${crop_id}`, formData, config)
         dispatch({
             type: CROP_UPDATE_SUCCESS,
             success: true,

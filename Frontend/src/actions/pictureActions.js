@@ -21,7 +21,6 @@ import {
     PICTURE_SLIDER_FAILED
 } from "../constants/pictureConstants";
 
-const root_url = "http://192.168.77.4:8080";
 
 export const listPictures = (id) => async (dispatch, getState) => {
     try {
@@ -29,7 +28,7 @@ export const listPictures = (id) => async (dispatch, getState) => {
             type: PICTURE_LIST_REQUEST
         })
 
-        const { data } = await axios.get(`${root_url}/api/disease/${id}/picture/`);
+        const { data } = await axios.get(`/api/disease/${id}/picture/`);
         // console.log(data);
         dispatch({
             type: PICTURE_LIST_SUCCESS,
@@ -50,7 +49,7 @@ export const sliderPicture = () => async (dispatch) => {
             type: PICTURE_SLIDER_REQUEST
         })
 
-        const { data } = await axios.get(`${root_url}/api/disease/`);
+        const { data } = await axios.get(`/api/disease/`);
         dispatch({
             type: PICTURE_SLIDER_SUCCESS,
             payload: data
@@ -77,7 +76,7 @@ export const deletePicture= (id) => async (dispatch, getState) => {
                 Authorization: `Bearer ${userInfo.token}`
             }
         }
-        await axios.delete(`${root_url}/api/disease/picture/${id}`, config)
+        await axios.delete(`/api/disease/picture/${id}`, config)
         dispatch({
             type: PICTURE_DELETE_SUCCESS,
         })
@@ -102,7 +101,7 @@ export const createPicture = (FormData) => async (dispatch, getState) => {
                 Authorization: `Bearer ${userInfo.token}`
             }
         }
-        const { data } = await axios.post(`${root_url}/api/disease/picture/`, FormData, config)
+        const { data } = await axios.post(`/api/disease/picture/`, FormData, config)
         dispatch({
             type: PICTURE_CREATE_SUCCESS,
             payload: data
@@ -129,7 +128,7 @@ export const updatePicture = (id, formData) => async (dispatch, getState) => {
                 Authorization: `Bearer ${userInfo.token}`
             }
         }
-        const { data } = await axios.put(`${root_url}/api/disease/picture/${id}`, formData, config)
+        const { data } = await axios.put(`/api/disease/picture/${id}`, formData, config)
         dispatch({
             type: PICTURE_UPDATE_SUCCESS,
             success: true,
