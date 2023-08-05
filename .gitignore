@@ -87,3 +87,4 @@ venv.bak/
 node_modules/
 yarn.lock
 staticfiles/
+/build
