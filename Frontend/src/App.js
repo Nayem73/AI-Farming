@@ -10,7 +10,6 @@ import RegisterScreen from './screens/RegisterScreen';
 
 import ProfileScreen from './screens/ProfileScreen';
 import UserListScreen from './screens/AdminUserListScreen';
-// import UserEditScreen from './screens/UserEditScreen';
 
 
 import DiseaseDetailsScreen from './screens/DiseaseDetailsScreen';
@@ -31,9 +30,6 @@ function App() {
         <Route exact path='/' element={<HomeScreen />} />
         <Route path='/login' element={<LoginScreen />} />
         <Route path='/register' element={<RegisterScreen />} />
-        {/* <Route path='/profile' element={<ProfileScreen />} /> */}
-        {/* <Route path='/admin/userlist/' element={<UserListScreen />} />
-        <Route path='/admin/user/:id/edit' element={<UserEditScreen />} /> */}
 
         <Route path='/aisearch/' element={<AISearchScreen />} />
         <Route path='/profile/' element={<ProfileScreen />} />
