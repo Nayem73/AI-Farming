@@ -33,13 +33,6 @@ public class DiseaseController {
         this.cropRepository = cropRepository;
     }
 
-//    @GetMapping("/user")
-//    public ResponseEntity<String> getCurrentUser() {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        String username = authentication.getName();
-//        return ResponseEntity.ok("Logged in as: " + username);
-//    }
-
     @GetMapping("/disease/")
     public List<Disease> getAllDisease() {
         return diseaseRepository.findAll();
@@ -142,21 +135,6 @@ public class DiseaseController {
         String fileName = file.getOriginalFilename();
         return fileName != null && (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") || fileName.endsWith(".png"));
     }
-
-
-
-//    @PutMapping("/disease/{id}")
-////    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-//    public Disease updateDisease(@PathVariable Long id, @RequestBody Disease updatedDisease) {
-//        Disease disease = diseaseRepository.findById(id)
-//                .orElseThrow(() -> new IllegalArgumentException("Invalid Disease ID: " + id));
-//
-//        disease.setTitle(updatedDisease.getTitle());
-//        disease.setImg(updatedDisease.getImg());
-//        disease.setDescription(updatedDisease.getDescription());
-//        //crop.setId(updatedCrop.getId());
-//        return diseaseRepository.save(disease);
-//    }
 
     @PutMapping("/disease/{diseaseId}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN') OR hasAuthority('ROLE_SUPER_ADMIN')")

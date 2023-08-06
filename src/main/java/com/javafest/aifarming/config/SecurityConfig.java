@@ -45,19 +45,8 @@ public class SecurityConfig {
         return new UserInfoUserDetailsService();
     }
 
-//    @Bean
-//    public AuthenticationSuccessHandler successHandler() {
-//        return new SimpleUrlAuthenticationSuccessHandler();
-//    }
-//
-//    @Bean
-//    public AuthenticationFailureHandler failureHandler() {
-//        return new SimpleUrlAuthenticationFailureHandler();
-//    }
-
     @Bean
     //authorization stuff
-    //which endpoints
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(rQ -> {
@@ -70,26 +59,6 @@ public class SecurityConfig {
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
-
-//    @Bean
-//    //authorization stuff
-//    //which endpoints
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        return http.csrf().disable()
-//                .authorizeHttpRequests()
-//                .requestMatchers("/api/crops/", "/signup", "/login").permitAll()
-//                .and()
-//                .authorizeHttpRequests().requestMatchers("/api/**").authenticated()
-//                .and()
-//                .httpBasic()
-//                .and()
-////                .formLogin().disable() // Disable form login
-////                .logout().disable() // Disable logout
-////                .exceptionHandling()
-////                .authenticationEntryPoint((request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED)) // Send 401 Unauthorized for unauthenticated requests
-//                //.and()
-//                .build();
-//    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

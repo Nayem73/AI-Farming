@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 @RestController
@@ -133,18 +132,6 @@ public class ForwardController {
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(returnResponse);
-
-
-//        Disease disease = diseaseRepository.findByCropTitleAndDiseaseTitleExact(text, predictionClass);
-//        if (disease != null) {
-//            return ResponseEntity.ok(disease);
-//        } else {
-//            // Handle the case where the Crop is not found
-//            return ResponseEntity.notFound().build();
-//        }
-
-        // Step 6: Return the response from the other server
-        //return response;
     }
 
     private boolean is30DaysAgo(Date startDate, Date endDate) {

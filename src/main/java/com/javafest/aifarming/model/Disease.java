@@ -121,12 +121,4 @@ public class Disease {
         this.crop = crop;
     }
 
-//    @Override
-//    public String toString() {
-//        return "Disease{" +
-//                "id=" + id +
-//                ", description='" + description + '\'' +
-//                ", crop=" + crop +
-//                '}';
-//    }
 }

@@ -84,11 +84,4 @@ public class Crop {
         }
     }
 
-//    @Override
-//    public String toString() {
-//        return "CropCategory{" +
-//                "id=" + id +
-//                ", title='" + title + '\'' +
-//                '}';
-//    }
 }

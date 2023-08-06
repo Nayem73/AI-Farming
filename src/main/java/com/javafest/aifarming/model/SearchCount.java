@@ -46,12 +46,6 @@ public class SearchCount {
         this.count = count;
     }
 
-//    public SearchCount(UserInfo userInfo, int count, Date lastResetDate) {
-//        this.userInfo = userInfo;
-//        this.count = count;
-//        this.lastResetDate = lastResetDate;
-//    }
-
     public Long getId() {
         return id;
     }
