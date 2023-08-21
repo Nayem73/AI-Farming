@@ -12,10 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api")
@@ -28,9 +25,25 @@ public class UserReviewController {
         this.userInfoRepository = userInfoRepository;
     }
 
-    @GetMapping("/review")
-    public List<UserReview> getAllUserReview() {
-        return userReviewRepository.findAll();
+    @GetMapping("/review/{userId}")
+    public ResponseEntity<List<Map<String, Object>>> getAllUserReviewByUserId(@PathVariable Long userId) {
+        // Fetch the corresponding Disease object from the database using the diseaseId
+        List<UserReview> userReviews = userReviewRepository.findReviewByUserId(userId);
+
+
+        // Create a list to store all reviews of userId
+        List<Map<String, Object>> response = new ArrayList<>();
+
+        // Iterate through the userReview entities and extract the specific fields to include in the response
+        for (UserReview userReview : userReviews) {
+            Map<String, Object> res = new LinkedHashMap<>();
+            res.put("reviewId", userReview.getId());
+            res.put("description", userReview.getDescription());
+            res.put("img", userReview.getImg());
+
+            response.add(res);
+        }
+        return ResponseEntity.ok().body(response);
     }
 
     @PostMapping("/review/")
