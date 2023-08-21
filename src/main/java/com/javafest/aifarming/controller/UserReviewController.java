@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 @RestController
@@ -69,18 +72,51 @@ public class UserReviewController {
             response.put("message", "Please login first.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
+        String realPath;
+        if (file.isEmpty()) {
+            realPath = "null";
+        } else {
+            // Check if the uploaded file is an image
+            if (!isImageFile(file)) {
+                Map<String, Object> errorResponse = new HashMap<>();
+                errorResponse.put("error", "Only image files are allowed.");
+                return ResponseEntity.badRequest().body(errorResponse);
+            }
 
-        UserReview userReview = new UserReview(text, "/img/placeholder.jpg", userInfo);
+            // Set the appropriate path to store the image
+            String imagePath = "src/main/resources/images";
+
+            // Create the directory if it doesn't exist
+            Path imageDir = Paths.get(imagePath);
+            if (!Files.exists(imageDir)) {
+                Files.createDirectories(imageDir);
+            }
+
+            // Generate a unique file name for the image
+            String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+
+            // Save the image file using the provided path
+            Path targetPath = imageDir.resolve(fileName);
+            Files.copy(file.getInputStream(), targetPath);
+            realPath = "/api/picture?link=images/" + fileName;
+        }
+
+        UserReview userReview = new UserReview(text, realPath, userInfo);
         userReviewRepository.save(userReview);
 
         Map<String, Object> response = new LinkedHashMap<>();
         response.put("reviewId", userReview.getId());
         response.put("description", text);
         response.put("img", userReview.getImg());
-        response.put("userId", userReview.getUserInfo().getId());
+        response.put("userName", userReview.getUserInfo().getUserName());
 
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(response);
+    }
+
+    private boolean isImageFile(MultipartFile file) {
+        String fileName = file.getOriginalFilename();
+        return fileName != null && (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") || fileName.endsWith(".png"));
     }
 }
