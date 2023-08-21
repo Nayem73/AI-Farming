@@ -3,6 +3,8 @@ package com.javafest.aifarming.model;
 import jakarta.persistence.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import java.util.List;
+
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 @Entity(name = "UserInfo")
@@ -56,6 +58,13 @@ public class UserInfo {
 
     @OneToOne(mappedBy = "userInfo", cascade = CascadeType.ALL, orphanRemoval = true)
     private SearchCount searchCount;
+
+    @OneToMany(
+            mappedBy = "userInfo",
+            orphanRemoval = true,
+            cascade = CascadeType.ALL
+    )
+    private List<UserReview> userReviews;
 
     public UserInfo() {
     }
