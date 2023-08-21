@@ -4,6 +4,9 @@ import com.javafest.aifarming.model.UserInfo;
 import com.javafest.aifarming.model.UserReview;
 import com.javafest.aifarming.repository.UserInfoRepository;
 import com.javafest.aifarming.repository.UserReviewRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,25 +32,28 @@ public class UserReviewController {
     }
 
     @GetMapping("/review/{userId}")
-    public ResponseEntity<List<Map<String, Object>>> getAllUserReviewByUserId(@PathVariable Long userId) {
-        // Fetch the corresponding Disease object from the database using the diseaseId
-        List<UserReview> userReviews = userReviewRepository.findReviewByUserId(userId);
+    public ResponseEntity<Page<Map<String, Object>>> getAllUserReviewByUserId(
+            @PathVariable Long userId,
+            @RequestParam(defaultValue = "0") int page, //start of page
+            @RequestParam(defaultValue = "5") int size) { //pageSize - number of review per page
 
+        // Create a Pageable object to represent pagination parameters
+        Pageable pageable = PageRequest.of(page, size);
 
-        // Create a list to store all reviews of userId
-        List<Map<String, Object>> response = new ArrayList<>();
+        // Fetch the Page of UserReview objects using the userReviewRepository
+        Page<UserReview> userReviewPage = userReviewRepository.findReviewByUserId(userId, pageable);
 
-        // Iterate through the userReview entities and extract the specific fields to include in the response
-        for (UserReview userReview : userReviews) {
+        Page<Map<String, Object>> responsePage = userReviewPage.map(userReview -> {
             Map<String, Object> res = new LinkedHashMap<>();
             res.put("reviewId", userReview.getId());
             res.put("description", userReview.getDescription());
             res.put("img", userReview.getImg());
+            return res;
+        });
 
-            response.add(res);
-        }
-        return ResponseEntity.ok().body(response);
+        return ResponseEntity.ok().body(responsePage);
     }
+
 
     @PostMapping("/review/")
     public ResponseEntity<Map<String, Object>> addUserReview(
