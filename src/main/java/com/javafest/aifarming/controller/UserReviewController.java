@@ -5,6 +5,7 @@ import com.javafest.aifarming.model.UserReview;
 import com.javafest.aifarming.repository.UserInfoRepository;
 import com.javafest.aifarming.repository.UserReviewRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -34,25 +35,28 @@ public class UserReviewController {
     @GetMapping("/review/{userId}")
     public ResponseEntity<Page<Map<String, Object>>> getAllUserReviewByUserId(
             @PathVariable Long userId,
-            @RequestParam(defaultValue = "0") int page, //start of page
-            @RequestParam(defaultValue = "5") int size) { //pageSize - number of review per page
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
 
-        // Create a Pageable object to represent pagination parameters
         Pageable pageable = PageRequest.of(page, size);
 
-        // Fetch the Page of UserReview objects using the userReviewRepository
         Page<UserReview> userReviewPage = userReviewRepository.findReviewByUserId(userId, pageable);
 
-        Page<Map<String, Object>> responsePage = userReviewPage.map(userReview -> {
+        List<Map<String, Object>> response = new ArrayList<>();
+
+        for (UserReview userReview : userReviewPage.getContent()) {
             Map<String, Object> res = new LinkedHashMap<>();
             res.put("reviewId", userReview.getId());
             res.put("description", userReview.getDescription());
             res.put("img", userReview.getImg());
-            return res;
-        });
 
-        return ResponseEntity.ok().body(responsePage);
+            response.add(res);
+        }
+
+        return ResponseEntity.ok()
+                .body(new PageImpl<>(response, pageable, userReviewPage.getTotalElements()));
     }
+
 
 
     @PostMapping("/review/")
