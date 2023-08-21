@@ -99,7 +99,7 @@ public class DiseaseController {
         }
 
         // Set the appropriate path to store the image (adjust this to your needs)
-        String imagePath = "\\Users\\nayem\\OneDrive\\Desktop\\images";
+        String imagePath = "src/main/resources/images";
 
         // Create the directory if it doesn't exist
         Path imageDir = Paths.get(imagePath);
@@ -159,7 +159,7 @@ public class DiseaseController {
                 return ResponseEntity.badRequest().body(errorResponse);
             }
 
-            String imagePath = "\\Users\\nayem\\OneDrive\\Desktop\\images";
+            String imagePath = "src/main/resources/images";
             Path imageDir = Paths.get(imagePath);
             if (!Files.exists(imageDir)) {
                 Files.createDirectories(imageDir);

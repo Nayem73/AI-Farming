@@ -45,7 +45,7 @@ public class PictureController {
         }
 
         // Set the appropriate path to store the image (adjust this to your needs)
-        String imagePath = "\\Users\\nayem\\OneDrive\\Desktop\\images";
+        String imagePath = "src/main/resources/images";
 
         // Create the directory if it doesn't exist
         Path imageDir = Paths.get(imagePath);
