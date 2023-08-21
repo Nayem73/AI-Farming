@@ -83,7 +83,7 @@ public class PictureController {
     @GetMapping
     public ResponseEntity<Resource> showPicture(@RequestParam("link") String imagePath) throws IOException {
         // Concatenate the base image path with the relative image path from the request parameter
-        String baseImagePath = "/Users/nayem/OneDrive/Desktop/";
+        String baseImagePath = "src/main/resources/";
         Path imageFilePath = Paths.get(baseImagePath, imagePath);
 
         if (!Files.exists(imageFilePath)) {
