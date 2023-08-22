@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface UserReviewRepository extends JpaRepository<UserReview, Long> {
-    @Query("SELECT c FROM UserReview c JOIN FETCH c.userInfo cc WHERE cc.id = ?1")
-    Page<UserReview> findReviewByUserId(Long userId, Pageable pageable);
+    Page<UserReview> findAll(Pageable pageable);
 }
 

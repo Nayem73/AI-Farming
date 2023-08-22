@@ -32,15 +32,14 @@ public class UserReviewController {
         this.userInfoRepository = userInfoRepository;
     }
 
-    @GetMapping("/review/{userId}")
-    public ResponseEntity<Page<Map<String, Object>>> getAllUserReviewByUserId(
-            @PathVariable Long userId,
+    @GetMapping("/review")
+    public ResponseEntity<Page<Map<String, Object>>> getAllUserReviews(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
         Pageable pageable = PageRequest.of(page, size);
 
-        Page<UserReview> userReviewPage = userReviewRepository.findReviewByUserId(userId, pageable);
+        Page<UserReview> userReviewPage = userReviewRepository.findAll(pageable);
 
         List<Map<String, Object>> response = new ArrayList<>();
 
@@ -56,6 +55,7 @@ public class UserReviewController {
         return ResponseEntity.ok()
                 .body(new PageImpl<>(response, pageable, userReviewPage.getTotalElements()));
     }
+
 
 
 
