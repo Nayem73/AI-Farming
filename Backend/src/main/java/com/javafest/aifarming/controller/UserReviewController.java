@@ -4,10 +4,7 @@ import com.javafest.aifarming.model.UserInfo;
 import com.javafest.aifarming.model.UserReview;
 import com.javafest.aifarming.repository.UserInfoRepository;
 import com.javafest.aifarming.repository.UserReviewRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -37,8 +34,8 @@ public class UserReviewController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
-        Pageable pageable = PageRequest.of(page, size);
-
+//        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
         Page<UserReview> userReviewPage = userReviewRepository.findAll(pageable);
 
         List<Map<String, Object>> response = new ArrayList<>();
