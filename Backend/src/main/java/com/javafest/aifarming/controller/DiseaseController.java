@@ -61,8 +61,9 @@ public class DiseaseController {
             // Case 1: crop is provided, search is optional
             if (cropTitle.isEmpty()) {
                 diseases = diseaseRepository.findBySearch(search);
-            }
-            else {
+            } else if (search == null || search.isEmpty()) {
+                diseases = diseaseRepository.findByTitle(cropTitle);
+            } else {
                 diseases = diseaseRepository.findByCategoryTitleAndDisease(cropTitle, search);
             }
         } else if (cropTitle != null) {
@@ -71,8 +72,7 @@ public class DiseaseController {
             diseases = diseaseRepository.findByDiseaseTitle(diseaseTitle);
         } else if (search != null) {
             diseases = diseaseRepository.findBySearch(search);
-        }
-        else {
+        } else {
             // Handle the case when both parameters are missing.
             // For example, return an error message or an empty list.
             diseases = Collections.emptyList();
