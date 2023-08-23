@@ -6,6 +6,7 @@ import com.javafest.aifarming.repository.CropRepository;
 import com.javafest.aifarming.repository.DiseaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
@@ -53,31 +54,38 @@ public class DiseaseController {
 
     @GetMapping("/disease")
 //    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public List<Disease> getCropsByDisease(@RequestParam(value = "crop", required = false) String cropTitle,
-                                           @RequestParam(value = "disease", required = false) String diseaseTitle,
-                                           @RequestParam(value = "search", required = false) String search) {
-        List<Disease> diseases;
+    public ResponseEntity<Page<Disease>> getCropsByDisease(
+            @RequestParam(value = "crop", required = false) String cropTitle,
+            @RequestParam(value = "disease", required = false) String diseaseTitle,
+            @RequestParam(value = "search", required = false) String search,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Disease> diseases;
         if (cropTitle != null) {
             // Case 1: crop is provided, search is optional
             if (cropTitle.isEmpty()) {
-                diseases = diseaseRepository.findBySearch(search);
-            } else if (search == null || search.isEmpty()) {
-                diseases = diseaseRepository.findByTitle(cropTitle);
-            } else {
-                diseases = diseaseRepository.findByCategoryTitleAndDisease(cropTitle, search);
+                diseases = diseaseRepository.findBySearch(search, pageable);
+            } else if ((search == null || search.isEmpty()) && (diseaseTitle == null || diseaseTitle.isEmpty())) {
+                diseases = diseaseRepository.findByTitle(cropTitle, pageable);
+            } else if (diseaseTitle != null) {
+                Disease dis = diseaseRepository.findByCropTitleAndDiseaseTitleExact(cropTitle, diseaseTitle);
+                List<Disease> disList = Collections.singletonList(dis);
+                diseases = new PageImpl<>(disList, pageable, disList.size());
             }
-        } else if (cropTitle != null) {
-            diseases = diseaseRepository.findByTitle(cropTitle);
+            else {
+                diseases = diseaseRepository.findByCategoryTitleAndDisease(cropTitle, search, pageable);
+            }
         } else if (diseaseTitle != null) {
-            diseases = diseaseRepository.findByDiseaseTitle(diseaseTitle);
+            diseases = diseaseRepository.findByDiseaseTitle(diseaseTitle, pageable);
         } else if (search != null) {
-            diseases = diseaseRepository.findBySearch(search);
+            diseases = diseaseRepository.findBySearch(search, pageable);
         } else {
             // Handle the case when both parameters are missing.
             // For example, return an error message or an empty list.
-            diseases = Collections.emptyList();
+            diseases = new PageImpl<>(Collections.emptyList());
         }
-        return diseases;
+        return ResponseEntity.ok(diseases);
     }
 
     @PostMapping("/disease/")
