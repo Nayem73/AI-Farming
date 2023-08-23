@@ -5,6 +5,9 @@ import com.javafest.aifarming.model.Disease;
 import com.javafest.aifarming.repository.CropRepository;
 import com.javafest.aifarming.repository.DiseaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,8 +37,13 @@ public class DiseaseController {
     }
 
     @GetMapping("/disease/")
-    public List<Disease> getAllDisease() {
-        return diseaseRepository.findAll();
+    public ResponseEntity<Page<Disease>> getAllDisease(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Disease> diseasePage = diseaseRepository.findAll(pageable);
+        return ResponseEntity.ok(diseasePage);
     }
 
     @GetMapping("/disease/{cropTitle}/{diseaseTitle}")
