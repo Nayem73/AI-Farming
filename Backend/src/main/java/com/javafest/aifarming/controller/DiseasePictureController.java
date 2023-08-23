@@ -5,6 +5,10 @@ import com.javafest.aifarming.model.DiseasePicture;
 import com.javafest.aifarming.repository.DiseasePictureRepository;
 import com.javafest.aifarming.repository.DiseaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,9 +33,15 @@ public class DiseasePictureController {
     }
 
     @GetMapping("/disease/{diseaseId}/picture/")
-    public ResponseEntity<List<Map<String, Object>>> getAllDiseasePicturesByDiseaseId(@PathVariable Long diseaseId) {
+    public ResponseEntity<Page<Map<String, Object>>> getAllDiseasePicturesByDiseaseId(
+            @PathVariable Long diseaseId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
         // Fetch the corresponding Disease object from the database using the diseaseId
-        List<DiseasePicture> existingDiseasePictures = diseasePictureRepository.findByAllDiseasePictureById(diseaseId);
+        Page<DiseasePicture> existingDiseasePictures = diseasePictureRepository.findByAllDiseasePictureById(diseaseId, pageable);
         if (existingDiseasePictures.isEmpty()) {
             // If the diseaseId does not match any existing Disease, return a 404 Not Found response
             return ResponseEntity.notFound().build();
@@ -48,7 +58,8 @@ public class DiseasePictureController {
             simplifiedDiseasePictures.add(simplifiedPicture);
         }
 
-        return ResponseEntity.ok().body(simplifiedDiseasePictures);
+        return ResponseEntity.ok()
+                .body(new PageImpl<>(simplifiedDiseasePictures, pageable, existingDiseasePictures.getTotalElements()));
     }
 
     @PostMapping("/disease/picture/")
