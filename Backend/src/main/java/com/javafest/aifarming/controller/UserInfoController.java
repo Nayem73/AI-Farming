@@ -8,6 +8,10 @@ import com.javafest.aifarming.repository.UserInfoRepository;
 import com.javafest.aifarming.service.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -175,11 +179,15 @@ public class UserInfoController {
 
     @GetMapping("/userlist/")
     @PreAuthorize("hasAuthority('ROLE_ADMIN') OR hasAuthority('ROLE_SUPER_ADMIN')")
-    public ResponseEntity<List<Map<String, Object>>> getAllUsers() {
-        List<UserInfo> users = userInfoRepository.findAll();
+    public ResponseEntity<Page<Map<String, Object>>> getAllUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<UserInfo> usersPage = userInfoRepository.findAll(pageable);
 
         List<Map<String, Object>> userResponseList = new ArrayList<>();
-        for (UserInfo user : users) {
+        for (UserInfo user : usersPage) {
             Map<String, Object> userResponse = new LinkedHashMap<>();
             userResponse.put("id", user.getId());
             userResponse.put("userName", user.getUserName());
@@ -193,7 +201,8 @@ public class UserInfoController {
             userResponseList.add(userResponse);
         }
 
-        return ResponseEntity.ok(userResponseList);
+        return ResponseEntity.ok()
+                .body(new PageImpl<>(userResponseList, pageable, usersPage.getTotalElements()));
     }
 
 
