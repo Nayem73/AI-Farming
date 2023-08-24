@@ -85,12 +85,19 @@ export const userUpdateProfileReducer = (state = {}, action) => {
 }
 
 
-export const userListReducer = (state = { users: [] }, action) => {
+export const userListReducer = (state = { users: [],prev_page:null, cur_page:null, next_page:null, total_page:null }, action) => {
     switch (action.type) {
         case USER_LIST_REQUEST:
             return { loading: true }
         case USER_LIST_SUCCESS:
-            return { loading: false, users: action.payload }
+            return {
+                loading: false,
+                users: action.payload.content,
+                cur_page:action.payload.pageable.pageNumber,
+                total_page: action.payload.total_pages,
+                prev_page: action.payload.pageable.pageNumber > 0 ? action.payload.pageable.pageNumber - 1 : null,
+                next_page: action.payload.pageable.pageNumber < action.payload.total_pages - 1 ? action.payload.pageable.pageNumber + 1 : null
+            }
         case USER_LIST_FAILED:
             return { loading: false, error: action.payload }
         default:

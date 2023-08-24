@@ -8,7 +8,7 @@ import Loader from '../components/Loader';
 import Message from '../components/Message';
 import DiseaseCard from '../components/DiseaseCard';
 import { listDiseases } from '../actions/diseaseActions';
-import {sliderPicture} from '../actions/pictureActions'; 
+// import {sliderPicture} from '../actions/pictureActions'; 
 
 
 import Slider from '../components/Slider';
