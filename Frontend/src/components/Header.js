@@ -9,6 +9,7 @@ import { listCrops } from '../actions/cropActions';
 
 // Components
 import SearchBox from './SearchBox';
+import { listDiseases } from '../actions/diseaseActions';
 
 
 function Header() {
@@ -59,11 +60,18 @@ function Header() {
 
     //___________________________Header_______________________//
 
+
+    const reloadAndNavigate = () => {
+        dispatch(listDiseases()); // Dispatch the action
+        history('/'); // Navigate to the specified route
+    };
+
     return (
         <nav className='navbar bg-base-100 top-0 shadow-xl'>
             <div className=" container  top-0 mx-auto flex">
                 <div className="flex-auto ">
-                    <Link to='/' className="btn btn-outline normal-case text-xl">AI-Farming</Link>
+                    {/* <Link to='/' className="btn btn-outline normal-case text-xl">AI-Farming</Link> */}
+                    <button onClick={reloadAndNavigate} className="btn btn-outline normal-case text-xl">AI-Farming</button>
                 </div>
                 <div className='searchBox_id1'>
                     <Select className='shadow-lg p-0 bg-dark rounded-lg '

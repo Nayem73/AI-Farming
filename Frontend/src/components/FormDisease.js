@@ -36,7 +36,6 @@ const FormDisease = ({ existingData }) => {
     const { loading, error, crops } = cropList;
     const { loading: loadingCreate, error: errorCreate, success: successCreate } = diseaseCreate;
     const { loading:loadingPicture, error:errorPicture, pictures } = pictureList;
-    
 
     useEffect(() => {
         dispatch(listCrops())
@@ -156,11 +155,12 @@ const FormDisease = ({ existingData }) => {
 
     return (
         <>
-        
+        {errorCreate && <Message message={errorCreate} />}
         <form onSubmit={handleSubmit}>
         <div>
             <label htmlFor="title">Title:</label>
             <input
+            required
             type="text"
             id="title"
             name="title"
@@ -171,6 +171,7 @@ const FormDisease = ({ existingData }) => {
         <div>
             <label htmlFor="img">Image:</label>
             <input
+            required
             type="file"
             id="img"
             name="img"
@@ -182,6 +183,7 @@ const FormDisease = ({ existingData }) => {
         <div>
             <label htmlFor="cropId">Crop ID:</label>
             <Select
+            required
             options={cropOptions}
             onChange={handleCropChange}
             value={cropOptions.find((option) => option.value === formData.crop.id)}

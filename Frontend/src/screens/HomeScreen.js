@@ -13,6 +13,8 @@ import { listDiseases } from '../actions/diseaseActions';
 
 import Slider from '../components/Slider';
 
+import Paginate from '../components/Paginate'
+
 
 
 function HomeScreen() {
@@ -24,7 +26,7 @@ function HomeScreen() {
     const dispatch = useDispatch();
 
     const diseaseList = useSelector(state => state.diseaseList);
-    const { loading, error, diseases } = diseaseList;
+    const { loading, error ,diseases, cur_page, total_page } = diseaseList;
 
     // const pictureSlider = useSelector(state => state.pictureSlider);
     // const { error:errorSliser, diseases:diseaseSlider } = pictureSlider;
@@ -54,8 +56,9 @@ function HomeScreen() {
             <div className='lg:px-20 mt-10'>
                 {loading ? (<Loader />) : error ? (<Message message={error} />) : <div className=' grid lg:grid-cols-5 md:grid-cols-3  gap-2 flex-col items-center justify-center '>
                     {diseases.map((disease) => <DiseaseCard key={disease.id} disease={disease} />)}
+                
                 </div>}
-    
+                {loading ? (<Loader />) : error ? (<Message message={error} />) :<Paginate pages={total_page} page={cur_page} dispatcher_action={listDiseases}/>}
             </div>
         </>
     )

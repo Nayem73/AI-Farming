@@ -162,7 +162,10 @@ export const updateUerProfile = (user_id, FormData) => async (dispatch, getState
 }
 
 
-export const listUsers = () => async (dispatch, getState) => {
+export const listUsers = (params) => async (dispatch, getState) => {
+    let page = 0;
+    if (params){
+        page = params.page || 0;}
     try {
         dispatch({
             type: USER_LIST_REQUEST
@@ -176,7 +179,7 @@ export const listUsers = () => async (dispatch, getState) => {
             }
         }
 
-        const { data } = await axios.get(`/api/userlist/`, config)
+        const { data } = await axios.get(`/api/userlist/?page=${page}`, config)
 
         dispatch({
             type: USER_LIST_SUCCESS,

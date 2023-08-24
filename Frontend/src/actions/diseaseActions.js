@@ -28,6 +28,7 @@ import {
 export const listDiseases = (params) => async (dispatch) => {
     let crop = '';
     let search = '';
+    let page = 0;
     let url = `/api/disease/`
     if (params){
         if (params.crop){
@@ -37,6 +38,10 @@ export const listDiseases = (params) => async (dispatch) => {
         if (params.search){
             search = params.search;
             url = `/api/disease?crop=${crop}&search=${search}`
+        }
+        if (params.page){
+            page = params.page;
+            url = `/api/disease?crop=${crop}&search=${search}&page=${page}`
         }
     }
     try {

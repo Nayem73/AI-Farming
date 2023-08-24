@@ -5,6 +5,9 @@ import { listDiseases, deleteDisease } from '../actions/diseaseActions';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 
+
+import Paginate from '../components/Paginate'
+
 const DiseaseListScreen = () => {
     const dispatch = useDispatch();
 
@@ -13,13 +16,15 @@ const DiseaseListScreen = () => {
 
 
     const diseaseList = useSelector(state => state.diseaseList);
-    const { loading, error, diseases } = diseaseList;
+    const { loading, error, diseases, cur_page, total_page } = diseaseList;
     const history = useNavigate();
 
     const userLogin = useSelector(state => state.userLogin);
     const { userInfo } = userLogin;
     const diseaseDelete = useSelector(state => state.diseaseDelete);
     const {  success: successDelete } = diseaseDelete;
+
+    // var [currentPageNumber, setCurrentPageNumber] = useState('');
 
 
     useEffect(() => {
@@ -103,7 +108,9 @@ const DiseaseListScreen = () => {
                         ))}
                     </tbody>
                 </table>
+                <Paginate pages={total_page} page={cur_page} dispatcher_action={listDiseases}/>
             </div>}
+           
         </div>
     )
 }

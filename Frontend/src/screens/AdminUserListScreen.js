@@ -4,6 +4,7 @@ import { updateUerProfile, listUsers } from '../actions/userActions';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import { useNavigate } from 'react-router-dom';
+import Paginate from '../components/Paginate'
 
 const UserListScreen = () => {
     const dispatch = useDispatch();
@@ -20,7 +21,7 @@ const UserListScreen = () => {
     const userLogin = useSelector(state => state.userLogin);
     const { userInfo } = userLogin;
 
-    const { loading, error, users } = userList;
+    const { loading, error, users, cur_page, total_page } = userList;
     const { success: successUpdate } = userUpdate;
 
     useEffect(() => {
@@ -107,6 +108,7 @@ const UserListScreen = () => {
                             ))}
                     </tbody>
                 </table>
+                <Paginate pages={total_page} page={cur_page} dispatcher_action={listUsers}/>
             </div>}
         </>
     )

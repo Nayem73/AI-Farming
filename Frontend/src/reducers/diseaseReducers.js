@@ -35,7 +35,7 @@ export const diseaseListReducer = (state = {diseases: [],prev_page:null, cur_pag
                 loading: false,
                 diseases: action.payload.content,
                 cur_page:action.payload.pageable.pageNumber,
-                total_page: action.payload.total_pages,
+                total_page: action.payload.totalPages,
                 prev_page: action.payload.pageable.pageNumber > 0 ? action.payload.pageable.pageNumber - 1 : null,
                 next_page: action.payload.pageable.pageNumber < action.payload.total_pages - 1 ? action.payload.pageable.pageNumber + 1 : null
                 
