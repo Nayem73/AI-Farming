@@ -148,7 +148,7 @@ public class UserInfoController {
     public ResponseEntity<Map<String, Object>> getProfile(Authentication authentication) {
         if (authentication == null) {
             Map<String, Object> response = new LinkedHashMap<>();
-            response.put("error", "Please login first.");
+            response.put("message", "Please login first.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
 
@@ -156,7 +156,7 @@ public class UserInfoController {
         Optional<UserInfo> userInfoOptional = userInfoRepository.findByUserName(userName);
         if (!userInfoOptional.isPresent()) {
             Map<String, Object> response = new LinkedHashMap<>();
-            response.put("error", "User not found.");
+            response.put("message", "User not found.");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
 
@@ -216,13 +216,13 @@ public class UserInfoController {
 //        System.out.println("~~~~~~~~~~~~~"+ userInfo.getRole());
         Map<String, Object> response = new LinkedHashMap<>();
         if (userInfo == null) {
-            response.put("error", "User not found.");
+            response.put("message", "User not found.");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         } else if (userInfo.getRole().equals("ROLE_ADMIN") && isAdmin) {
-            response.put("error", userInfo.getUserName() + " is already an Admin");
+            response.put("message", userInfo.getUserName() + " is already an Admin");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         } else if (userInfo.getRole().equals("ROLE_USER") && !isAdmin) {
-            response.put("error", "isAdmin is provided false and " +userInfo.getUserName() + " is already a User.");
+            response.put("message", "isAdmin is provided false and " +userInfo.getUserName() + " is already a User.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
 

@@ -179,7 +179,7 @@ public class DiseaseController {
         if (file != null && !file.isEmpty()) {
             if (!isImageFile(file)) {
                 Map<String, Object> errorResponse = new HashMap<>();
-                errorResponse.put("error", "Only image files are allowed.");
+                errorResponse.put("message", "Only image files are allowed.");
                 return ResponseEntity.badRequest().body(errorResponse);
             }
 

@@ -5,10 +5,6 @@ import com.javafest.aifarming.model.DiseasePicture;
 import com.javafest.aifarming.repository.DiseasePictureRepository;
 import com.javafest.aifarming.repository.DiseaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -63,14 +59,18 @@ public class DiseasePictureController {
 
         if (file.isEmpty()) {
             Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("error", "Please select an image file.");
+            errorResponse.put("message", "Please select an image file.");
+            return ResponseEntity.badRequest().body(errorResponse);
+        } else if (diseaseId == null) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Please select a disease");
             return ResponseEntity.badRequest().body(errorResponse);
         }
 
         // Check if the uploaded file is an image
         if (!isImageFile(file)) {
             Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("error", "Only image files are allowed.");
+            errorResponse.put("message", "Only image files are allowed.");
             return ResponseEntity.badRequest().body(errorResponse);
         }
 
@@ -95,7 +95,7 @@ public class DiseasePictureController {
         if (!optionalDisease.isPresent()) {
             // If the diseaseId does not match any existing Disease, return an error response
             Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("error", "Invalid diseaseId. No matching Disease found.");
+            errorResponse.put("message", "Invalid diseaseId. No matching Disease found.");
             return ResponseEntity.badRequest().body(errorResponse);
         }
 
@@ -128,14 +128,14 @@ public class DiseasePictureController {
 
         if (file.isEmpty()) {
             Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("error", "Please select an image file.");
+            errorResponse.put("message", "Please select an image file.");
             return ResponseEntity.badRequest().body(errorResponse);
         }
 
         // Check if the uploaded file is an image
         if (!isImageFile(file)) {
             Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("error", "Only image files are allowed.");
+            errorResponse.put("message", "Only image files are allowed.");
             return ResponseEntity.badRequest().body(errorResponse);
         }
 
@@ -144,7 +144,7 @@ public class DiseasePictureController {
         if (!optionalDiseasePicture.isPresent()) {
             // If the pictureId does not match any existing DiseasePicture, return an error response
             Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("error", "Invalid pictureId. No matching DiseasePicture found.");
+            errorResponse.put("message", "Invalid pictureId. No matching DiseasePicture found.");
             return ResponseEntity.badRequest().body(errorResponse);
         }
 
@@ -189,7 +189,7 @@ public class DiseasePictureController {
         if (!optionalDiseasePicture.isPresent()) {
             // If the pictureId does not match any existing DiseasePicture, return an error response
             Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("error", "Invalid pictureId. No matching DiseasePicture found.");
+            errorResponse.put("message", "Invalid pictureId. No matching DiseasePicture found.");
             return ResponseEntity.badRequest().body(errorResponse);
         }
 

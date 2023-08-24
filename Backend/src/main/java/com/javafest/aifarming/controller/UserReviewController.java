@@ -86,7 +86,7 @@ public class UserReviewController {
             // Check if the uploaded file is an image
             if (!isImageFile(file)) {
                 Map<String, Object> errorResponse = new HashMap<>();
-                errorResponse.put("error", "Only image files are allowed.");
+                errorResponse.put("message", "Only image files are allowed.");
                 return ResponseEntity.badRequest().body(errorResponse);
             }
 
@@ -169,7 +169,7 @@ public class UserReviewController {
         if (file != null && !file.isEmpty()) {
             if (!isImageFile(file)) {
                 Map<String, Object> errorResponse = new HashMap<>();
-                errorResponse.put("error", "Only image files are allowed.");
+                errorResponse.put("message", "Only image files are allowed.");
                 return ResponseEntity.badRequest().body(errorResponse);
             }
 
