@@ -19,10 +19,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api")
@@ -38,14 +35,29 @@ public class DiseaseController {
     }
 
     @GetMapping("/disease/")
-    public ResponseEntity<Page<Disease>> getAllDisease(
+    public ResponseEntity<Page<Map<String, Object>>> getAllDisease(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
         Pageable pageable = PageRequest.of(page, size);
         Page<Disease> diseasePage = diseaseRepository.findAll(pageable);
-        return ResponseEntity.ok(diseasePage);
+
+        List<Map<String, Object>> response = new ArrayList<>();
+
+        for (Disease disease : diseasePage.getContent()) {
+            Map<String, Object> res = new LinkedHashMap<>();
+            res.put("id", disease.getId());
+            res.put("title", disease.getTitle());
+            res.put("img", disease.getImg());
+            res.put("crop", disease.getCrop());
+
+            response.add(res);
+        }
+
+        return ResponseEntity.ok()
+                .body(new PageImpl<>(response, pageable, diseasePage.getTotalElements()));
     }
+
 
     @GetMapping("/disease/{cropTitle}/{diseaseTitle}")
     public Disease getCropsByCategoryTitleAndDisease(@PathVariable String cropTitle, @PathVariable String diseaseTitle) {
