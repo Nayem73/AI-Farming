@@ -33,15 +33,9 @@ public class DiseasePictureController {
     }
 
     @GetMapping("/disease/{diseaseId}/picture/")
-    public ResponseEntity<Page<Map<String, Object>>> getAllDiseasePicturesByDiseaseId(
-            @PathVariable Long diseaseId,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-
-        Pageable pageable = PageRequest.of(page, size);
-
+    public ResponseEntity<List<Map<String, Object>>> getAllDiseasePicturesByDiseaseId(@PathVariable Long diseaseId) {
         // Fetch the corresponding Disease object from the database using the diseaseId
-        Page<DiseasePicture> existingDiseasePictures = diseasePictureRepository.findByAllDiseasePictureById(diseaseId, pageable);
+        List<DiseasePicture> existingDiseasePictures = diseasePictureRepository.findByAllDiseasePictureById(diseaseId);
         if (existingDiseasePictures.isEmpty()) {
             // If the diseaseId does not match any existing Disease, return a 404 Not Found response
             return ResponseEntity.notFound().build();
@@ -58,8 +52,7 @@ public class DiseasePictureController {
             simplifiedDiseasePictures.add(simplifiedPicture);
         }
 
-        return ResponseEntity.ok()
-                .body(new PageImpl<>(simplifiedDiseasePictures, pageable, existingDiseasePictures.getTotalElements()));
+        return ResponseEntity.ok().body(simplifiedDiseasePictures);
     }
 
     @PostMapping("/disease/picture/")

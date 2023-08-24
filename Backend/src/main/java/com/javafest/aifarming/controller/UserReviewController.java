@@ -126,4 +126,118 @@ public class UserReviewController {
         String fileName = file.getOriginalFilename();
         return fileName != null && (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") || fileName.endsWith(".png"));
     }
+
+    @PutMapping("/review/{reviewId}")
+    public ResponseEntity<Map<String, Object>> updateUserReview(
+            @PathVariable Long reviewId,
+            @RequestParam(value = "description", required = false) String text,
+            @RequestParam(value = "img", required = false) MultipartFile file,
+            Authentication authentication
+    ) throws IOException {
+
+        // Check if the user is authenticated (logged in)
+        if (authentication == null) {
+            Map<String, Object> response = new LinkedHashMap<>();
+            response.put("message", "Please login first.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+
+        // Check if the review exists
+        Optional<UserReview> optionalUserReview = userReviewRepository.findById(reviewId);
+        if (!optionalUserReview.isPresent()) {
+            Map<String, Object> response = new LinkedHashMap<>();
+            response.put("message", "Review not found.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+
+        UserReview userReview = optionalUserReview.get();
+
+        // Check if the logged-in user is the owner of the review
+        String userName = authentication.getName();
+        if (!userReview.getUserInfo().getUserName().equals(userName)) {
+            Map<String, Object> response = new LinkedHashMap<>();
+            response.put("message", "Only the user who made the review can edit this review.");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+        }
+
+        // Update the description if provided
+        if (text != null && !text.isEmpty()) {
+            userReview.setDescription(text);
+        }
+
+        // Update the review image if provided
+        if (file != null && !file.isEmpty()) {
+            if (!isImageFile(file)) {
+                Map<String, Object> errorResponse = new HashMap<>();
+                errorResponse.put("error", "Only image files are allowed.");
+                return ResponseEntity.badRequest().body(errorResponse);
+            }
+
+            String imagePath = "src/main/resources/images";
+
+            Path imageDir = Paths.get(imagePath);
+            if (!Files.exists(imageDir)) {
+                Files.createDirectories(imageDir);
+            }
+
+            String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+            Path targetPath = imageDir.resolve(fileName);
+            Files.copy(file.getInputStream(), targetPath);
+
+            userReview.setImg("/api/picture?link=images/" + fileName);
+        }
+
+        userReviewRepository.save(userReview);
+
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put("reviewId", userReview.getId());
+        response.put("description", userReview.getDescription());
+        response.put("img", userReview.getImg());
+        response.put("userName", userReview.getUserInfo().getUserName());
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response);
+    }
+
+    @DeleteMapping("/review/{reviewId}")
+    public ResponseEntity<Map<String, Object>> deleteUserReview(
+            @PathVariable Long reviewId,
+            Authentication authentication) {
+
+        // Check if the user is authenticated (logged in)
+        if (authentication == null) {
+            Map<String, Object> response = new LinkedHashMap<>();
+            response.put("message", "Please login first.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+
+        Optional<UserReview> optionalUserReview = userReviewRepository.findById(reviewId);
+
+        if (optionalUserReview.isEmpty()) {
+            Map<String, Object> response = new LinkedHashMap<>();
+            response.put("message", "Review not found.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+
+        UserReview userReview = optionalUserReview.get();
+        // Retrieve the email of the logged-in user from the Authentication object
+        String userName = authentication.getName();
+        // Retrieve the UserInfo entity for the logged-in user
+        UserInfo userInfo = userInfoRepository.getByUserName(userName);
+        if (userInfo != null && (userInfo.getRole().equals("ROLE_ADMIN") || userInfo.getRole().equals("ROLE_SUPER_ADMIN"))) {
+            userReviewRepository.delete(userReview);
+        } else if (userReview.getUserInfo().getUserName().equals(userName)) { // Check if the logged-in user is the owner of the review
+            userReviewRepository.delete(userReview);
+        } else {
+            Map<String, Object> response = new LinkedHashMap<>();
+            response.put("message", "You can not delete another user's review.");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+        }
+
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put("message", "Review deleted successfully.");
+        return ResponseEntity.ok().body(response);
+    }
+
 }
