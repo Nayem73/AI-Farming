@@ -87,6 +87,13 @@ public class UserReviewController {
             response.put("message", "Please login first.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
+        // Check if the comment text size is more than 200 characters
+        if (text.length() > 200) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("message", "comment size exceeds the limit of 200 characters.");
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
+
         String realPath;
         if (file.isEmpty()) {
             realPath = "null";
@@ -173,6 +180,13 @@ public class UserReviewController {
             Map<String, Object> response = new LinkedHashMap<>();
             response.put("message", "Only the user who made the review can edit this review.");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+        }
+
+        // Check if the comment text size is more than 200 characters
+        if (text.length() > 200) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("message", "comment size exceeds the limit of 200 characters.");
+            return ResponseEntity.badRequest().body(errorResponse);
         }
 
         // Update the description if provided
