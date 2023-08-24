@@ -26,8 +26,8 @@ function HomeScreen() {
     const diseaseList = useSelector(state => state.diseaseList);
     const { loading, error, diseases } = diseaseList;
 
-    const pictureSlider = useSelector(state => state.pictureSlider);
-    const { error:errorSliser, diseases:diseaseSlider } = pictureSlider;
+    // const pictureSlider = useSelector(state => state.pictureSlider);
+    // const { error:errorSliser, diseases:diseaseSlider } = pictureSlider;
 
 
     useEffect(() => {
@@ -42,13 +42,13 @@ function HomeScreen() {
         }
     }, [dispatch, crop_title, search])
 
-    useEffect(() => {
-        dispatch(sliderPicture())
-    }, [dispatch])
+    // useEffect(() => {
+    //     dispatch(sliderPicture())
+    // }, [dispatch])
 
     return (
         <>
-            {loading ? (<Loader />) : errorSliser ? (<Message message={errorSliser} />) :<Slider items={diseaseSlider}/>}
+            {loading ? (<Loader />) : error ? (<Message message={error} />) :<Slider items={diseases}/>}
             
 
             <div className='lg:px-20 mt-10'>
