@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @RestController
@@ -43,8 +45,14 @@ public class UserReviewController {
         for (UserReview userReview : userReviewPage.getContent()) {
             Map<String, Object> res = new LinkedHashMap<>();
             res.put("reviewId", userReview.getId());
-            res.put("description", userReview.getDescription());
+            //res.put("created", userReview.getLocalDateTime());
+            // Format LocalDateTime as a string
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String formattedDateTime = userReview.getLocalDateTime().format(formatter);
+            res.put("created", formattedDateTime); // Sending reviewDate as a formatted string
+            res.put("comment", userReview.getDescription());
             res.put("img", userReview.getImg());
+            res.put("userName", userReview.getUserInfo().getUserName());
 
             response.add(res);
         }
@@ -56,7 +64,7 @@ public class UserReviewController {
 
 
 
-    @PostMapping("/review/")
+    @PostMapping("/review")
     public ResponseEntity<Map<String, Object>> addUserReview(
             @RequestParam("description") String text,
             @RequestParam(value = "img", required = false) MultipartFile file,
@@ -108,12 +116,19 @@ public class UserReviewController {
             realPath = "/api/picture?link=images/" + fileName;
         }
 
-        UserReview userReview = new UserReview(text, realPath, userInfo);
+        LocalDateTime curDateTime = LocalDateTime.now();
+
+        UserReview userReview = new UserReview(text, realPath, userInfo, curDateTime);
         userReviewRepository.save(userReview);
 
         Map<String, Object> response = new LinkedHashMap<>();
         response.put("reviewId", userReview.getId());
-        response.put("description", text);
+        //res.put("created", userReview.getLocalDateTime());
+        // Format LocalDateTime as a string
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDateTime = userReview.getLocalDateTime().format(formatter);
+        response.put("created", formattedDateTime); // Sending reviewDate as a formatted string
+        response.put("comment", userReview.getDescription());
         response.put("img", userReview.getImg());
         response.put("userName", userReview.getUserInfo().getUserName());
 
@@ -191,7 +206,12 @@ public class UserReviewController {
 
         Map<String, Object> response = new LinkedHashMap<>();
         response.put("reviewId", userReview.getId());
-        response.put("description", userReview.getDescription());
+        //res.put("created", userReview.getLocalDateTime());
+        // Format LocalDateTime as a string
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDateTime = userReview.getLocalDateTime().format(formatter);
+        response.put("created", formattedDateTime); // Sending reviewDate as a formatted string
+        response.put("comment", userReview.getDescription());
         response.put("img", userReview.getImg());
         response.put("userName", userReview.getUserInfo().getUserName());
 
