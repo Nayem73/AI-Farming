@@ -26,12 +26,20 @@ import {
     AI_SEARCH_FAILED,
     AI_SEARCH_RESET } from "../constants/diseaseConstants";
 
-export const diseaseListReducer = (state = {diseases: []}, action) => {
+export const diseaseListReducer = (state = {diseases: [],prev_page:null, cur_page:null, next_page:null, total_page:null}, action) => {
     switch (action.type) {
         case DISEASE_LIST_REQUEST:
             return { loading: true, diseases: [] }
         case DISEASE_LIST_SUCCESS:
-            return { loading: false, diseases: action.payload }
+            return { 
+                loading: false,
+                diseases: action.payload.content,
+                cur_page:action.payload.pageable.pageNumber,
+                total_page: action.payload.total_pages,
+                prev_page: action.payload.pageable.pageNumber > 0 ? action.payload.pageable.pageNumber - 1 : null,
+                next_page: action.payload.pageable.pageNumber < action.payload.total_pages - 1 ? action.payload.pageable.pageNumber + 1 : null
+                
+            }
         case DISEASE_LIST_FAILED:
             return { loading: false, error: action.payload }
         default:
