@@ -87,7 +87,7 @@ public class UserInfoController {
         if (userInfo == null) {
             // Create the response map
             Map<String, Object> response = new LinkedHashMap<>();
-            response.put("error", "Invalid email or password");
+            response.put("message", "Invalid email or password");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(response);
         }
@@ -119,14 +119,14 @@ public class UserInfoController {
             } else {
                 // Create the response map
                 Map<String, Object> response = new LinkedHashMap<>();
-                response.put("error", "Invalid username or password");
+                response.put("message", "Invalid username or password");
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(response);
             }
         } catch (AuthenticationException e) {
             // Create the response map
             Map<String, Object> response = new LinkedHashMap<>();
-            response.put("error", "Authentication failed: " + e.getMessage());
+            response.put("message", "Authentication failed: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(response);
         }

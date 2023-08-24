@@ -103,14 +103,22 @@ public class DiseaseController {
 
         if (file.isEmpty()) {
             Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("error", "Please select a file to upload.");
+            errorResponse.put("message", "Please select an image");
+            return ResponseEntity.badRequest().body(errorResponse);
+        } else if (title.isEmpty()) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Please select a title for the disease");
+            return ResponseEntity.badRequest().body(errorResponse);
+        }  else if (cropId == null) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Please select a cropId for the disease");
             return ResponseEntity.badRequest().body(errorResponse);
         }
 
         // Check if the uploaded file is an image
         if (!isImageFile(file)) {
             Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("error", "Only image files are allowed.");
+            errorResponse.put("message", "Only image files are allowed.");
             return ResponseEntity.badRequest().body(errorResponse);
         }
 
