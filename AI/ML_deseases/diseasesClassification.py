@@ -4,6 +4,9 @@ from PIL import Image
 
 class CropDiseaseML:
     def __init__(self):
+        """
+        Load all pre-trained models
+        """
         banana_model = tflite.Interpreter('ML_deseases/tfliteModels/banana.tflite')
         potato_model = tflite.Interpreter('ML_deseases/tfliteModels/potato.tflite')
         tomato_model = tflite.Interpreter('ML_deseases/tfliteModels/tomato.tflite')
@@ -63,7 +66,7 @@ class CropDiseaseML:
             model.invoke()
             pred_prob = model.get_tensor(output_details[0]['index'])
             arg_max_pred = pred_prob.argmax()
-            return f"{category} {self.class_name_dict[category][arg_max_pred]}"
+            return f"{self.class_name_dict[category][arg_max_pred]}"
         except Exception as e:
             pass
                 
