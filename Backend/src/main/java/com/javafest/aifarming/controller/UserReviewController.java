@@ -66,7 +66,7 @@ public class UserReviewController {
 
     @PostMapping("/review")
     public ResponseEntity<Map<String, Object>> addUserReview(
-            @RequestParam("description") String text,
+            @RequestParam("comment") String text,
             @RequestParam(value = "img", required = false) MultipartFile file,
             Authentication authentication
             ) throws IOException {
@@ -95,7 +95,7 @@ public class UserReviewController {
         }
 
         String realPath;
-        if (file.isEmpty()) {
+        if (file == null) {
             realPath = "null";
         } else {
             // Check if the uploaded file is an image
@@ -152,7 +152,7 @@ public class UserReviewController {
     @PutMapping("/review/{reviewId}")
     public ResponseEntity<Map<String, Object>> updateUserReview(
             @PathVariable Long reviewId,
-            @RequestParam(value = "description", required = false) String text,
+            @RequestParam(value = "comment", required = false) String text,
             @RequestParam(value = "img", required = false) MultipartFile file,
             Authentication authentication
     ) throws IOException {
@@ -190,12 +190,12 @@ public class UserReviewController {
         }
 
         // Update the description if provided
-        if (text != null && !text.isEmpty()) {
+        if (text != null) {
             userReview.setDescription(text);
         }
 
         // Update the review image if provided
-        if (file != null && !file.isEmpty()) {
+        if (file != null) {
             if (!isImageFile(file)) {
                 Map<String, Object> errorResponse = new HashMap<>();
                 errorResponse.put("message", "Only image files are allowed.");
