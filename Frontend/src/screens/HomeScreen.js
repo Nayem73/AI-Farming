@@ -59,7 +59,7 @@ function HomeScreen() {
                     {diseases.map((disease) => <DiseaseCard key={disease.id} disease={disease} />)}
                 
                 </div>}
-                <div className="flex justify-center mb-5">
+                <div className="flex justify-center m-10">
                 {loading ? <></> : error ? <></> :<Paginate pages={total_page} page={cur_page} dispatcher_action={listDiseases}/>}
                 </div>
                 
