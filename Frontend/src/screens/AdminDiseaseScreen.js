@@ -80,6 +80,7 @@ const DiseaseListScreen = () => {
                                 <td></td>
                                 <td><Link to={`/disease/${disease.crop.title}/${disease.title}`}>{disease.title}</Link></td>
                                 <td><Link to={`/admin/picture/${disease.crop.title}/${disease.title}/${disease.id}/`}><i class="fa-solid fa-image"></i></Link></td>
+                                {/* <td><img className='h-20 w-20' src={disease.img} alt={disease.img} /></td> */}
                                 <td>{disease.crop.title}</td>
                                 {/* <td>{disease.isAdmin ? (<i className='fas fa-check' style={{ color: 'green' }}> </i>) : (<i className='fas fa-items' style={{ color: 'red' }}></i>)}</td> */}
 

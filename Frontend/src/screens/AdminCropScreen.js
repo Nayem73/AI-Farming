@@ -132,7 +132,7 @@ const AdminCropScreen = () => {
                                 <td></td>
                                 {/* <td>{disease.isAdmin ? (<i className='fas fa-check' style={{ color: 'green' }}> </i>) : (<i className='fas fa-items' style={{ color: 'red' }}></i>)}</td> */}
 
-                                <td>
+                                <td className="text-right">
                                     
                                     
                                     {(delete_crop_bool && (delete_crop_id === crop.id)) ?

@@ -5,6 +5,7 @@ import { Link,useParams, useNavigate } from 'react-router-dom';
 import { listDiseaseDetails } from '../actions/diseaseActions.js';
 import Loader from '../components/Loader.js';
 import Message from '../components/Message.js';
+import PictureAdmin from '../components/PictureAdmin.js';
 import FormDisease from '../components/FormDisease.js';
 import { DISEASE_UPDATE_RESET } from '../constants/diseaseConstants.js';
 
@@ -45,7 +46,7 @@ const DiseaseEditScreeen = () => {
     }, [ dispatch, successUpdate, successUpdate ,crop_title, disease_title])
     
     // console.log('edit page',disease)
-
+    console.log(disease.id)
 
     return (
         <div className='lg:px-20 mt-10 mr-5 ml-5'>
@@ -58,11 +59,16 @@ const DiseaseEditScreeen = () => {
         <h1 className='text-3xl font-bold justify-center items-center'>Update Disease</h1>
         {loading ? (<Loader />) : error ? (<Message message={error} />) :
             (Object.keys(disease).length > 0 && disease.id ? (
+            <>
             <FormDisease existingData={disease} />
+            <PictureAdmin disease_id={disease.id} />
+            </>            
             ) : (
             <p>Loading...</p>
             ))
         }
+
+
         </div>
     );
     

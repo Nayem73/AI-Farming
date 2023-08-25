@@ -94,7 +94,7 @@ const UserListScreen = () => {
                                         </label>
                                     </>:<></>}</td>
 
-                                    <td>
+                                    <td className="text-right">
                                     {userInfo.isSuperAdmin && !edit_user_bool?<button onClick={()=>editButtonHandler(user.id)} className='btn mx-2'> <i className='fas fa-edit'></i> </button>
                                     :<>
                                     {(edit_user_bool && (edit_user_id === user.id )) ?

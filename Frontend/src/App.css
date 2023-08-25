@@ -222,3 +222,24 @@ input[type=submit]:hover {
 #p_wrap {
   white-space: pre-line;
 }
+
+
+
+
+.copy-status {
+  margin-left: 10px;
+  color: green;
+  font-size: 12px;
+  opacity: 0;
+  animation: fadeOut 2s ease-in;
+}
+
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
