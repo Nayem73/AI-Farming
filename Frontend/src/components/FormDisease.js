@@ -171,7 +171,8 @@ const FormDisease = ({ existingData }) => {
         <div>
             <label htmlFor="img">Image:</label>
             <input
-            required
+            // required if  existingData is not null
+            required={existingData ? false : true}
             type="file"
             id="img"
             name="img"

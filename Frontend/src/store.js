@@ -35,6 +35,13 @@ import {
     diseaseUpdateReducer,
     aiSearchReducer } from './reducers/diseaseReducers';
 
+import {
+    reviewCreateReducer,
+    reviewDeleteReducer,
+    reviewListReducer,
+    reviewUpdateReducer } from './reducers/reviewReducers';
+
+
 
 const reducer = combineReducers({
     cropList : cropListReducer,
@@ -62,6 +69,11 @@ const reducer = combineReducers({
     userUpdateProfile: userUpdateProfileReducer,
     userDelete: userDeleteReducer,
     userList: userListReducer,
+
+    reviewList: reviewListReducer,
+    reviewDelete: reviewDeleteReducer,
+    reviewCreate: reviewCreateReducer,
+    reviewUpdate: reviewUpdateReducer,
 
 
 })

@@ -207,3 +207,8 @@ input[type=submit]:hover {
     display: block;
   }
 }
+
+
+#p_wrap {
+  white-space: pre-line;
+}

@@ -20,6 +20,8 @@ import AdminCropScreen from './screens/AdminCropScreen';
 import AdminPictureScreen from './screens/AdminPictureScreen';
 import AISearchScreen from './screens/AISearchScreen';
 
+import ReviewScreen from './screens/ReviewScreen';
+
 
 
 function App() {
@@ -30,6 +32,7 @@ function App() {
         <Route exact path='/' element={<HomeScreen />} />
         <Route path='/login' element={<LoginScreen />} />
         <Route path='/register' element={<RegisterScreen />} />
+        <Route path='/review' element={<ReviewScreen />} />
 
         <Route path='/aisearch/' element={<AISearchScreen />} />
         <Route path='/profile/' element={<ProfileScreen />} />

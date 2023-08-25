@@ -116,6 +116,12 @@ function Header() {
                                             <span className="badge">New</span>
                                         </Link>
                                     </li>
+                                    <li>
+                                        <Link to={'/review'} className="justify-between">
+                                            Review
+                                            {/* <span className="badge">New</span> */}
+                                        </Link>
+                                    </li>
                                     {(userInfo && userInfo.isAdmin === true) && <li>
                                         <Link to={'/admin/userlist'}>Users</Link>
                                     </li>}
