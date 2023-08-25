@@ -108,9 +108,12 @@ const DiseaseListScreen = () => {
                         ))}
                     </tbody>
                 </table>
+                
+                <div className="flex justify-center mb-5">
                 <Paginate pages={total_page} page={cur_page} dispatcher_action={listDiseases}/>
+                </div>
             </div>}
-           
+        
         </div>
     )
 }

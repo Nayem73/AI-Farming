@@ -49,7 +49,8 @@ function HomeScreen() {
     // }, [dispatch])
 
     return (
-        <>
+        <>  
+            <div className='mt-5'></div>
             {loading ? (<Loader />) : error ? (<Message message={error} />) :<Slider items={diseases}/>}
             
 
@@ -58,7 +59,10 @@ function HomeScreen() {
                     {diseases.map((disease) => <DiseaseCard key={disease.id} disease={disease} />)}
                 
                 </div>}
-                {loading ? (<Loader />) : error ? (<Message message={error} />) :<Paginate pages={total_page} page={cur_page} dispatcher_action={listDiseases}/>}
+                <div className="flex justify-center mb-5">
+                {loading ? <></> : error ? <></> :<Paginate pages={total_page} page={cur_page} dispatcher_action={listDiseases}/>}
+                </div>
+                
             </div>
         </>
     )

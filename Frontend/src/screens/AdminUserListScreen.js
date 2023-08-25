@@ -108,7 +108,10 @@ const UserListScreen = () => {
                             ))}
                     </tbody>
                 </table>
-                <Paginate pages={total_page} page={cur_page} dispatcher_action={listUsers}/>
+                
+                <div className="flex justify-center mb-5">
+                    <Paginate pages={total_page} page={cur_page} dispatcher_action={listUsers}/>
+                </div>
             </div>}
         </>
     )
