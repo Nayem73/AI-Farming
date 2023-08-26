@@ -5,6 +5,7 @@ import com.javafest.aifarming.model.DiseasePicture;
 import com.javafest.aifarming.repository.DiseasePictureRepository;
 import com.javafest.aifarming.repository.DiseaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,12 +30,14 @@ public class DiseasePictureController {
     }
 
     @GetMapping("/disease/{diseaseId}/picture/")
-    public ResponseEntity<List<Map<String, Object>>> getAllDiseasePicturesByDiseaseId(@PathVariable Long diseaseId) {
+    public ResponseEntity<?> getAllDiseasePicturesByDiseaseId(@PathVariable Long diseaseId) {
         // Fetch the corresponding Disease object from the database using the diseaseId
         List<DiseasePicture> existingDiseasePictures = diseasePictureRepository.findByAllDiseasePictureById(diseaseId);
         if (existingDiseasePictures.isEmpty()) {
-            // If the diseaseId does not match any existing Disease, return a 404 Not Found response
-            return ResponseEntity.notFound().build();
+            // If the diseaseId does not match any existing Disease, return a response with the "picture not found" message
+            Map<String, String> responseMessage = new HashMap<>();
+            responseMessage.put("message", "Picture not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
         }
 
         // Create a list to store the simplified representations of DiseasePicture objects
@@ -50,6 +53,8 @@ public class DiseasePictureController {
 
         return ResponseEntity.ok().body(simplifiedDiseasePictures);
     }
+
+
 
     @PostMapping("/disease/picture/")
     @PreAuthorize("hasAuthority('ROLE_ADMIN') OR hasAuthority('ROLE_SUPER_ADMIN')")
