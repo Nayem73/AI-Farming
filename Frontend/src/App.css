@@ -243,3 +243,13 @@ input[type=submit]:hover {
     opacity: 0;
   }
 }
+
+.header_dropdown ul li{
+  margin: 5px;
+  /* overflow: hidden; */
+  /* add redius */
+  border-radius: 20px;
+  box-shadow: 0 2px 2px -1px hsla(240, 30.1%, 28%, 0.25);
+  transition: all ease 200ms;
+
+}

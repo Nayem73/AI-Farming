@@ -97,19 +97,21 @@ function Header() {
                     {
                         userInfo ?
 
-                            <div className="dropdown dropdown-end">
+                            <div className="dropdown dropdown-end header_dropdown">
                                 <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
 
                                     <h3>{userInfo.username}</h3>
                                 </label>
                                 <ul tabIndex={0} className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
-                                    <li className='searchBox_id2'><SearchBox  crop={selectedOption} /></li>
+                                    
                                     <li className='searchBox_id2'>
-                                        <Select className='p-0 bg-dark rounded-lg '
+                                        <Select className='p-0 bg-dark rounded-lg ml-5'
                                         options={options}
                                         onChange={selectedCrop}
                                         />
                                     </li>
+                                    <li className='searchBox_id2'><SearchBox  crop={selectedOption} /></li>
+                                    
                                     <li>
                                         <Link to={'/profile'} className="justify-between">
                                             Profile
@@ -135,24 +137,27 @@ function Header() {
                                     <li onClick={logOutHandler}><a>Logout</a></li>
                                 </ul>
                             </div> :
-                            <div className="dropdown dropdown-end">
+                            <div className="dropdown dropdown-end header_dropdown">
                                 <label tabIndex={1} className="btn btn-ghost btn-circle avatar">
                                     <i class="fa-solid fa-bars"></i>
                                 </label>
                                 <ul tabIndex={1} className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
+                                    
+
+                                    <li className='searchBox_id2'>
+                                        <Select className='p-0 bg-dark rounded-lg ml-5'
+                                        options={options}
+                                        onChange={selectedCrop}
+                                        />
+                                    </li>
+                                    <li className='searchBox_id2'><SearchBox  crop={selectedOption}/></li>
+                                    
                                     <li>
                                         <Link to={'/login'} className="font-bold justify-between">
                                             Log in
                                         </Link>
                                     </li>
 
-                                    <li className='searchBox_id2'>
-                                        <Select className='p-0 bg-dark rounded-lg '
-                                        options={options}
-                                        onChange={selectedCrop}
-                                        />
-                                    </li>
-                                    <li className='searchBox_id2'><SearchBox  crop={selectedOption}/></li>
                                 </ul>
                             </div>
                             
