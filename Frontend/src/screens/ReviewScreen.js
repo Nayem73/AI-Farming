@@ -30,6 +30,7 @@ function ReviewScreen() {
     const { loading: loadingReviewDelete, error: errorReviewDelete, success: successReviewDelete } = reviewDelete;
     
     
+    const [editingReview, setEditingReview] = useState(false);
     const [comment, setComment] = useState('')
     const [imageFile, setImageFile] = useState(null);
     const [usingCamera, setUsingCamera] = useState(false);
@@ -55,6 +56,7 @@ function ReviewScreen() {
             setUsingCamera(false);
             handleReset();
             setReviewId(null);
+            setEditingReview(false);
         }
     }, [dispatch, successReviewDelete, successReviewCreate, successReviewUpdate])
 
@@ -77,6 +79,7 @@ function ReviewScreen() {
             behavior: 'smooth', // You can adjust the scrolling behavior
             block: 'start' // You can adjust the scroll position within the form
         });
+        setEditingReview(true);
     
     }
 
@@ -109,6 +112,22 @@ function ReviewScreen() {
     const handleReset = () => {
         document.getElementById("myForm").reset(); // Replace "myForm" with your actual form ID
     };
+
+    const editCancelHandler = () => {
+        setFormData({
+            img: null,
+            comment: ''
+        })
+        setImageFile(null);
+        setUsingCamera(false);
+        handleReset();
+        setReviewId(null);
+        setEditingReview(false);
+    }
+
+
+
+
 
     return <div>
         <div className="mt-5 flex flex-col w-full text-center">
@@ -215,7 +234,16 @@ function ReviewScreen() {
                 />
             </div>
             <div className='py-4 flex justify-left'>
+                {editingReview?<>
+                    <button type='submit' className=' btn btn-primary w-24'>Update</button>
+                    <div onClick={()=>editCancelHandler()} className=' btn btn-primary w-24 mx-5'>Cancle</div>
+                </>:
+                <>
                 <button type='submit' className=' btn btn-primary w-24'>Submit</button>
+                </>
+                
+                }
+                
             </div>
             </form>
 
