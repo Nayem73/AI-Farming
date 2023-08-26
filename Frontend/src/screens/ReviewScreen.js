@@ -1,4 +1,4 @@
-import '../ReviewBox.css'; // Import your CSS file for styling
+// import '../ReviewBox.css'; // Import your CSS file for styling
 import React, { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
