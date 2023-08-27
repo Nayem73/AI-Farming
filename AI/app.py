@@ -46,7 +46,7 @@ async def predict(
     except Exception as e:
         response.status_code = status.HTTP_400_BAD_REQUEST
         return {
-            'error': str(e)
+            'massage': str(e)
         }
     disease = crop_disease_ml.predict(image, crop)
     print(disease)
@@ -57,7 +57,7 @@ async def predict(
     else:
         response.status_code = status.HTTP_400_BAD_REQUEST
         return {
-            'error': 'Invalid crop'
+            'massage': 'Invalid crop'
         }
 
 if __name__ == "__main__":
