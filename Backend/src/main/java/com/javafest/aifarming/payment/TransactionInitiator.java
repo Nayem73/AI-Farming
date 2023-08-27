@@ -1,6 +1,7 @@
 package com.javafest.aifarming.payment;
 
 import com.javafest.aifarming.payment.utility.ParameterBuilder;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import java.util.Map;
  * required parameters to hit SSL Commerz payment page are constructed in a Map of String as key value pair
  * Its method initTrnxnRequest returns JSON list or String with Session key which then used to select payment option
  */
+@Component
 public class TransactionInitiator {
     public String initTrnxnRequest() {
         String response = "";

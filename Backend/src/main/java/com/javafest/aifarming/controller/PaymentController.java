@@ -6,14 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
 
 @Controller
+@RequestMapping("/api")
 public class PaymentController {
 
-    private TransactionInitiator transactionInitiator;
+    private final TransactionInitiator transactionInitiator;
 
     @Autowired
     public PaymentController(TransactionInitiator transactionInitiator) {
@@ -22,6 +24,7 @@ public class PaymentController {
 
     @GetMapping("/initiate-payment")
     public String initiatePayment() {
+        // Initialize the transaction and get the payment URL
         String paymentUrl = transactionInitiator.initTrnxnRequest();
         return "redirect:" + paymentUrl;
     }
