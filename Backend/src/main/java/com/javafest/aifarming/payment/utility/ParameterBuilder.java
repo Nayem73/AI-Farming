@@ -31,7 +31,7 @@ public class ParameterBuilder {
 
     public static Map<String, String> constructRequestParameters() {
         // CREATING LIST OF POST DATA
-        String baseUrl = "http://localhost:8080/";//Request.Url.Scheme + "://" + Request.Url.Authority + Request.ApplicationPath.TrimEnd('/') + "/";
+        String baseUrl = "http://localhost:8080/api/";//Request.Url.Scheme + "://" + Request.Url.Authority + Request.ApplicationPath.TrimEnd('/') + "/";
         Map<String, String> postData = new HashMap<String, String>();
         postData.put("total_amount", "150.00");
         postData.put("tran_id", "TESTASPNET1234");
