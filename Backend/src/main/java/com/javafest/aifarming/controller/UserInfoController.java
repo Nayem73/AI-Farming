@@ -68,6 +68,7 @@ public class UserInfoController {
             newUser.setEmail(email);
             newUser.setPassword(encodedPassword);
             newUser.setRole("ROLE_USER");
+            newUser.setSubscribed(false);
 
             userInfoRepository.save(newUser);
             return ResponseEntity.ok("User added successfully");
@@ -173,7 +174,28 @@ public class UserInfoController {
         response.put("id", userInfo.getId());
         response.put("userName", userInfo.getUserName());
         response.put("email", userInfo.getEmail());
-        response.put("searchLeft", forwardController.maxRequestCountPerMonth - searchCount);
+        if ("ROLE_SUPER_ADMIN".equals(userInfo.getRole()) || "ROLE_ADMIN".equals(userInfo.getRole())) {
+            response.put("searchLeft", "Unlimited");
+            Date currentDate = new Date();
+            long currentTimeMillis = currentDate.getTime();
+
+            long millisecondsInADay = 24 * 60 * 60 * 1000; // 24 hours * 60 minutes * 60 seconds * 1000 milliseconds
+            long thirtyDaysInMillis = 30 * millisecondsInADay;
+
+            long dateAfter30DaysMillis = currentTimeMillis + thirtyDaysInMillis;
+            Date dateAfter30Days = new Date(dateAfter30DaysMillis);
+            response.put("subscription ends on", dateAfter30Days);
+        } else {
+            response.put("searchLeft", forwardController.maxRequestCountPerMonth - searchCount);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date());
+            // Move to the next month
+            calendar.add(Calendar.MONTH, 1);
+            // Set the day to 1
+            calendar.set(Calendar.DAY_OF_MONTH, 1);
+            Date firstDayOfNextMonth = calendar.getTime();
+            response.put("searchLeft resets on", firstDayOfNextMonth);
+        }
 
         return ResponseEntity.ok(response);
     }
@@ -193,6 +215,9 @@ public class UserInfoController {
             userResponse.put("id", user.getId());
             userResponse.put("userName", user.getUserName());
             userResponse.put("email", user.getEmail());
+            if ("ROLE_SUPER_ADMIN".equals(user.getRole()) || "ROLE_ADMIN".equals(user.getRole())) {
+                userResponse.put("isSubscribed", true);
+            }
             userResponse.put("isSuperAdmin", "ROLE_SUPER_ADMIN".equals(user.getRole()));
             if ("ROLE_SUPER_ADMIN".equals(user.getRole())) {
                 userResponse.put("isAdmin", true);
@@ -229,6 +254,7 @@ public class UserInfoController {
 
         if (isAdmin) {
             userInfo.setRole("ROLE_ADMIN");
+            userInfo.setSubscribed(true);
             userInfoRepository.save(userInfo); // Save the changes
             response.put("Success", "User " + userInfo.getUserName() + " is now Admin");
             return ResponseEntity.ok(response);

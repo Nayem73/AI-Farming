@@ -55,6 +55,16 @@ public class UserInfo {
     )
     private String role;
 
+    @Column(name = "isSubscribed")
+    private boolean isSubscribed;
+
+    public boolean isSubscribed() {
+        return isSubscribed;
+    }
+
+    public void setSubscribed(boolean subscribed) {
+        isSubscribed = subscribed;
+    }
 
     @OneToOne(mappedBy = "userInfo", cascade = CascadeType.ALL, orphanRemoval = true)
     private SearchCount searchCount;
@@ -75,12 +85,13 @@ public class UserInfo {
 
     public UserInfo() {
     }
-    public UserInfo(int id, String userName, String email, String password, String role) {
+    public UserInfo(int id, String userName, String email, String password, String role, boolean isSubscribed) {
         this.id = id;
         this.userName = userName;
         this.email = email;
         this.password = password;
         this.role = role;
+        this.isSubscribed = isSubscribed;
     }
 
     public int getId() {

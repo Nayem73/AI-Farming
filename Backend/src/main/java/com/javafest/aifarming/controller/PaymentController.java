@@ -1,10 +1,12 @@
 package com.javafest.aifarming.controller;
 
 import com.javafest.aifarming.model.PaymentInfo;
+import com.javafest.aifarming.model.SearchCount;
 import com.javafest.aifarming.model.UserInfo;
 import com.javafest.aifarming.payment.TransactionInitiator;
 import com.javafest.aifarming.payment.TransactionResponseValidator;
 import com.javafest.aifarming.repository.PaymentInfoRepository;
+import com.javafest.aifarming.repository.SearchCountRepository;
 import com.javafest.aifarming.repository.UserInfoRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.Map;
 
 @Controller
@@ -21,11 +24,13 @@ public class PaymentController {
     private final TransactionInitiator transactionInitiator;
     private final UserInfoRepository userInfoRepository;
     private final PaymentInfoRepository paymentInfoRepository;
+    private final SearchCountRepository searchCountRepository;
 
-    public PaymentController(TransactionInitiator transactionInitiator, UserInfoRepository userInfoRepository, PaymentInfoRepository paymentInfoRepository) {
+    public PaymentController(TransactionInitiator transactionInitiator, UserInfoRepository userInfoRepository, PaymentInfoRepository paymentInfoRepository, SearchCountRepository searchCountRepository) {
         this.transactionInitiator = transactionInitiator;
         this.userInfoRepository = userInfoRepository;
         this.paymentInfoRepository = paymentInfoRepository;
+        this.searchCountRepository = searchCountRepository;
     }
 
     @GetMapping("/payment")
@@ -45,6 +50,8 @@ public class PaymentController {
             return "redirect:/api/disease/";
         }
         System.out.println("---------------------------------------------------------------- "+ userName);
+        Date currentDate = new Date();
+        System.out.println(currentDate +" gettime = "+ currentDate.getTime());
 
         String paymentUrl = transactionInitiator.initTrnxnRequest();
         return "redirect:" + paymentUrl; // Redirect to the payment URL
@@ -82,6 +89,11 @@ public class PaymentController {
             if (transactionResponseValidator.receiveSuccessResponse(responseParams)) {
                 // Payment was successful
                 // Perform any necessary actions for successful payment, e.g., updating the order status
+                SearchCount searchCount = searchCountRepository.findByUserInfo(userInfo);
+                Date currentDate = new Date();
+                searchCount.setLastResetDate(currentDate);
+                searchCountRepository.save(searchCount);
+
                 PaymentInfo paymentInfo = new PaymentInfo();
                 paymentInfo.setTranId(responseParams.get("tran_id"));
                 paymentInfo.setValId(responseParams.get("val_id"));
