@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { getUserDetails } from '../actions/userActions';
+import { getUserDetails, changePassword } from '../actions/userActions';
 import Message from '../components/Message';
+import SuccessMessage from '../components/SuccessMessage';
 import Loader from '../components/Loader';
+import FormContainer from '../components/FormContainer'
 
 const ProfileScreen = () => {
 
@@ -24,12 +26,39 @@ const ProfileScreen = () => {
     }, [dispatch])
 
 
+    // ______________change password______________ //
+    const [currentPassword, setCurrentPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmpPssword, setConfirmPassword] = useState('');
+
+    const passwordChange = useSelector(state => state.passwordChange);
+    const { loading: loadingPasswordChange, error: errorPasswordChange, success: successPasswordChange } = passwordChange;
+
+    useEffect(() => {
+        if (successPasswordChange) {
+            // alert('Password changed successfully')
+            setCurrentPassword('');
+            setNewPassword('');
+            setConfirmPassword('');
+        }
+    }, [successPasswordChange, loadingPasswordChange])
+
+    const submitHandler = (e) => {
+        e.preventDefault();
+        const formDataToSend = new FormData();
+        formDataToSend.append('currentPassword', currentPassword);
+        formDataToSend.append('newPassword', newPassword);
+        formDataToSend.append('confirmpPssword', confirmpPssword);
+        dispatch(changePassword(formDataToSend));
+    }
+
+
 
     return (
         <div className='lg:px-20 mt-10 mr-5 ml-5 mb-10 review'>
 
             
-            <div className="my-5 w-full inline-flex items-center justify-center flex-shrink-0 h-10 mb-5 text-blue-500 bg-blue-100 rounded-full dark:bg-blue-500 dark:text-blue-100">
+            <div className=" my-5 w-full inline-flex items-center justify-center flex-shrink-0 h-10 mb-5 text-blue-500 bg-blue-100 rounded-full dark:bg-blue-500 dark:text-blue-100">
                 <h2 className="px-8 font-bold text-xl title-font">Profile</h2>
             </div>
             {loading ? <Loader /> : error ? <Message message={error} /> :
@@ -39,7 +68,7 @@ const ProfileScreen = () => {
                 <div className="flex flex-wrap -m-4">
 
                     {/* profile */}
-                    <div className="p-4 lg:w-1/3 md:w-1/2">
+                    <div className="p-4 w-full">
                         <div className="h-full px-8 py-10 review">
                             <div className="flex flex-col items-center mb-3">
                                 <div className="inline-flex items-center justify-center flex-shrink-0 w-20 h-20 mb-5 text-blue-500 bg-blue-100 rounded-full dark:bg-blue-500 dark:text-blue-100">
@@ -60,6 +89,51 @@ const ProfileScreen = () => {
                     </div>
 
                     {/* Reset password */}
+                    <div className="p-4 w-full">
+                        <div className="h-full px-8 py-10 review">
+                            <div className="flex flex-col items-center mb-3">
+                                <div className=" my-5 w-full inline-flex items-center justify-center flex-shrink-0 h-10 mb-5 text-blue-500 bg-blue-100 rounded-full dark:bg-blue-500 dark:text-blue-100">
+                                <i class="fa-solid fa-key fa-2xl"></i> <h2 className="px-8 font-bold text-xl title-font">Change Password</h2>
+                                </div>
+                                <div className="flex-grow">
+                                <FormContainer>
+
+                                    <div>
+                                        {errorPasswordChange && <Message message={errorPasswordChange} />}
+                                        {successPasswordChange && <SuccessMessage message='Password changed successfully' />}
+                                        {loading && <Loader />}
+                                        <form onSubmit={submitHandler}>
+                                            <div className="form-control w-full  ">
+                                                <label className="label">
+                                                    <span className="label-text">Current Password</span>
+                                                </label>
+                                                <input required type="password" placeholder="Enter current password" className="input input-bordered w-full max-w-xs" onChange={(e) => setCurrentPassword(e.target.value)} />
+                                            </div>
+                                            <div className="form-control w-full ">
+                                                <label className="label">
+                                                    <span className="label-text">New Password</span>
+
+                                                </label>
+                                                <input required type="password" placeholder="Enter new password" className="input input-bordered w-full max-w-xs" onChange={(e) => setNewPassword(e.target.value)} />
+                                            </div>
+                                            <div className="form-control w-full ">
+                                                <label className="label">
+                                                    <span className="label-text">Confirm Password</span>
+
+                                                </label>
+                                                <input required type="password" placeholder="Enter Confirm password" className="input input-bordered w-full max-w-xs" onChange={(e) => setConfirmPassword(e.target.value)} />
+                                            </div>
+                                            <div className='py-4 flex justify-center items-center'>
+                                                <button type='submit' className=' btn btn-primary w-24'>Change</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    </FormContainer>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
 
 

@@ -26,7 +26,11 @@ import {
     
     USER_UPDATE_FAILED,
     USER_UPDATE_REQUEST,
-    USER_UPDATE_SUCCESS } from "../constants/userConstants"
+    USER_UPDATE_SUCCESS,
+
+    PASSWORD_CHANGE_REQUEST,
+    PASSWORD_CHANGE_SUCCESS,
+    PASSWORD_CHANGE_FAILED} from "../constants/userConstants"
 
 
 export const login = (formData) => async (dispatch) => {
@@ -99,6 +103,46 @@ export const register = (formData) => async (dispatch) => {
         })
     }
 }
+
+
+export const changePassword = (formData) => async (dispatch, getState) => {
+    try {
+        dispatch({
+            type: PASSWORD_CHANGE_REQUEST
+        })
+
+        const { userLogin: { userInfo } } = getState();
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        }
+
+        const { data } = await axios.patch(`/api/changepassword/`, formData, config)
+        // console.log('register action', data)
+        dispatch({
+            type: PASSWORD_CHANGE_SUCCESS,
+            payload: data
+        })
+
+        // dispatch({
+        //     type: USER_LOGIN_SUCCESS,
+        //     payload: data
+        // })
+
+        // localStorage.setItem('userInfo', JSON.stringify(data))
+
+    } catch (error) {
+        dispatch({
+            type: PASSWORD_CHANGE_FAILED,
+            payload: error.response.data.message ? error.response.data.message :error.response? error.message : 'error'
+        })
+    }
+}
+
+
 
 
 export const getUserDetails = () => async (dispatch, getState) => {

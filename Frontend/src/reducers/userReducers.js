@@ -25,7 +25,11 @@ import {
     USER_UPDATE_FAILED,
     USER_UPDATE_REQUEST,
     USER_UPDATE_RESET,
-    USER_UPDATE_SUCCESS } from "../constants/userConstants";
+    USER_UPDATE_SUCCESS,
+
+    PASSWORD_CHANGE_REQUEST,
+    PASSWORD_CHANGE_SUCCESS,
+    PASSWORD_CHANGE_FAILED } from "../constants/userConstants";
 
 export const userLoginReducer = (state = {}, action) => {
     switch (action.type) {
@@ -54,6 +58,7 @@ export const userRegisterReducer = (state = {}, action) => {
             return state;
     }
 }
+
 
 
 export const userDetailsReducer = (state = { user: {} }, action) => {
@@ -118,3 +123,19 @@ export const userDeleteReducer = (state = {}, action) => {
     }
 }
 
+
+
+// password change
+
+export const passwordChangeReducer = (state = {}, action) => {
+    switch (action.type) {
+        case PASSWORD_CHANGE_REQUEST:
+            return { loading: true }
+        case PASSWORD_CHANGE_SUCCESS:
+            return { loading: false, success: true }
+        case PASSWORD_CHANGE_FAILED:
+            return { loading: false, error: action.payload }
+        default:
+            return state;
+    }
+}
