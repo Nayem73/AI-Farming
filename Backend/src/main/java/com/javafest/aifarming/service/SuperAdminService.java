@@ -36,6 +36,7 @@ public class SuperAdminService {
             superAdmin.setEmail(email);
             superAdmin.setPassword(encodedPassword);
             superAdmin.setRole(role);
+            superAdmin.setSubscribed(true);
 
             userInfoRepository.save(superAdmin);
         }
