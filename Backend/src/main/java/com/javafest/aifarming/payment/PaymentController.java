@@ -1,8 +1,10 @@
 package com.javafest.aifarming.payment;
 
+import com.javafest.aifarming.model.UserInfo;
 import com.javafest.aifarming.repository.UserInfoRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,29 +23,47 @@ public class PaymentController {
     }
 
     @GetMapping("/payment")
-    public String initiatePayment() {
-//    public String initiatePayment(Authentication authentication) {
-        // Check if the user is authenticated (logged in)
-//        if (authentication == null) {
-//            return "redirect:/login"; // Redirect to your login page
-//        }
-//
-//        // Retrieve the userName of the logged-in user from the Authentication object
-//        String userName = authentication.getName();
-//        // Retrieve the UserInfo entity for the logged-in user
-//        UserInfo userInfo = userInfoRepository.getByUserName(userName);
-//
-//        // Check if UserInfo entity exists for the user
-//        if (userInfo == null) {
-//            return "error"; // Return an error view
-//        }
+    public String initiatePayment(Authentication authentication) {
+         //Check if the user is authenticated (logged in)
+        if (authentication == null) {
+            return "redirect:/login"; // Redirect to your login page
+        }
+
+        // Retrieve the userName of the logged-in user from the Authentication object
+        String userName = authentication.getName();
+        // Retrieve the UserInfo entity for the logged-in user
+        UserInfo userInfo = userInfoRepository.getByUserName(userName);
+
+        // Check if UserInfo entity exists for the user
+        if (userInfo == null) {
+            return "error"; // Return an error view
+        }
 
         String paymentUrl = transactionInitiator.initTrnxnRequest();
         return "redirect:" + paymentUrl; // Redirect to the payment URL
     }
 
     @PostMapping("/ssl-success-page")
-    public ResponseEntity<String> successPage(@RequestParam Map<String, String> responseParams) {
+    public ResponseEntity<String> successPage(
+            @RequestParam Map<String, String> responseParams,
+            Authentication authentication) {
+
+        // Check if the user is authenticated (logged in)
+        if (authentication == null) {
+//            return "redirect:/login"; // Redirect to your login page
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("please login first.");
+        }
+
+         //Retrieve the userName of the logged-in user from the Authentication object
+        String userName = authentication.getName();
+        // Retrieve the UserInfo entity for the logged-in user
+        UserInfo userInfo = userInfoRepository.getByUserName(userName);
+        System.out.println("**** username: "+ userName);
+
+        // Check if UserInfo entity exists for the user
+        if (userInfo == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("please login first.");
+        }
         try {
             // Validate the payment response using the TransactionResponseValidator class
             TransactionResponseValidator transactionResponseValidator = new TransactionResponseValidator();
