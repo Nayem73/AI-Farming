@@ -21,7 +21,7 @@ public class TransactionResponseValidator {
         /**
          *Get your AMOUNT and Currency FROM DB to initiate this Transaction
          */
-        String amount = "150";
+        String amount = "500";
         String currency = "BDT";
         // Set your store Id and store password and define TestMode
         SSLCommerz sslcz = new SSLCommerz("aifar64ea1f7a8c3ec", "aifar64ea1f7a8c3ec@ssl", true);

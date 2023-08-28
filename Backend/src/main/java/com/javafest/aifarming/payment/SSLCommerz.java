@@ -93,6 +93,7 @@ public class SSLCommerz {
         String response = this.sendPost(postData);
         try {
             SSLCommerzInitResponse resp = Util.extractInitResponse(response);
+            System.out.println("YYYYYYYYYYYYYYYYYYYYYYY " + resp.status);
             if (resp.status.equals("SUCCESS")) {
                 if (isGetGatewayList) {
                     // We will work on it!
@@ -189,7 +190,11 @@ public class SSLCommerz {
 
             if (!json.isEmpty()) {
                 SSLCommerzValidatorResponse resp = Util.extractValidatorResponse(json);//new JavaScriptSerializer().Deserialize < SSLCommerzValidatorResponse > (json);
-
+                System.out.println("$$$$$$$ "+ resp.status);
+                System.out.println("$$$$$$$ "+ resp.tran_id);
+                System.out.println("$$$$$$$ "+ merchantTrnxnAmount);
+                System.out.println("$$$$$$$ "+ resp.currency_amount);
+                System.out.println("$$$$$$$ "+ resp.currency_type);
                 if (resp.status.equals("VALID") || resp.status.equals("VALIDATED")) {
 
                     if (merchantTrnxnId.equals(resp.tran_id)

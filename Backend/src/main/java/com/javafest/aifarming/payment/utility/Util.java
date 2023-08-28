@@ -41,6 +41,7 @@ public class Util {
             output = output + outputLine;
         }
         br.close();
+        System.out.println("output: " + output);
         return output;
     }
 }

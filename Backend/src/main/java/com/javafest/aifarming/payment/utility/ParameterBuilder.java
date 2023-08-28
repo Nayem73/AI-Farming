@@ -31,11 +31,12 @@ public class ParameterBuilder {
 
     public static Map<String, String> constructRequestParameters() {
         // CREATING LIST OF POST DATA
-        String baseUrl = "http://localhost:8080/api/";//Request.Url.Scheme + "://" + Request.Url.Authority + Request.ApplicationPath.TrimEnd('/') + "/";
+        String baseUrl = "http://localhost:8080/api";//Request.Url.Scheme + "://" + Request.Url.Authority + Request.ApplicationPath.TrimEnd('/') + "/";
         Map<String, String> postData = new HashMap<String, String>();
-        postData.put("total_amount", "150.00");
-        postData.put("tran_id", "TESTASPNET1234");
-        postData.put("success_url", baseUrl + "ssl-success-page");
+        postData.put("total_amount", "500.00");
+        postData.put("tran_id", "whereisit");
+        postData.put("success_url", baseUrl + "/ssl-success-page");
+//        postData.put("success_url", baseUrl + "ssl-success-page");
         postData.put("fail_url", "https://sandbox.sslcommerz.com/developer/fail.php");
         postData.put("cancel_url", "https://sandbox.sslcommerz.com/developer/cancel.php");
         postData.put("version", "3.00");
