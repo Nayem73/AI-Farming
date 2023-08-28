@@ -1,8 +1,7 @@
 // import '../ReviewBox.css'; // Import your CSS file for styling
 import React, { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
-import { Row, Col, Image, ListGroup, Button, Card, Form } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom';
 import Message from '../components/Message';
 import Paginate from '../components/Paginate'
 import SuccessMessage from '../components/SuccessMessage'
@@ -16,6 +15,18 @@ import {
 
 function ReviewScreen() {
     const dispatch = useDispatch()
+    const history = useNavigate();
+
+    const userLogin = useSelector(state => state.userLogin);
+    const { userInfo } = userLogin;
+
+    useEffect(() => {
+        if (!userInfo) {
+            history('/login')
+        }
+    }, [dispatch])
+
+
 
     const reviewCreate = useSelector(state => state.reviewCreate);
     const { loading: loadingReviewCreate, error: errorReviewCreate, success: successReviewCreate } = reviewCreate;
@@ -167,9 +178,10 @@ function ReviewScreen() {
                                     
                                 </div>
                             </div>
+                            
                             <div className="flex justify-center">
-                                <button className="inline-flex px-4 py-2 text-base font-semibold text-white transition duration-500 ease-in-out transform bg-blue-500 border-blue-500 rounded-lg hover:bg-blue-700 hover:border-blue-700 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2" onClick={() => updateHandler(review.reviewId)}>Edit</button>
-                                <button className="inline-flex px-4 py-2 ml-4 text-base font-semibold text-white transition duration-500 ease-in-out transform bg-red-500 border-red-500 rounded-lg hover:bg-red-700 hover:border-red-700 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2" onClick={() => deleteHandler(review.reviewId)}>Delete</button>
+                            {(userInfo && userInfo.username === review.userName) && <button className="inline-flex px-4 py-2 text-base font-semibold text-white transition duration-500 ease-in-out transform bg-blue-500 border-blue-500 rounded-lg hover:bg-blue-700 hover:border-blue-700 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2" onClick={() => updateHandler(review.reviewId)}>Edit</button>}
+                            {(userInfo && (userInfo.username === review.userName || userInfo.isSuperAdmin)) &&  <button className="inline-flex px-4 py-2 ml-4 text-base font-semibold text-white transition duration-500 ease-in-out transform bg-red-500 border-red-500 rounded-lg hover:bg-red-700 hover:border-red-700 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2" onClick={() => deleteHandler(review.reviewId)}>Delete</button>}
                             </div>
                             <p className="text-sm text-gray-500">Created: {review.created}</p>
                         </div>
