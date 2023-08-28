@@ -58,7 +58,7 @@ public class UserInfoController {
                     .body("Error: User already exists!");
         } else if (existingUserByEmail.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Error: User with this email already exists");
+                    .body("Error: User already exists!");
         } else {
             // Encode the password and save the new user
             String encodedPassword = passwordEncoder.encode(password);
@@ -126,7 +126,8 @@ public class UserInfoController {
         } catch (AuthenticationException e) {
             // Create the response map
             Map<String, Object> response = new LinkedHashMap<>();
-            response.put("message", "Authentication failed: " + e.getMessage());
+//            response.put("message", "Authentication failed: " + e.getMessage());
+            response.put("message", "Invalid username or password");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(response);
         }
