@@ -66,6 +66,13 @@ public class UserInfo {
     )
     private List<UserReview> userReviews;
 
+    @OneToMany(
+            mappedBy = "userInfo",
+            orphanRemoval = true,
+            cascade = CascadeType.ALL
+    )
+    private List<PaymentInfo> paymentInfos;
+
     public UserInfo() {
     }
     public UserInfo(int id, String userName, String email, String password, String role) {

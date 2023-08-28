@@ -55,10 +55,10 @@ public class UserInfoController {
 
         if (existingUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Error: User already exists!");
+                    .body("message: User already exists!");
         } else if (existingUserByEmail.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Error: User already exists!");
+                    .body("message: User already exists!");
         } else {
             // Encode the password and save the new user
             String encodedPassword = passwordEncoder.encode(password);
