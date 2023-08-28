@@ -16,17 +16,19 @@ const RegisterScreen = () => {
     const [message, setMassage] = useState(null)
 
 
-    const history = useNavigate();
-    const redirect = window.location.search ? window.location.search.split('=')[1] : '/'
+
     const dispatch = useDispatch();
     const userRegister = useSelector(state => state.userRegister);
-    const { loading, error, userInfo } = userRegister;
+    const { loading, error, message:registerSuccessMessage } = userRegister;
+
+
 
     useEffect(() => {
-        if (userInfo) {
-            history(redirect)
+        if (registerSuccessMessage){
+            // reset signupForm
+            document.getElementById('signupForm').reset();
         }
-    }, [history, userInfo, redirect])
+    }, [registerSuccessMessage])
 
 
     const submitHandler = (e) => {
@@ -50,10 +52,10 @@ const RegisterScreen = () => {
         <FormContainer>
 
         <div>
-            {message && <SuccessMessage message={message} />}
+            {registerSuccessMessage && <SuccessMessage message={registerSuccessMessage} />}
             {error && <Message message={error} />}
             {loading && <Loader />}
-            <form onSubmit={submitHandler}>
+            <form id='signupForm' onSubmit={submitHandler}>
             <div className="form-control w-full  ">
                     <br />
                     <h1 className='text-3xl'>Sign Up</h1>
@@ -88,7 +90,7 @@ const RegisterScreen = () => {
                 </div>
                 <div>
 
-                    <h3>Already have any account?  <Link to={redirect ? `/login?redirect=${redirect}` : '/register'}> <strong>Sign in</strong> </Link>
+                    <h3>Already have any account?  <Link to="/login"> <strong>Sign in</strong> </Link>
                     </h3>
                 </div>
             </form>
