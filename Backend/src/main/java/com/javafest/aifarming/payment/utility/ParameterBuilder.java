@@ -53,7 +53,8 @@ public class ParameterBuilder {
         postData.put("total_amount", "500.00");
         String uniqueTransId = generateUniqueTransId(); // Call a method to generate a unique ID
         postData.put("tran_id", uniqueTransId);
-        postData.put("success_url", baseUrl + "/ssl-success-page");
+//        postData.put("success_url", baseUrl + "/ssl-success-page");
+        postData.put("success_url", baseUrl + "/profile");
         postData.put("fail_url", "https://sandbox.sslcommerz.com/developer/fail.php");
         postData.put("cancel_url", "https://sandbox.sslcommerz.com/developer/cancel.php");
         postData.put("version", "3.00");

@@ -60,7 +60,7 @@ public class PaymentController {
         return ResponseEntity.ok(paymentUrl);
     }
 
-    @PostMapping("/ssl-success-page")
+    @PostMapping("/profile")
     public ResponseEntity<String> successPage(
             @RequestParam Map<String, String> responseParams,
             Authentication authentication) {
