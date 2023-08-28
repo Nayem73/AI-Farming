@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { getUserDetails, changePassword } from '../actions/userActions';
+import { createSubscription } from '../actions/subscriptionActions';
 import Message from '../components/Message';
 import SuccessMessage from '../components/SuccessMessage';
 import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer'
+
 
 const ProfileScreen = () => {
 
@@ -16,6 +18,9 @@ const ProfileScreen = () => {
 
     const userLogin = useSelector(state => state.userLogin);
     const { userInfo } = userLogin;
+
+    const subscription = useSelector(state => state.subscription);
+    const { loading: loadingSubscription, error: errorSubscription, success: successSubscription } = subscription;
 
 
     useEffect(() => {
@@ -50,6 +55,14 @@ const ProfileScreen = () => {
         formDataToSend.append('newPassword', newPassword);
         formDataToSend.append('confirmpPssword', confirmpPssword);
         dispatch(changePassword(formDataToSend));
+    }
+
+    // ______________subscription______________ //
+    
+
+    const subscripHandler = (e) => {
+        e.preventDefault();
+        dispatch(createSubscription());
     }
 
 
@@ -87,6 +100,28 @@ const ProfileScreen = () => {
                             </div>
                         </div>
                     </div>
+
+
+
+                    <div className="p-4 w-full">
+                        <div className="h-full px-8 py-10 review">
+                            <div className="flex flex-col items-center mb-3">
+                                <div className=" my-5 w-full inline-flex items-center justify-center flex-shrink-0 h-10 mb-5 text-blue-500 bg-blue-100 rounded-full dark:bg-blue-500 dark:text-blue-100">
+                                    <h2 className="px-8 font-bold text-xl title-font">Update to Pro</h2>
+                                </div>
+                                <div className="flex-grow">
+                                    <h2 className="mb-3 text-lg font-medium text-gray-900 title-font"><strong>Username : </strong>{user.userName}</h2>
+                                    <p className="text-sm text-gray-500"><strong>Email : </strong>{user.email}</p>
+                                    <p className="text-sm text-gray-500"><strong>Search Left : </strong>{user.searchLeft}</p>
+                                    <div className='py-4 flex justify-center items-center'>
+                                        {/* click button to subscribe */}
+                                        <button onClick={subscripHandler} className=' btn btn-primary w-full'>Subscribe</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
 
                     {/* Reset password */}
                     <div className="p-4 w-full">

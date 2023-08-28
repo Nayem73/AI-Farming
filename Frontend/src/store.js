@@ -44,6 +44,7 @@ import {
 
 
 import {
+    subscriptionReducer,
     subscriptionCheckdReducer,
     subscriptionAmountReducer,
     subscriptionAmountUpdateReducer,
@@ -86,7 +87,7 @@ const reducer = combineReducers({
     reviewCreate: reviewCreateReducer,
     reviewUpdate: reviewUpdateReducer,
 
-
+    subscription: subscriptionReducer,
     subscriptionCheck: subscriptionCheckdReducer,
     subscriptionAmount: subscriptionAmountReducer,
     subscriptionAmountUpdate: subscriptionAmountUpdateReducer,

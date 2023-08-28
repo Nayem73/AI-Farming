@@ -1,5 +1,9 @@
 import axios from "axios";
-import { 
+import {
+    SUBCRIPTION_REQUEST,
+    SUBCRIPTION_SUCCESS,
+    SUBCRIPTION_FAILED,
+
     SUBCRIPTION_LIST_REQUEST,
     SUBCRIPTION_LIST_SUCCESS,
     SUBCRIPTION_LIST_FAILED,
@@ -20,6 +24,42 @@ import {
     SUBCRIPTION_CHECK_SUCCESS,
     SUBCRIPTION_CHECK_FAILED
 } from "../constants/subscriptionConstants";
+
+
+        
+export const createSubscription = () => async (dispatch, getState) => {
+    try {
+        dispatch({
+            type: SUBCRIPTION_REQUEST
+        })
+
+        const { userLogin: { userInfo } } = getState();
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        }
+
+
+        const { data } = await axios.get(`/api/payment`, config)
+        // redirect to payment page
+        window.location.href = data;
+
+
+        dispatch({
+            type: SUBCRIPTION_SUCCESS,
+            payload: data
+        })
+
+    } catch (error) {
+        dispatch({
+            type: SUBCRIPTION_FAILED,
+            payload: error.response.data.message ? error.response.data.message :error.response? error.message : 'error'
+        })
+    }
+}
 
 
 export const subscriptionCheck = () => async (dispatch, getState) => {

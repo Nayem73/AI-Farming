@@ -1,4 +1,8 @@
-import { 
+import {
+    SUBCRIPTION_REQUEST,
+    SUBCRIPTION_SUCCESS,
+    SUBCRIPTION_FAILED,
+
     SUBCRIPTION_LIST_REQUEST,
     SUBCRIPTION_LIST_SUCCESS,
     SUBCRIPTION_LIST_FAILED,
@@ -19,6 +23,20 @@ import {
     SUBCRIPTION_CHECK_SUCCESS,
     SUBCRIPTION_CHECK_FAILED
 } from "../constants/subscriptionConstants";
+
+
+export const subscriptionReducer = (state = { subscription: {} }, action) => {
+    switch (action.type) {
+        case SUBCRIPTION_REQUEST:
+            return { ...state, loading: true }
+        case SUBCRIPTION_SUCCESS:
+            return { loading: false, subscription: action.payload }
+        case SUBCRIPTION_FAILED:
+            return { loading: false, error: action.payload }
+        default:
+            return state;
+    }
+}
 
 
 export const subscriptionCheckdReducer = (state = { subscription: {} }, action) => {
