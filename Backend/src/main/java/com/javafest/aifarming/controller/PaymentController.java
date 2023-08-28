@@ -34,10 +34,11 @@ public class PaymentController {
     }
 
     @GetMapping("/payment")
-    public String initiatePayment(Authentication authentication) {
+    public ResponseEntity<?> initiatePayment(Authentication authentication) {
          //Check if the user is authenticated (logged in)
         if (authentication == null) {
-            return "redirect:/api/disease/"; // Redirect to your login page
+//            return "redirect:/api/disease/"; // Redirect to your login page
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Please login first.");
         }
 
         // Retrieve the userName of the logged-in user from the Authentication object
@@ -47,14 +48,16 @@ public class PaymentController {
 
         // Check if UserInfo entity exists for the user
         if (userInfo == null) {
-            return "redirect:/api/disease/";
+//            return "redirect:/api/disease/";
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Please login first.");
         }
         System.out.println("---------------------------------------------------------------- "+ userName);
         Date currentDate = new Date();
         System.out.println(currentDate +" gettime = "+ currentDate.getTime());
 
         String paymentUrl = transactionInitiator.initTrnxnRequest();
-        return "redirect:" + paymentUrl; // Redirect to the payment URL
+//        return "redirect:" + paymentUrl; // Redirect to the payment URL
+        return ResponseEntity.ok(paymentUrl);
     }
 
     @PostMapping("/ssl-success-page")
