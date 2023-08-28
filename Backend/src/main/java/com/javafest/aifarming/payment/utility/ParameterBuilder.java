@@ -34,9 +34,9 @@ public class ParameterBuilder {
         String baseUrl = "http://localhost:8080/api";//Request.Url.Scheme + "://" + Request.Url.Authority + Request.ApplicationPath.TrimEnd('/') + "/";
         Map<String, String> postData = new HashMap<String, String>();
         postData.put("total_amount", "500.00");
-        postData.put("tran_id", "whereisit");
+        String uniqueTransId = generateUniqueTransId(); // Call a method to generate a unique ID
+        postData.put("tran_id", uniqueTransId);
         postData.put("success_url", baseUrl + "/ssl-success-page");
-//        postData.put("success_url", baseUrl + "ssl-success-page");
         postData.put("fail_url", "https://sandbox.sslcommerz.com/developer/fail.php");
         postData.put("cancel_url", "https://sandbox.sslcommerz.com/developer/cancel.php");
         postData.put("version", "3.00");
@@ -62,5 +62,12 @@ public class ParameterBuilder {
         postData.put("value_c", "ref00");
         postData.put("value_d", "ref00");
         return postData;
+    }
+
+    private static String generateUniqueTransId() {
+        // Generate a unique transaction ID using timestamp and random number
+        long timestamp = System.currentTimeMillis();
+        int random = (int) (Math.random() * 10000); // Generate a random number
+        return "TRANS" + timestamp + "_" + random;
     }
 }
