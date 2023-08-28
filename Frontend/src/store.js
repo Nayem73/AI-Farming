@@ -43,6 +43,15 @@ import {
     reviewUpdateReducer } from './reducers/reviewReducers';
 
 
+import {
+    subscriptionCheckdReducer,
+    subscriptionAmountReducer,
+    subscriptionAmountUpdateReducer,
+    subscriptionListReducer,
+    subscriptionsStatisticReducer,
+    } from './reducers/subscriptionReducers';
+
+
 
 const reducer = combineReducers({
     cropList : cropListReducer,
@@ -76,6 +85,13 @@ const reducer = combineReducers({
     reviewDelete: reviewDeleteReducer,
     reviewCreate: reviewCreateReducer,
     reviewUpdate: reviewUpdateReducer,
+
+
+    subscriptionCheck: subscriptionCheckdReducer,
+    subscriptionAmount: subscriptionAmountReducer,
+    subscriptionAmountUpdate: subscriptionAmountUpdateReducer,
+    subscriptionList: subscriptionListReducer,
+    subscriptionsStatistic: subscriptionsStatisticReducer
 
 
 })
