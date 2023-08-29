@@ -133,6 +133,9 @@ function Header() {
                                     {userInfo && userInfo.isAdmin === true && <li>
                                         <Link to={'/admin/crop/'}>Crops</Link>
                                     </li>}
+                                    {userInfo && userInfo.isAdmin === true && <li>
+                                        <Link to={'/admin/subscriptions'}>Subscriptions</Link>
+                                    </li>}
 
                                     <li onClick={logOutHandler}><a>Logout</a></li>
                                 </ul>

@@ -22,6 +22,8 @@ import AISearchScreen from './screens/AISearchScreen';
 
 import ReviewScreen from './screens/ReviewScreen';
 
+import SubcriptionsScreen from './screens/AdminSubscriptionsScreen';
+
 
 
 function App() {
@@ -43,6 +45,7 @@ function App() {
         <Route path='/admin/disease/create' element={<DiseaseCreateScreen />} />
         <Route path='/admin/disease/edit/:crop_title/:disease_title' element={<DiseaseEditScreeen />} />
         <Route path='/admin/picture/:crop_title/:disease_title/:disease_id/' element={<AdminPictureScreen />} />
+        <Route path='/admin/subscriptions' element={<SubcriptionsScreen />} />
       </Routes>
       <Footer />
     </BrowserRouter>

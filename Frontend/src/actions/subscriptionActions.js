@@ -62,7 +62,7 @@ export const createSubscription = () => async (dispatch, getState) => {
 }
 
 
-export const subscriptionCheck = () => async (dispatch, getState) => {
+export const checkSubscription= () => async (dispatch, getState) => {
     try {
         dispatch({
             type: SUBCRIPTION_CHECK_REQUEST
@@ -78,7 +78,7 @@ export const subscriptionCheck = () => async (dispatch, getState) => {
         }
 
 
-        const { data } = await axios.get(`/api/admin/subscription/issubscripted/`, config)
+        const { data } = await axios.get(`/api/issubscribed/`, config)
         dispatch({
             type: SUBCRIPTION_CHECK_SUCCESS,
             payload: data
@@ -101,7 +101,7 @@ export const amountSubscription = () => async (dispatch) => {
         })
 
 
-        const { data } = await axios.get(`/api/admin/subscription/updateamount/`)
+        const { data } = await axios.get(`/api/admin/subscription/amount/`)
         dispatch({
             type: SUBCRIPTION_AMOUNT_SUCCESS,
             payload: data
@@ -132,7 +132,7 @@ export const updateAmountSubscription = (formData) => async (dispatch, getState)
             }
         }
 
-        const { data } = await axios.patch(`/api/admin/subscription/updateamount/`, formData, config)
+        const { data } = await axios.patch(`/api/admin/subscription/amount/`, formData, config)
         dispatch({
             type: SUBCRIPTION_AMOUNT_UPDDATE_SUCCESS,
             payload: data
@@ -164,7 +164,7 @@ export const listSubscriptions = (params) => async (dispatch, getState) => {
             }
         }
 
-        const { data } = await axios.get(`/api/admin/subscription?page=${page}`, config)
+        const { data } = await axios.get(`/api/admin/subscriptions?page=${page}`, config)
 
         dispatch({
             type: SUBCRIPTION_LIST_SUCCESS,
