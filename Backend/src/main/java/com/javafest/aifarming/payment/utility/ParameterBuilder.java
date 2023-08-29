@@ -3,10 +3,7 @@ package com.javafest.aifarming.payment.utility;
 import com.javafest.aifarming.model.PaymentInfo;
 import com.javafest.aifarming.model.UserInfo;
 import com.javafest.aifarming.repository.PaymentInfoRepository;
-import com.javafest.aifarming.repository.UserInfoRepository;
 import com.javafest.aifarming.service.SubscriptionAmountService;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

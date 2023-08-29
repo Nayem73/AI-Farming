@@ -52,6 +52,9 @@ public class PaymentController {
         if (userInfo == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Please login first.");
         }
+        if (userInfo.isSubscribed()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are already a subscribed user.");
+        }
 
         String paymentUrl = transactionInitiator.initTrnxnRequest(userInfo, subscriptionAmountService, paymentInfoRepository);
 //        return "redirect:" + paymentUrl; // Redirect to the payment URL
