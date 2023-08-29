@@ -191,6 +191,29 @@ public class UserInfoController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/issubscribed/")
+    public ResponseEntity<?> getSubscriptionStatus(Authentication authentication) {
+        // Check if the user is authenticated (logged in)
+        if (authentication == null) {
+            Map<String, Object> response = new LinkedHashMap<>();
+            response.put("message", "Please login first.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+        // Retrieve the email of the logged-in user from the Authentication object
+        String userName = authentication.getName();
+        // Retrieve the UserInfo entity for the logged-in user
+        UserInfo userInfo = userInfoRepository.getByUserName(userName);
+        // Check if UserInfo entity exists for the user
+        if (userInfo == null) {
+            Map<String, Object> response = new LinkedHashMap<>();
+            response.put("message", "Please login first.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+        Map<String, Object> response = new HashMap<>();
+        response.put("is_subscribed", userInfo.isSubscribed());
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/userlist/")
     @PreAuthorize("hasAuthority('ROLE_ADMIN') OR hasAuthority('ROLE_SUPER_ADMIN')")
     public ResponseEntity<Page<Map<String, Object>>> getAllUsers(
