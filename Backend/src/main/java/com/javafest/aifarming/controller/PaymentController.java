@@ -10,6 +10,7 @@ import com.javafest.aifarming.repository.SearchCountRepository;
 import com.javafest.aifarming.repository.UserInfoRepository;
 import com.javafest.aifarming.service.SubscriptionAmountService;
 import org.springframework.data.domain.*;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -64,7 +65,7 @@ public class PaymentController {
         return ResponseEntity.ok(paymentUrl);
     }
 
-    @PostMapping("/profile")
+    @PostMapping("/ssl-success-page")
     public ResponseEntity<String> successPage(
             @RequestParam Map<String, String> responseParams,
             Authentication authentication) {
@@ -123,8 +124,10 @@ public class PaymentController {
 
                 // Save the PaymentInfo object to the database
                 paymentInfoRepository.save(paymentInfo);
-
-                return ResponseEntity.ok("Payment successful!");
+//                return ResponseEntity.ok("Payment successful!");
+                return ResponseEntity.status(HttpStatus.SEE_OTHER)
+                        .header(HttpHeaders.LOCATION, "http://127.0.0.1:3000/profile")
+                        .build();
             } else {
                 // Payment validation failed
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Payment validation failed");

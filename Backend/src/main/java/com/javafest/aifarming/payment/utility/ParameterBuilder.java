@@ -37,7 +37,7 @@ public class ParameterBuilder {
 
     public static Map<String, String> constructRequestParameters(UserInfoRepository userInfoRepository, SubscriptionAmountService subscriptionAmountService) {
         // CREATING LIST OF POST DATA
-        String baseUrl = "http://localhost:8080/api";//Request.Url.Scheme + "://" + Request.Url.Authority + Request.ApplicationPath.TrimEnd('/') + "/";
+        String baseUrl = "http://192.168.77.7:8080/api";//Request.Url.Scheme + "://" + Request.Url.Authority + Request.ApplicationPath.TrimEnd('/') + "/";
         Map<String, String> postData = new HashMap<String, String>();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -57,8 +57,8 @@ public class ParameterBuilder {
 
         String uniqueTransId = generateUniqueTransId(); // Call a method to generate a unique ID
         postData.put("tran_id", uniqueTransId);
-//        postData.put("success_url", baseUrl + "/ssl-success-page");
-        postData.put("success_url", baseUrl + "/profile");
+        postData.put("success_url", baseUrl + "/ssl-success-page");
+//        postData.put("success_url", baseUrl + "/profile");
         postData.put("fail_url", "https://sandbox.sslcommerz.com/developer/fail.php");
         postData.put("cancel_url", "https://sandbox.sslcommerz.com/developer/cancel.php");
         postData.put("version", "3.00");
