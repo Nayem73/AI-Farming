@@ -3,6 +3,7 @@ package com.javafest.aifarming.model;
 import jakarta.persistence.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import java.util.Date;
 import java.util.List;
 
 import static jakarta.persistence.GenerationType.SEQUENCE;
@@ -55,17 +56,6 @@ public class UserInfo {
     )
     private String role;
 
-    @Column(name = "isSubscribed")
-    private boolean isSubscribed;
-
-    public boolean isSubscribed() {
-        return isSubscribed;
-    }
-
-    public void setSubscribed(boolean subscribed) {
-        isSubscribed = subscribed;
-    }
-
     @OneToOne(mappedBy = "userInfo", cascade = CascadeType.ALL, orphanRemoval = true)
     private SearchCount searchCount;
 
@@ -85,13 +75,12 @@ public class UserInfo {
 
     public UserInfo() {
     }
-    public UserInfo(int id, String userName, String email, String password, String role, boolean isSubscribed) {
+    public UserInfo(int id, String userName, String email, String password, String role) {
         this.id = id;
         this.userName = userName;
         this.email = email;
         this.password = password;
         this.role = role;
-        this.isSubscribed = isSubscribed;
     }
 
     public int getId() {
@@ -142,5 +131,20 @@ public class UserInfo {
         this.searchCount = searchCount;
     }
 
+    public boolean isSubscribed() {
+        if ("ROLE_SUPER_ADMIN".equals(role) || "ROLE_ADMIN".equals(role)) {
+            return true; // Admin roles are always subscribed
+        }
+
+        if (paymentInfos.isEmpty()) {
+            return false; // No payment information available
+        }
+
+        PaymentInfo lastPayment = paymentInfos.get(paymentInfos.size() - 1);
+        Date expiryDate = lastPayment.getExpiryDate();
+        Date currentDate = new Date();
+
+        return expiryDate != null && expiryDate.after(currentDate); //expiredDate is after currentDate
+    }
 
 }

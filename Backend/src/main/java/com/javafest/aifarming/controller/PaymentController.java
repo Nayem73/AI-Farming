@@ -94,15 +94,28 @@ public class PaymentController {
                 // Perform any necessary actions for successful payment, e.g., updating the order status
                 SearchCount searchCount = searchCountRepository.findByUserInfo(userInfo);
                 Date currentDate = new Date();
+                if (searchCount == null) {
+                    searchCount = new SearchCount(userInfo, 0);
+                }
                 searchCount.setLastResetDate(currentDate);
                 searchCountRepository.save(searchCount);
 
                 PaymentInfo paymentInfo = new PaymentInfo();
+                long currentTimeMillis = currentDate.getTime();
+
+                long millisecondsInADay = 24 * 60 * 60 * 1000; // 24 hours * 60 minutes * 60 seconds * 1000 milliseconds
+                long thirtyDaysInMillis = 30 * millisecondsInADay;
+                long dateAfter30DaysMillis = currentTimeMillis + thirtyDaysInMillis;
+                Date dateAfter30Days = new Date(dateAfter30DaysMillis);
+                paymentInfo.setExpiryDate(dateAfter30Days);
                 paymentInfo.setTranId(responseParams.get("tran_id"));
                 paymentInfo.setValId(responseParams.get("val_id"));
                 paymentInfo.setUserInfo(userInfo);
                 paymentInfo.setAmount(responseParams.get("amount"));
                 paymentInfo.setCardType(responseParams.get("card_type"));
+                paymentInfo.setCardIssuer(responseParams.get("card_issuer"));
+                paymentInfo.setCurrency(responseParams.get("currency"));
+                paymentInfo.setTranDate(responseParams.get("tran_date"));
 
                 // Save the PaymentInfo object to the database
                 paymentInfoRepository.save(paymentInfo);

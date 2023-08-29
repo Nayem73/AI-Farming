@@ -3,6 +3,7 @@ package com.javafest.aifarming.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
@@ -24,6 +25,19 @@ public class PaymentInfo {
             updatable = false
     )
     private Long id;
+
+
+
+    public Date getExpiryDate() {
+        return expiryDate;
+    }
+
+    public void setExpiryDate(Date expiryDate) {
+        this.expiryDate = expiryDate;
+    }
+
+    @Column(name = "expiry_date")
+    private Date expiryDate;
 
     @Column(name = "tran_id")
     private String tranId;

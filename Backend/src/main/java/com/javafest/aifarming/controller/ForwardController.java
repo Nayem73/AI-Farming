@@ -82,9 +82,13 @@ public class ForwardController {
             }
         }
 
+        if (userInfo.isSubscribed()) {
+            System.out.println(userInfo.getUserName() + " is a subscribed user <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<=============================================");
+        }
+
         // Check if the user has exceeded the maximum allowed request count
         int requestCount = searchCount.getCount();
-        if (requestCount >= maxRequestCountPerMonth) {
+        if (requestCount >= maxRequestCountPerMonth && !userInfo.isSubscribed()) {
             // If the user has exceeded the request limit, return an error response
             Map<String, Object> response = new LinkedHashMap<>();
             response.put("message", "You have exceeded your search limit. Please try again later.");
