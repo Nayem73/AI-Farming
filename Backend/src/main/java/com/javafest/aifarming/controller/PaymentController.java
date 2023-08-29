@@ -42,50 +42,26 @@ public class PaymentController {
     public ResponseEntity<?> initiatePayment(Authentication authentication) {
          //Check if the user is authenticated (logged in)
         if (authentication == null) {
-//            return "redirect:/api/disease/"; // Redirect to your login page
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Please login first.");
         }
-
         // Retrieve the userName of the logged-in user from the Authentication object
         String userName = authentication.getName();
         // Retrieve the UserInfo entity for the logged-in user
         UserInfo userInfo = userInfoRepository.getByUserName(userName);
-
         // Check if UserInfo entity exists for the user
         if (userInfo == null) {
-//            return "redirect:/api/disease/";
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Please login first.");
         }
-        System.out.println("---------------------------------------------------------------- "+ userName);
-        Date currentDate = new Date();
-        System.out.println(currentDate +" gettime = "+ currentDate.getTime());
 
-        String paymentUrl = transactionInitiator.initTrnxnRequest();
+        String paymentUrl = transactionInitiator.initTrnxnRequest(userInfo, subscriptionAmountService, paymentInfoRepository);
 //        return "redirect:" + paymentUrl; // Redirect to the payment URL
+
         return ResponseEntity.ok(paymentUrl);
     }
 
     @PostMapping("/ssl-success-page")
-    public ResponseEntity<String> successPage(
-            @RequestParam Map<String, String> responseParams,
-            Authentication authentication) {
+    public ResponseEntity<String> successPage(@RequestParam Map<String, String> responseParams) {
 
-        // Check if the user is authenticated (logged in)
-        if (authentication == null) {
-//            return "redirect:/login"; // Redirect to your login page
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("please login first.");
-        }
-
-         //Retrieve the userName of the logged-in user from the Authentication object
-        String userName = authentication.getName();
-        // Retrieve the UserInfo entity for the logged-in user
-        UserInfo userInfo = userInfoRepository.getByUserName(userName);
-        System.out.println("**** username: "+ userName);
-
-        // Check if UserInfo entity exists for the user
-        if (userInfo == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("please login first.");
-        }
         try {
             // Validate the payment response using the TransactionResponseValidator class
             TransactionResponseValidator transactionResponseValidator = new TransactionResponseValidator(subscriptionAmountService);
@@ -97,6 +73,10 @@ public class PaymentController {
             if (transactionResponseValidator.receiveSuccessResponse(responseParams)) {
                 // Payment was successful
                 // Perform any necessary actions for successful payment, e.g., updating the order status
+                PaymentInfo paymentInfo = paymentInfoRepository.findByTranId(responseParams.get("tran_id"));
+                System.out.println("5555555555555555555555555555555555555555555555555555555555555555555555 "+ paymentInfo.getTranId());
+                UserInfo userInfo = paymentInfo.getUserInfo();
+
                 SearchCount searchCount = searchCountRepository.findByUserInfo(userInfo);
                 Date currentDate = new Date();
                 if (searchCount == null) {
@@ -105,7 +85,7 @@ public class PaymentController {
                 searchCount.setLastResetDate(currentDate);
                 searchCountRepository.save(searchCount);
 
-                PaymentInfo paymentInfo = new PaymentInfo();
+
                 long currentTimeMillis = currentDate.getTime();
 
                 long millisecondsInADay = 24 * 60 * 60 * 1000; // 24 hours * 60 minutes * 60 seconds * 1000 milliseconds
@@ -113,7 +93,7 @@ public class PaymentController {
                 long dateAfter30DaysMillis = currentTimeMillis + thirtyDaysInMillis;
                 Date dateAfter30Days = new Date(dateAfter30DaysMillis);
                 paymentInfo.setExpiryDate(dateAfter30Days);
-                paymentInfo.setTranId(responseParams.get("tran_id"));
+                //paymentInfo.setTranId(responseParams.get("tran_id")); tran_id is already set from user side in ParameterBuilder class.
                 paymentInfo.setValId(responseParams.get("val_id"));
                 paymentInfo.setUserInfo(userInfo);
                 paymentInfo.setAmount(responseParams.get("amount"));

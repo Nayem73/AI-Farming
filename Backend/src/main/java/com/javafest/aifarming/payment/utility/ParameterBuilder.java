@@ -1,6 +1,8 @@
 package com.javafest.aifarming.payment.utility;
 
+import com.javafest.aifarming.model.PaymentInfo;
 import com.javafest.aifarming.model.UserInfo;
+import com.javafest.aifarming.repository.PaymentInfoRepository;
 import com.javafest.aifarming.repository.UserInfoRepository;
 import com.javafest.aifarming.service.SubscriptionAmountService;
 import org.springframework.security.core.Authentication;
@@ -35,28 +37,28 @@ public class ParameterBuilder {
                 : resultString;
     }
 
-    public static Map<String, String> constructRequestParameters(UserInfoRepository userInfoRepository, SubscriptionAmountService subscriptionAmountService) {
+    public static Map<String, String> constructRequestParameters(
+            UserInfo userInfo,
+            SubscriptionAmountService subscriptionAmountService,
+            PaymentInfoRepository paymentInfoRepository) {
         // CREATING LIST OF POST DATA
         String baseUrl = "http://192.168.77.7:8080/api";//Request.Url.Scheme + "://" + Request.Url.Authority + Request.ApplicationPath.TrimEnd('/') + "/";
         Map<String, String> postData = new HashMap<String, String>();
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        // Check if the user is authenticated (logged in)
-        if (authentication != null && authentication.isAuthenticated()) {
-            // Retrieve the username from authentication
-            String userName = authentication.getName();
-            UserInfo userInfo = userInfoRepository.getByUserName(userName);
-            System.out.println("from ParameterBuilder " + userName);
+        postData.put("cus_name", userInfo.getUserName()); // Set the username
+        postData.put("cus_email", userInfo.getEmail()); // Set the email
 
-            postData.put("cus_name", userInfo.getUserName()); // Set the username
-            postData.put("cus_email", userInfo.getEmail()); // Set the email
-        }
+        PaymentInfo paymentInfo = new PaymentInfo();
+        paymentInfo.setUserInfo(userInfo);
+        String uniqueTransId = generateUniqueTransId(); // Call a method to generate a unique ID
+        postData.put("tran_id", uniqueTransId);
+        paymentInfo.setTranId(uniqueTransId);
+        paymentInfoRepository.save(paymentInfo);
+
 //        postData.put("total_amount", "500.00");
         String amount = Double.toString(subscriptionAmountService.getSubscriptionAmount());
         postData.put("total_amount", amount);
 
-        String uniqueTransId = generateUniqueTransId(); // Call a method to generate a unique ID
-        postData.put("tran_id", uniqueTransId);
         postData.put("success_url", baseUrl + "/ssl-success-page");
 //        postData.put("success_url", baseUrl + "/profile");
         postData.put("fail_url", "https://sandbox.sslcommerz.com/developer/fail.php");
