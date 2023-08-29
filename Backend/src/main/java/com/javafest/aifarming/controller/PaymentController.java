@@ -8,6 +8,7 @@ import com.javafest.aifarming.payment.TransactionResponseValidator;
 import com.javafest.aifarming.repository.PaymentInfoRepository;
 import com.javafest.aifarming.repository.SearchCountRepository;
 import com.javafest.aifarming.repository.UserInfoRepository;
+import com.javafest.aifarming.service.SubscriptionAmountService;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,12 +27,14 @@ public class PaymentController {
     private final UserInfoRepository userInfoRepository;
     private final PaymentInfoRepository paymentInfoRepository;
     private final SearchCountRepository searchCountRepository;
+    private final SubscriptionAmountService subscriptionAmountService;
 
-    public PaymentController(TransactionInitiator transactionInitiator, UserInfoRepository userInfoRepository, PaymentInfoRepository paymentInfoRepository, SearchCountRepository searchCountRepository) {
+    public PaymentController(TransactionInitiator transactionInitiator, UserInfoRepository userInfoRepository, PaymentInfoRepository paymentInfoRepository, SearchCountRepository searchCountRepository, SubscriptionAmountService subscriptionAmountService) {
         this.transactionInitiator = transactionInitiator;
         this.userInfoRepository = userInfoRepository;
         this.paymentInfoRepository = paymentInfoRepository;
         this.searchCountRepository = searchCountRepository;
+        this.subscriptionAmountService = subscriptionAmountService;
     }
 
     @GetMapping("/payment")
@@ -84,7 +87,7 @@ public class PaymentController {
         }
         try {
             // Validate the payment response using the TransactionResponseValidator class
-            TransactionResponseValidator transactionResponseValidator = new TransactionResponseValidator();
+            TransactionResponseValidator transactionResponseValidator = new TransactionResponseValidator(subscriptionAmountService);
             System.out.println("----------------------------------------------------------------------------------------------------");
             System.out.println(responseParams);
             System.out.println("----------------------------------------------------------------------------------------------------");

@@ -2,6 +2,7 @@ package com.javafest.aifarming.payment;
 
 import com.javafest.aifarming.payment.utility.ParameterBuilder;
 import com.javafest.aifarming.repository.UserInfoRepository;
+import com.javafest.aifarming.service.SubscriptionAmountService;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -14,9 +15,11 @@ import java.util.Map;
 @Component
 public class TransactionInitiator {
     private final UserInfoRepository userInfoRepository;
+    private final SubscriptionAmountService subscriptionAmountService;
 
-    public TransactionInitiator(UserInfoRepository userInfoRepository) {
+    public TransactionInitiator(UserInfoRepository userInfoRepository, SubscriptionAmountService subscriptionAmountService) {
         this.userInfoRepository = userInfoRepository;
+        this.subscriptionAmountService = subscriptionAmountService;
     }
 
     public String initTrnxnRequest() {
@@ -27,7 +30,7 @@ public class TransactionInitiator {
              * keep an eye on success fail url correctly.
              * insert your success and fail URL correctly in this Map
              */
-            Map<String, String> postData = ParameterBuilder.constructRequestParameters(userInfoRepository);
+            Map<String, String> postData = ParameterBuilder.constructRequestParameters(userInfoRepository, subscriptionAmountService);
             /**
              * Provide your SSL Commerz store Id and Password by this following constructor.
              * If Test Mode then insert true and false otherwise.

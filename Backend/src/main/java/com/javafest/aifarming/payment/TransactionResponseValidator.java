@@ -1,5 +1,9 @@
 package com.javafest.aifarming.payment;
 
+import com.javafest.aifarming.repository.SubscriptionAmountRepository;
+import com.javafest.aifarming.service.SubscriptionAmountService;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.Map;
 
 /**
@@ -8,6 +12,12 @@ import java.util.Map;
  * and false otherwise.
  */
 public class TransactionResponseValidator {
+    private final SubscriptionAmountService subscriptionAmountService;
+
+    public TransactionResponseValidator(SubscriptionAmountService subscriptionAmountService) {
+        this.subscriptionAmountService = subscriptionAmountService;
+    }
+
     /**
      *
      * @param request
@@ -21,7 +31,8 @@ public class TransactionResponseValidator {
         /**
          *Get your AMOUNT and Currency FROM DB to initiate this Transaction
          */
-        String amount = "500";
+        //String amount = "500";
+        String amount = Double.toString(subscriptionAmountService.getSubscriptionAmount());
         String currency = "BDT";
         // Set your store Id and store password and define TestMode
         SSLCommerz sslcz = new SSLCommerz("aifar64ea1f7a8c3ec", "aifar64ea1f7a8c3ec@ssl", true);

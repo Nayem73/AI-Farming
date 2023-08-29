@@ -2,6 +2,7 @@ package com.javafest.aifarming.payment.utility;
 
 import com.javafest.aifarming.model.UserInfo;
 import com.javafest.aifarming.repository.UserInfoRepository;
+import com.javafest.aifarming.service.SubscriptionAmountService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -34,7 +35,7 @@ public class ParameterBuilder {
                 : resultString;
     }
 
-    public static Map<String, String> constructRequestParameters(UserInfoRepository userInfoRepository) {
+    public static Map<String, String> constructRequestParameters(UserInfoRepository userInfoRepository, SubscriptionAmountService subscriptionAmountService) {
         // CREATING LIST OF POST DATA
         String baseUrl = "http://localhost:8080/api";//Request.Url.Scheme + "://" + Request.Url.Authority + Request.ApplicationPath.TrimEnd('/') + "/";
         Map<String, String> postData = new HashMap<String, String>();
@@ -50,7 +51,10 @@ public class ParameterBuilder {
             postData.put("cus_name", userInfo.getUserName()); // Set the username
             postData.put("cus_email", userInfo.getEmail()); // Set the email
         }
-        postData.put("total_amount", "500.00");
+//        postData.put("total_amount", "500.00");
+        String amount = Double.toString(subscriptionAmountService.getSubscriptionAmount());
+        postData.put("total_amount", amount);
+
         String uniqueTransId = generateUniqueTransId(); // Call a method to generate a unique ID
         postData.put("tran_id", uniqueTransId);
 //        postData.put("success_url", baseUrl + "/ssl-success-page");
