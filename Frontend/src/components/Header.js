@@ -155,11 +155,20 @@ function Header() {
                                     </li>
                                     <li className='searchBox_id2'><SearchBox  crop={selectedOption}/></li>
                                     
+                                    
+                                    <li>
+                                        <Link to={'/review'} className="justify-between">
+                                            Review
+                                            {/* <span className="badge">New</span> */}
+                                        </Link>
+                                    </li>
+
                                     <li>
                                         <Link to={'/login'} className="font-bold justify-between">
                                             Log in
                                         </Link>
                                     </li>
+                                    
 
                                 </ul>
                             </div>
