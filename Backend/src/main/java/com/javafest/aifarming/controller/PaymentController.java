@@ -1,7 +1,6 @@
 package com.javafest.aifarming.controller;
 
 import com.javafest.aifarming.model.PaymentInfo;
-import com.javafest.aifarming.model.SearchCount;
 import com.javafest.aifarming.model.UserInfo;
 import com.javafest.aifarming.payment.TransactionInitiator;
 import com.javafest.aifarming.payment.TransactionResponseValidator;
@@ -53,7 +52,7 @@ public class PaymentController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Please login first.");
         }
         if (userInfo.isSubscribed()) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are already a subscribed user.");
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("You are already a subscribed user.");
         }
 
         String paymentUrl = transactionInitiator.initTrnxnRequest(userInfo, subscriptionAmountService, paymentInfoRepository);
@@ -71,22 +70,19 @@ public class PaymentController {
             System.out.println("----------------------------------------------------------------------------------------------------");
             System.out.println(responseParams);
             System.out.println("----------------------------------------------------------------------------------------------------");
-            boolean pr = transactionResponseValidator.receiveSuccessResponse(responseParams);
-            System.out.println("~~~~~~~~~~~~~~~ "+ pr);
             if (transactionResponseValidator.receiveSuccessResponse(responseParams)) {
                 // Payment was successful
                 // Perform any necessary actions for successful payment, e.g., updating the order status
                 PaymentInfo paymentInfo = paymentInfoRepository.findByTranId(responseParams.get("tran_id"));
-                System.out.println("5555555555555555555555555555555555555555555555555555555555555555555555 "+ paymentInfo.getTranId());
                 UserInfo userInfo = paymentInfo.getUserInfo();
 
-                SearchCount searchCount = searchCountRepository.findByUserInfo(userInfo);
                 Date currentDate = new Date();
-                if (searchCount == null) {
-                    searchCount = new SearchCount(userInfo, 0);
-                }
-                searchCount.setLastResetDate(currentDate);
-                searchCountRepository.save(searchCount);
+//                SearchCount searchCount = searchCountRepository.findByUserInfo(userInfo);
+//                if (searchCount == null) {
+//                    searchCount = new SearchCount(userInfo, 0);
+//                }
+//                searchCount.setLastResetDate(currentDate);
+//                searchCountRepository.save(searchCount);
 
 
                 long currentTimeMillis = currentDate.getTime();

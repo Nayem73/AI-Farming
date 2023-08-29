@@ -65,39 +65,38 @@ public class ForwardController {
             response.put("message", "Please login first.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
-        // Retrieve the SearchCount entity for the logged-in user
-        SearchCount searchCount = searchCountRepository.findByUserInfo(userInfo);
 
-        // Check if SearchCount entity exists for the user, if not create it
-        Date currentDate = new Date();
-        if (searchCount == null) {
-            searchCount = new SearchCount(userInfo, 0);
-            searchCount.setLastResetDate(currentDate);
-            searchCountRepository.save(searchCount);
-        } else {
-            if (is30DaysAgo(searchCount.getLastResetDate(), currentDate)) {
-                searchCount.setCount(0);
+        if (!userInfo.isSubscribed()) {
+            // Retrieve the SearchCount entity for the logged-in user
+            SearchCount searchCount = searchCountRepository.findByUserInfo(userInfo);
+
+            // Check if SearchCount entity exists for the user, if not create it
+            Date currentDate = new Date();
+            if (searchCount == null) {
+                searchCount = new SearchCount(userInfo, 0);
                 searchCount.setLastResetDate(currentDate);
                 searchCountRepository.save(searchCount);
+            } else {
+                if (is30DaysAgo(searchCount.getLastResetDate(), currentDate)) {
+                    searchCount.setCount(0);
+                    searchCount.setLastResetDate(currentDate);
+                    searchCountRepository.save(searchCount);
+                }
             }
-        }
 
-        if (userInfo.isSubscribed()) {
-            System.out.println(userInfo.getUserName() + " is a subscribed user <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<=============================================");
-        }
+            // Check if the user has exceeded the maximum allowed request count
+            int requestCount = searchCount.getCount();
+            if (requestCount >= maxRequestCountPerMonth) {
+                // If the user has exceeded the request limit, return an error response
+                Map<String, Object> response = new LinkedHashMap<>();
+                response.put("message", "You have exceeded your search limit. Please try again later.");
+                return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(response);
+            }
 
-        // Check if the user has exceeded the maximum allowed request count
-        int requestCount = searchCount.getCount();
-        if (requestCount >= maxRequestCountPerMonth && !userInfo.isSubscribed()) {
-            // If the user has exceeded the request limit, return an error response
-            Map<String, Object> response = new LinkedHashMap<>();
-            response.put("message", "You have exceeded your search limit. Please try again later.");
-            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(response);
+            // Increment the user's request count for today
+            searchCount.setCount(requestCount + 1);
+            searchCountRepository.save(searchCount);
         }
-
-        // Increment the user's request count for today
-        searchCount.setCount(requestCount + 1);
-        searchCountRepository.save(searchCount);
 
 
         // Step 1: Prepare the request body as form-data

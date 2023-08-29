@@ -1,11 +1,11 @@
 package com.javafest.aifarming.controller;
 
-import com.javafest.aifarming.model.Disease;
 import com.javafest.aifarming.model.SearchCount;
 import com.javafest.aifarming.model.UserInfo;
 import com.javafest.aifarming.repository.SearchCountRepository;
 import com.javafest.aifarming.repository.UserInfoRepository;
 import com.javafest.aifarming.service.JwtService;
+import com.javafest.aifarming.service.SubscriptionAmountService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,20 +28,29 @@ import java.util.*;
 @RequestMapping("/api")
 public class UserInfoController {
     private final UserInfoRepository userInfoRepository;
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
-    private AuthenticationManager authenticationManager;
-    private ForwardController forwardController;
-    private SearchCountRepository searchCountRepository;
+    private final AuthenticationManager authenticationManager;
+    private final ForwardController forwardController;
+    private final SearchCountRepository searchCountRepository;
+    private final SubscriptionAmountService subscriptionAmountService;
 
     @Autowired
-    public UserInfoController(UserInfoRepository userInfoRepository, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager, ForwardController forwardController, SearchCountRepository searchCountRepository) {
+    public UserInfoController(
+            UserInfoRepository userInfoRepository,
+            PasswordEncoder passwordEncoder,
+            JwtService jwtService,
+            AuthenticationManager authenticationManager,
+            ForwardController forwardController,
+            SearchCountRepository searchCountRepository,
+            SubscriptionAmountService subscriptionAmountService) {
         this.userInfoRepository = userInfoRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
         this.forwardController = forwardController;
         this.searchCountRepository = searchCountRepository;
+        this.subscriptionAmountService = subscriptionAmountService;
     }
 
     @PostMapping("/signup/")
@@ -175,17 +184,8 @@ public class UserInfoController {
         response.put("email", userInfo.getEmail());
         if (userInfo.isSubscribed()) {
             response.put("searchLeft", "Unlimited");
-            //response.put("subscription ends on", dateAfter30Days);
         } else {
             response.put("searchLeft", forwardController.maxRequestCountPerMonth - searchCount);
-//            Calendar calendar = Calendar.getInstance();
-//            calendar.setTime(new Date());
-//            // Move to the next month
-//            calendar.add(Calendar.MONTH, 1);
-//            // Set the day to 1
-//            calendar.set(Calendar.DAY_OF_MONTH, 1);
-//            Date firstDayOfNextMonth = calendar.getTime();
-//            response.put("searchLeft resets on", firstDayOfNextMonth);
         }
 
         return ResponseEntity.ok(response);
@@ -209,8 +209,14 @@ public class UserInfoController {
             response.put("message", "Please login first.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
-        Map<String, Object> response = new HashMap<>();
+        Map<String, Object> response = new LinkedHashMap<>();
         response.put("is_subscribed", userInfo.isSubscribed());
+        if (userInfo.isSubscribed()) {
+            response.put("subscriptionDate", userInfo.getPaymentDate());
+            response.put("expiryDate", userInfo.getExpiryDate());
+        } else {
+            response.put("amount", subscriptionAmountService.getSubscriptionAmount());
+        }
         return ResponseEntity.ok(response);
     }
 
