@@ -1,10 +1,11 @@
 // import '../ReviewBox.css'; // Import your CSS file for styling
 import React, { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 import Message from '../components/Message';
 import Paginate from '../components/Paginate'
 import SuccessMessage from '../components/SuccessMessage'
+
 
 import {
     listReviews,
@@ -20,11 +21,11 @@ function ReviewScreen() {
     const userLogin = useSelector(state => state.userLogin);
     const { userInfo } = userLogin;
 
-    useEffect(() => {
-        if (!userInfo) {
-            history('/login')
-        }
-    }, [dispatch])
+    // useEffect(() => {
+    //     if (!userInfo) {
+    //         history('/login')
+    //     }
+    // }, [dispatch])
 
 
 
@@ -150,7 +151,7 @@ function ReviewScreen() {
                     <div className="p-4 review mt-2">
                         <div className="h-full px-8 py-10 border-2 border-gray-200 rounded-lg dark:border-gray-800">
                             <div className="flex flex-col  mb-3">
-                                <div className="inline-flex items-center justify-center flex-shrink-0 w-15 h-20 mb-5 text-blue-500 bg-blue-100 rounded-full dark:bg-blue-500 dark:text-blue-100">
+                                <div className="inline-flex items-center justify-center flex-shrink-0 w-15 h-10 mb-5 text-blue-500 bg-blue-100 rounded-full dark:bg-blue-500 dark:text-blue-100">
                                 
                                     <i class="fa-regular fa-user fa-2xl px-8"></i>
                                     <h2 className='px-8 font-bold text-xl title-font'>{review.userName}</h2>
@@ -208,7 +209,9 @@ function ReviewScreen() {
                 {successReviewUpdate && <SuccessMessage message={"Review is updated"} />}
 
         </div>
-        
+
+
+        {userInfo ?
         <div className='lg:px-20 mt-10 mr-5 ml-5 mb-10'>
             <form ref={formRef}  id="myForm" onSubmit={handleSubmit}>
             {imageFile && !usingCamera && (
@@ -259,7 +262,25 @@ function ReviewScreen() {
             </div>
             </form>
 
+        </div>: <>
+        
+        <div className="flex justify-center m-10">
+            <div className="flex-grow  rounded-lg dark:border-red-800 
+            dark:bg-red-100 p-8
+            dark:hover:bg-red-200 transition duration-500 ease-in-out
+            justify-center 
+            ">
+                
+                <p className="text-base leading-relaxed ">Please <Link to={'/login'} className="font-bold
+                text-blue-500
+                ">Login</Link> to create or update reviews</p>
+            </div>
+
         </div>
+
+        
+        
+        </>}
 
         
     </div>
