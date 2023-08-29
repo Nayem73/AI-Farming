@@ -8,14 +8,15 @@ import com.javafest.aifarming.payment.TransactionResponseValidator;
 import com.javafest.aifarming.repository.PaymentInfoRepository;
 import com.javafest.aifarming.repository.SearchCountRepository;
 import com.javafest.aifarming.repository.UserInfoRepository;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/api")
@@ -131,4 +132,28 @@ public class PaymentController {
         }
     }
 
+    @GetMapping("/admin/subscriptions")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') OR hasAuthority('ROLE_SUPER_ADMIN')")
+    public ResponseEntity<?> getAllPaymentHistory(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+        Page<PaymentInfo> paymentInfoPage = paymentInfoRepository.findAll(pageable);
+        List<Map<String, Object>> response = new ArrayList<>();
+
+        for (PaymentInfo paymentInfo : paymentInfoPage.getContent()) {
+            Map<String, Object> res = new LinkedHashMap<>();
+            res.put("id", paymentInfo.getId());
+            res.put("userName", paymentInfo.getUserInfo().getUserName());
+            res.put("amount", paymentInfo.getAmount());
+            res.put("currency", paymentInfo.getCurrency());
+            res.put("transactionId", paymentInfo.getTranId());
+            res.put("paymentDate", paymentInfo.getTranDate());
+            res.put("method", paymentInfo.getCardType());
+            response.add(res);
+        }
+        return ResponseEntity.ok()
+                .body(new PageImpl<>(response, pageable, paymentInfoPage.getTotalElements()));
+    }
 }
