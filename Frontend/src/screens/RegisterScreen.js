@@ -3,9 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import FormContainer from '../components/FormContainer'
 import { register } from '../actions/userActions';
+import { USER_REGISTER_FAILED } from '../constants/userConstants';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import SuccessMessage from '../components/SuccessMessage';
+
 
 const RegisterScreen = () => {
 
@@ -13,7 +15,6 @@ const RegisterScreen = () => {
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [message, setMassage] = useState(null)
 
 
 
@@ -28,7 +29,7 @@ const RegisterScreen = () => {
             // reset signupForm
             document.getElementById('signupForm').reset();
         }
-    }, [registerSuccessMessage])
+    }, [registerSuccessMessage, loading])
 
 
     const submitHandler = (e) => {
@@ -40,20 +41,27 @@ const RegisterScreen = () => {
 
         if (password !== confirmPassword)
         {
-            setMassage(`Password don't match `)
+            dispatch({
+                type: USER_REGISTER_FAILED,
+                payload: 'Password and Confirm Password do not match'
+            })
         }
         else {
             dispatch(register(formDataToSend))
         }
     }
 
-
     return (
+        <>
+        <div className='flex justify-center'>
+            {registerSuccessMessage && <SuccessMessage message={registerSuccessMessage} />}
+            {error && <Message message={error} />}
+        </div>
+        
         <FormContainer>
 
         <div>
-            {registerSuccessMessage && <SuccessMessage message={registerSuccessMessage} />}
-            {error && <Message message={error} />}
+            
             {loading && <Loader />}
             <form id='signupForm' onSubmit={submitHandler}>
             <div className="form-control w-full  ">
@@ -96,6 +104,8 @@ const RegisterScreen = () => {
             </form>
         </div>
         </FormContainer>
+        
+        </>
     )
 }
 

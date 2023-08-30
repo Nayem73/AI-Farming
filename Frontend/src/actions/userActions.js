@@ -71,7 +71,6 @@ export const logout = () => (dispatch) => {
 
 
 export const register = (formData) => async (dispatch) => {
-    console.log('register action', formData)
     try {
         dispatch({
             type: USER_REGISTER_REQUEST
@@ -84,14 +83,8 @@ export const register = (formData) => async (dispatch) => {
         }
 
         const { data } = await axios.post(`/api/signup/`, formData)
-        // console.log('register action', data)
         dispatch({
             type: USER_REGISTER_SUCCESS,
-            payload: data
-        })
-
-        dispatch({
-            type: USER_LOGIN_SUCCESS,
             payload: data
         })
 
