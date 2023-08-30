@@ -6,8 +6,8 @@ import com.javafest.aifarming.model.NotificationInfo;
 import com.javafest.aifarming.model.UserInfo;
 import com.javafest.aifarming.repository.CropRepository;
 import com.javafest.aifarming.repository.DiseaseRepository;
-import com.javafest.aifarming.repository.NotificationInfoRepository;
 import com.javafest.aifarming.repository.UserInfoRepository;
+import com.javafest.aifarming.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -34,18 +34,18 @@ public class DiseaseController {
     private final DiseaseRepository diseaseRepository;
     private final CropRepository cropRepository;
     private final UserInfoRepository userInfoRepository;
-    private final NotificationInfoRepository notificationInfoRepository;
+    private final NotificationService notificationService;
 
     @Autowired
     public DiseaseController(
             DiseaseRepository diseaseRepository,
             CropRepository cropRepository,
             UserInfoRepository userInfoRepository,
-            NotificationInfoRepository notificationInfoRepository) {
+            NotificationService notificationService) {
         this.diseaseRepository = diseaseRepository;
         this.cropRepository = cropRepository;
         this.userInfoRepository = userInfoRepository;
-        this.notificationInfoRepository = notificationInfoRepository;
+        this.notificationService = notificationService;
     }
 
     @GetMapping("/disease/")
@@ -127,8 +127,7 @@ public class DiseaseController {
             @RequestParam("title") String title,
             @RequestParam("img") MultipartFile file,
             @RequestParam("description") String description,
-            @RequestParam("cropId") Long cropId,
-            Authentication authentication
+            @RequestParam("cropId") Long cropId
     ) throws IOException {
         Crop crop = cropRepository.findById(cropId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Crop ID: " + cropId));
@@ -176,21 +175,10 @@ public class DiseaseController {
 //        disease.setImg(targetPath.toString());
         Disease disease = new Disease(title, "/api/picture?link=images/" + fileName, description, crop);
 
-
         // Save the Disease object to the database
         diseaseRepository.save(disease);
-
-        String userName = authentication.getName();
-        // Retrieve the UserInfo entity for the logged-in user
-        UserInfo userInfo = userInfoRepository.getByUserName(userName);
-        NotificationInfo notificationInfo = new NotificationInfo();
-        notificationInfo.setUserInfo(userInfo);
-        notificationInfo.setNotificationType("Disease");
-        notificationInfo.setTitle("New disease " + title + " is added! Check out it's information.");
-        notificationInfo.setDisease(title);
-        notificationInfo.setCrop(crop.getTitle());
-        notificationInfo.setStatus(false);
-        notificationInfoRepository.save(notificationInfo);
+        //save notifications for all users
+        notificationService.saveDiseaseNotificationForAllUsers(title, crop.getTitle());
 
         // Create a response with the link to the uploaded image
         Map<String, Object> response = new HashMap<>();

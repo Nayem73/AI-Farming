@@ -54,7 +54,7 @@ public class UserInfoController {
     }
 
     @PostMapping("/signup/")
-    public ResponseEntity<String> addNewUser(
+    public ResponseEntity<?> addNewUser(
             @RequestParam("userName") String userName,
             @RequestParam("email") String email,
             @RequestParam("password") String password) {
@@ -62,12 +62,15 @@ public class UserInfoController {
         Optional<UserInfo> existingUser = userInfoRepository.findByUserName(userName);
         Optional<UserInfo> existingUserByEmail = userInfoRepository.findByEmail(email);
 
+        Map<String, Object> response = new LinkedHashMap<>();
         if (existingUser.isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("message: User already exists!");
+            response.put("message", "User already exists with the same userName or email");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(response);
         } else if (existingUserByEmail.isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("message: User already exists!");
+            response.put("message", "User already exists with the same userName or email");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(response);
         } else {
             // Encode the password and save the new user
             String encodedPassword = passwordEncoder.encode(password);
