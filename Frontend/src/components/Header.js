@@ -10,6 +10,7 @@ import { listCrops } from '../actions/cropActions';
 // Components
 import SearchBox from './SearchBox';
 import { listDiseases } from '../actions/diseaseActions';
+import { listNotifications, deleteNotification } from '../actions/notificationActions';
 
 
 function Header() {
@@ -58,6 +59,36 @@ function Header() {
         setSelectedOption(selected);
     }
 
+    // __________________Notificaton_____________________//
+
+    const [totalNotifications, setTotalNotifications] = useState(0);
+
+    const notificationList = useSelector(state => state.notificationList);
+    const { loading:notificationListLoading, error: notificationListError,  notifications} = notificationList;
+
+    const notificationDelete = useSelector(state => state.notificationDelete);
+    const { loading:notificationDeleteLoading, error: notificationDeleteError, success: notificationDeleteSuccess} = notificationDelete;
+
+    useEffect(() => {
+        dispatch(listNotifications())
+    }, [dispatch, notificationDeleteSuccess])
+
+    useEffect(() => {
+        if(notifications){
+            setTotalNotifications(notifications.length)
+        }
+    }, [notifications])
+
+    const deleteHandler = (id) => {
+        dispatch(deleteNotification(id))
+    }
+
+    // ________________Notificaton end___________________//
+
+
+
+
+
     //___________________________Header_______________________//
 
 
@@ -83,7 +114,8 @@ function Header() {
                     <SearchBox crop={selectedOption}/>
                 </div>
                 <div className="flex-none">
-                    <div className="dropdown dropdown-end px-3">
+                    {/* ai search */}
+                    <div className="dropdown dropdown-end pl-3">
                         <Link to={'/aisearch/'}>
                             <div className=''>
                                 <label tabIndex={0} className="btn btn-ghost btn-circle">
@@ -94,6 +126,26 @@ function Header() {
                             </div>
                         </Link>
                     </div>
+
+                    {/* ai search end */}
+                    {/* notification */}
+
+                    <div className="dropdown dropdown-end">
+                        <Link to={'/cart'}>
+                            <div className=''>
+                                <label tabIndex={0} className="btn btn-ghost btn-circle">
+                                    <div className="indicator">
+                                    <i class="fa-solid fa-bell fa-xl"></i>
+                                        <span className="badge badge-sm indicator-item">{totalNotifications}</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </Link>
+                    </div>
+
+                    {/* notification end */}
+
+
                     {
                         userInfo ?
 

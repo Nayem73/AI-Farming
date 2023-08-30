@@ -38,7 +38,7 @@ const ProfileScreen = () => {
     // ______________change password______________ //
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
-    const [confirmpPssword, setConfirmPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
 
     const passwordChange = useSelector(state => state.passwordChange);
     const { loading: loadingPasswordChange, error: errorPasswordChange, success: successPasswordChange } = passwordChange;
@@ -57,7 +57,7 @@ const ProfileScreen = () => {
         const formDataToSend = new FormData();
         formDataToSend.append('currentPassword', currentPassword);
         formDataToSend.append('newPassword', newPassword);
-        formDataToSend.append('confirmpPssword', confirmpPssword);
+        formDataToSend.append('confirmPassword', confirmPassword);
         dispatch(changePassword(formDataToSend));
     }
 

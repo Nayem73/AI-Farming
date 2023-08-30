@@ -52,6 +52,11 @@ import {
     subscriptionsStatisticReducer,
     } from './reducers/subscriptionReducers';
 
+import {
+    notificationListReducer,
+    notificationDeleteReducer
+    } from './reducers/notificationReducers';
+
 
 
 const reducer = combineReducers({
@@ -92,7 +97,10 @@ const reducer = combineReducers({
     subscriptionAmount: subscriptionAmountReducer,
     subscriptionAmountUpdate: subscriptionAmountUpdateReducer,
     subscriptionList: subscriptionListReducer,
-    subscriptionsStatistic: subscriptionsStatisticReducer
+    subscriptionsStatistic: subscriptionsStatisticReducer,
+
+    notificationList: notificationListReducer,
+    notificationDelete: notificationDeleteReducer
 
 
 })
