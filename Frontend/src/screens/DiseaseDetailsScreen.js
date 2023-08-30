@@ -69,7 +69,7 @@ const DiseaseDetailsScreen = () => {
                                     <div className="w-full inline-flex items-center justify-center flex-shrink-0 lg:h-10 py-2 mb-5 text-blue-500 bg-blue-100 rounded-full dark:bg-blue-500 dark:text-blue-100">
                                         <h2 className="px-8 font-bold text-xl title-font">{crop_title} {disease_title}</h2>
                                     </div>
-                                    {loading ? (<Loader />) : error ? (<Message message={error} />) : <div className="container md_div" data-color-mode="light">
+                                    {loading ? (<Loader />) : error ? <div className='flex justify-center'><Message message={error} /></div> : <div className="container md_div" data-color-mode="light">
                                     <MDEditor.Markdown source={disease.description} style={{ whiteSpace: 'pre-wrap' }} className='md_show_div'/>
                                     </div>}
                                 </div>

@@ -5,6 +5,7 @@ import { Link,useNavigate } from 'react-router-dom';
 import Message from '../components/Message';
 import Paginate from '../components/Paginate'
 import SuccessMessage from '../components/SuccessMessage'
+import Loader from '../components/Loader';
 
 
 import {
@@ -146,6 +147,7 @@ function ReviewScreen() {
             <h1 className="mb-6 text-2xl font-semibold tracking-widest text-black uppercase title-font">Reviews</h1>
         </div>
         <div className="container px-5 py-4 mx-auto">
+        {loadingReviewList ? <Loader /> : errorReviewList ?<div className="flex justify-center"><Message  message={errorReviewList} /> </div> :
             <div className="-m-4">
                 {reviews.map((review) => (
                     <div className="p-4 review my-4 lg:mx-10 md:mx-2 sm:mx-2">
@@ -188,7 +190,7 @@ function ReviewScreen() {
                         </div>
                     </div>
                 ))}
-            </div>
+            </div>}
         </div>
 
         <div className="flex justify-center m-10">

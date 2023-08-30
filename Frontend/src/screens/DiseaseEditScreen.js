@@ -46,7 +46,6 @@ const DiseaseEditScreeen = () => {
     }, [ dispatch, successUpdate, successUpdate ,crop_title, disease_title])
     
     // console.log('edit page',disease)
-    console.log(disease.id)
 
     return (
         

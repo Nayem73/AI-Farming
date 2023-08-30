@@ -58,12 +58,14 @@ const FormDisease = ({ existingData }) => {
     // mark down link copy and picture show
 
     const cropOptions = []
+    if (crops){
     crops.map((crop) => cropOptions.push(
         {
             value: crop.id,
             label: crop.title
         }
-    ));
+        ));
+    }
 
     const handleChange = (e) => {
         const { name, value } = e.target;
