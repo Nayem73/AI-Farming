@@ -91,6 +91,7 @@ public class PaymentController {
                 notificationInfo.setNotificationType("payment");
                 notificationInfo.setTitle("Subscription fee Tk " + responseParams.get("amount") + " received Successfully. Transaction Id: "+
                         responseParams.get("tran_id"));
+                notificationInfo.setStatus(false);
                 notificationInfoRepository.save(notificationInfo);
 
                 Date currentDate = new Date();

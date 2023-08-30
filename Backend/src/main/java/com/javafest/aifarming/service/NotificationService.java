@@ -33,6 +33,7 @@ public class NotificationService {
             currentNotification.put("id", notificationInfo.getId());
             currentNotification.put("title", notificationInfo.getTitle());
             currentNotification.put("type", notificationInfo.getNotificationType());
+            currentNotification.put("status", notificationInfo.getStatus());
             if ("disease".equals(notificationInfo.getNotificationType())) {
                 currentNotification.put("disease", notificationInfo.getDisease());
                 currentNotification.put("crop", notificationInfo.getCrop());
@@ -52,10 +53,28 @@ public class NotificationService {
             notificationInfo.setTitle("New disease " + disease + " is added! Check out it's information.");
             notificationInfo.setDisease(disease);
             notificationInfo.setCrop(crop);
+            notificationInfo.setStatus(false);
             notificationInfoRepository.save(notificationInfo);
         }
     }
 
+    public ResponseEntity<?> countNotifications(UserInfo userInfo, Boolean st) {
+        Long numberOfUnreadNotifications = notificationInfoRepository.countUnreadNotifications(userInfo, st);
+        Map<String, Long> response = new LinkedHashMap<>();
+        response.put("count", numberOfUnreadNotifications);
+        return ResponseEntity.ok().body(response);
+    }
+
+    public ResponseEntity<?> markNotificationAsRead(Long notificationId, UserInfo userInfo) {
+        List<NotificationInfo> notificationInfos = notificationInfoRepository.findNotificationByUserInfo(notificationId, userInfo);
+        if (notificationInfos.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("this notification does not exist!");
+        }
+        NotificationInfo notification = notificationInfos.get(0);
+        notification.setStatus(true);
+        notificationInfoRepository.save(notification);
+        return ResponseEntity.ok().body("Notification marked as read.");
+    }
     public ResponseEntity<?> deleteNotification(Long notificationId, UserInfo userInfo) {
         List<NotificationInfo> notificationInfos = notificationInfoRepository.findNotificationByUserInfo(notificationId, userInfo);
         if (notificationInfos.isEmpty()) {
@@ -64,4 +83,5 @@ public class NotificationService {
         notificationInfoRepository.deleteById(notificationId);
         return ResponseEntity.ok().body("Notification deleted successfully.");
     }
+
 }

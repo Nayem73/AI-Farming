@@ -44,6 +44,54 @@ public class NotificationController {
         return notificationService.getLast5Notifications(userInfo);
     }
 
+    @PostMapping("/{notificationId}")
+    public ResponseEntity<?> markNotificationAsRead(
+            @PathVariable Long notificationId,
+            Authentication authentication) {
+
+        // Check if the user is authenticated (logged in)
+        if (authentication == null) {
+            Map<String, Object> response = new LinkedHashMap<>();
+            response.put("message", "Please login first.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+        // Retrieve the email of the logged-in user from the Authentication object
+        String userName = authentication.getName();
+        // Retrieve the UserInfo entity for the logged-in user
+        UserInfo userInfo = userInfoRepository.getByUserName(userName);
+        // Check if UserInfo entity exists for the user
+        if (userInfo == null) {
+            Map<String, Object> response = new LinkedHashMap<>();
+            response.put("message", "Please login first.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+
+        return notificationService.markNotificationAsRead(notificationId, userInfo);
+    }
+
+    @GetMapping("/count/")
+    public ResponseEntity<?> countUnreadNotifications(Authentication authentication) {
+
+        // Check if the user is authenticated (logged in)
+        if (authentication == null) {
+            Map<String, Object> response = new LinkedHashMap<>();
+            response.put("message", "Please login first.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+        // Retrieve the email of the logged-in user from the Authentication object
+        String userName = authentication.getName();
+        // Retrieve the UserInfo entity for the logged-in user
+        UserInfo userInfo = userInfoRepository.getByUserName(userName);
+        // Check if UserInfo entity exists for the user
+        if (userInfo == null) {
+            Map<String, Object> response = new LinkedHashMap<>();
+            response.put("message", "Please login first.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+
+        return notificationService.countNotifications(userInfo, false);
+    }
+
     @DeleteMapping("/{notificationId}")
     public ResponseEntity<?> deleteNotification(
             @PathVariable Long notificationId,
