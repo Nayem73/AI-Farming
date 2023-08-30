@@ -52,22 +52,34 @@ const DiseaseDetailsScreen = () => {
     return (
     
         <>
-        <div className='mt-10'>
-        {loading ? (<Loader />) : errorPicture ? (<></>) : pictures.length>0? <Slider items={pictures}/>:<></>}
-        </div>
+        <div className="container px-5 py-10 mx-auto ">
+                <div className="flex flex-wrap -m-4">
+                    
+                    <div className="lg:p-4 md:p-4 w-full">
+                        <div className="h-full lg:px-8 md:px-8 py-10 review">
+                            <div className="flex flex-col items-center mb-3"></div>
+                                <div className='mt-10 p-2'>
+                                {loading ? (<Loader />) : errorPicture ? (<></>) : pictures.length>0? <Slider items={pictures}/>:<></>}
+                                </div>
         
-        <div className='lg:px-20 mt-10'>
+                                <div className='lg:px-20 mt-10'>
 
-                
-                
-                <div className="w-full inline-flex items-center justify-center flex-shrink-0 h-10 mb-5 text-blue-500 bg-blue-100 rounded-full dark:bg-blue-500 dark:text-blue-100">
-                    <h2 className="px-8 font-bold text-xl title-font">{crop_title} {disease_title}</h2>
+                                        
+                                        
+                                    <div className="w-full inline-flex items-center justify-center flex-shrink-0 lg:h-10 py-2 mb-5 text-blue-500 bg-blue-100 rounded-full dark:bg-blue-500 dark:text-blue-100">
+                                        <h2 className="px-8 font-bold text-xl title-font">{crop_title} {disease_title}</h2>
+                                    </div>
+                                    {loading ? (<Loader />) : error ? (<Message message={error} />) : <div className="container md_div" data-color-mode="light">
+                                    <MDEditor.Markdown source={disease.description} style={{ whiteSpace: 'pre-wrap' }} className='md_show_div'/>
+                                    </div>}
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                {loading ? (<Loader />) : error ? (<Message message={error} />) : <div className="container md_div" data-color-mode="light">
-                <MDEditor.Markdown source={disease.description} style={{ whiteSpace: 'pre-wrap' }} className='md_show_div'/>
-                </div>}
-                </div>
-            </>
+
+        </>
 
 
     );

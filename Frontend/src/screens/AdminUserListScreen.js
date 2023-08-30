@@ -61,9 +61,19 @@ const UserListScreen = () => {
 
     return (
         <>
-            <h1 className='text-2xl font-bold mx-5 py-5'>Users</h1>
 
-            {loading ? <Loader /> : error ? <Message message={error} /> : <div className="overflow-x-auto mx-5">
+            <div className="container px-5 py-10 mx-auto ">
+                <div className="flex flex-wrap -m-4">
+                    
+                    <div className="p-4 w-full">
+                        <div className="h-full lg:px-8 md:px-8  py-10 review">
+                            <div className="flex flex-col items-center mb-3">
+                            <div className=" my-5 w-full inline-flex items-center justify-center flex-shrink-0 lg:h-10 py-2 mb-5 text-blue-500 bg-blue-100 rounded-full dark:bg-blue-500 dark:text-blue-100">
+                                <h2 className="px-8 font-bold text-xl title-font">Users Info, Create & Update</h2>
+                            </div>
+            
+
+            {loading ? <Loader /> : error ? <Message message={error} /> : <div className="overflow-x-auto mx-5 w-3/4">
                 <table className="table w-full">
                     <thead>
                         <tr>
@@ -113,6 +123,12 @@ const UserListScreen = () => {
                     <Paginate pages={total_page} page={cur_page} dispatcher_action={listUsers}/>
                 </div>
             </div>}
+
+            </div>
+            </div>
+            </div>
+            </div>
+            </div>
         </>
     )
 }

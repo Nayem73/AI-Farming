@@ -72,7 +72,7 @@ const ProfileScreen = () => {
 
 
     return (
-        <div className='lg:px-20 mt-10 mr-5 ml-5 mb-10 review'>
+        <div className='lg:px-20 mt-10 lg:mx-5 md:mx-5 mb-10 review'>
 
             
             
@@ -86,7 +86,7 @@ const ProfileScreen = () => {
                     <div className="p-4 w-full">
                         <div className="h-full px-8 py-10 review">
                             <div className="flex flex-col items-center mb-3">
-                                <div className=" my-5 w-full inline-flex items-center justify-center flex-shrink-0 h-10 mb-5 text-blue-500 bg-blue-100 rounded-full dark:bg-blue-500 dark:text-blue-100">
+                                <div className=" my-5 w-full inline-flex items-center justify-center flex-shrink-0 py-2 lg:h-10 mb-5 text-blue-500 bg-blue-100 rounded-full dark:bg-blue-500 dark:text-blue-100">
                                     <h2 className="px-8 font-bold text-xl title-font">Profile Info</h2>
                                 </div>
                                 <div className="inline-flex items-center justify-center flex-shrink-0 w-20 h-20 mb-5 text-blue-500 bg-blue-100 rounded-full dark:bg-blue-500 dark:text-blue-100">
@@ -119,7 +119,7 @@ const ProfileScreen = () => {
                     <div className="p-4 w-full">
                         <div className="h-full px-8 py-10 review">
                             <div className="flex flex-col items-center mb-3">
-                                <div className=" my-5 w-full inline-flex items-center justify-center flex-shrink-0 h-10 mb-5 text-blue-500 bg-blue-100 rounded-full dark:bg-blue-500 dark:text-blue-100">
+                                <div className=" my-5 w-full inline-flex items-center justify-center flex-shrink-0 py-2 lg:h-10 mb-5 text-blue-500 bg-blue-100 rounded-full dark:bg-blue-500 dark:text-blue-100">
                                     <h2 className="px-8 font-bold text-xl title-font">Update your Account</h2>
                                 </div>
                                 <div className="flex-grow">
@@ -140,8 +140,8 @@ const ProfileScreen = () => {
                     <div className="p-4 w-full">
                         <div className="h-full px-8 py-10 review">
                             <div className="flex flex-col items-center mb-3">
-                                <div className=" my-5 w-full inline-flex items-center justify-center flex-shrink-0 h-10 mb-5 text-blue-500 bg-blue-100 rounded-full dark:bg-blue-500 dark:text-blue-100">
-                                <i class="fa-solid fa-key fa-2xl"></i> <h2 className="px-8 font-bold text-xl title-font">Change Password</h2>
+                                <div className=" my-5 w-full inline-flex items-center justify-center flex-shrink-0 py-2 lg:h-10 mb-5 text-blue-500 bg-blue-100 rounded-full dark:bg-blue-500 dark:text-blue-100">
+                                <i class="fa-solid fa-key fa-2xl"></i> <h2 className="lg:px-8 md:px-4 font-bold text-xl title-font">Change Password</h2>
                                 </div>
                                 <div className="flex-grow">
                                 <FormContainer>

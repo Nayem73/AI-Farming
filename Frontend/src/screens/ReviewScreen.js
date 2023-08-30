@@ -148,13 +148,13 @@ function ReviewScreen() {
         <div className="container px-5 py-4 mx-auto">
             <div className="-m-4">
                 {reviews.map((review) => (
-                    <div className="p-4 review mt-2">
-                        <div className="h-full px-8 py-10 border-2 border-gray-200 rounded-lg dark:border-gray-800">
+                    <div className="p-4 review my-4 lg:mx-10 md:mx-2 sm:mx-2">
+                        <div className="h-full lg:px-8 md:px-4 sm:px-4 py-10 lg:border-2 md:border-2 border-gray-200 rounded-lg dark:border-gray-800">
                             <div className="flex flex-col  mb-3">
-                                <div className="inline-flex items-center justify-center flex-shrink-0 w-15 h-10 mb-5 text-blue-500 bg-blue-100 rounded-full dark:bg-blue-500 dark:text-blue-100">
+                                <div className="inline-flex items-center justify-center flex-shrink-0 w-15 h-10 mb-5 py-2 text-blue-500 bg-blue-100 rounded-full dark:bg-blue-500 dark:text-blue-100">
                                 
-                                    <i class="fa-regular fa-user fa-2xl px-8"></i>
-                                    <h2 className='px-8 font-bold text-xl title-font'>{review.userName}</h2>
+                                    <i class="fa-regular fa-user fa-2xl lg:px-8 md:px-4 sm:px-2"></i>
+                                    <h2 className='lg:px-8 md:px-4  sm:px-2 font-bold text-xl title-font'>{review.userName}</h2>
                                 </div>
 
 
@@ -184,7 +184,7 @@ function ReviewScreen() {
                             {(userInfo && userInfo.username === review.userName) && <button className="inline-flex px-4 py-2 text-base font-semibold text-white transition duration-500 ease-in-out transform bg-blue-500 border-blue-500 rounded-lg hover:bg-blue-700 hover:border-blue-700 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2" onClick={() => updateHandler(review.reviewId)}>Edit</button>}
                             {(userInfo && (userInfo.username === review.userName || userInfo.isSuperAdmin)) &&  <button className="inline-flex px-4 py-2 ml-4 text-base font-semibold text-white transition duration-500 ease-in-out transform bg-red-500 border-red-500 rounded-lg hover:bg-red-700 hover:border-red-700 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2" onClick={() => deleteHandler(review.reviewId)}>Delete</button>}
                             </div>
-                            <p className="text-sm text-gray-500">Created: {review.created}</p>
+                            <p className="pt-2 text-sm text-gray-500">Created: {review.created}</p>
                         </div>
                     </div>
                 ))}
@@ -198,9 +198,26 @@ function ReviewScreen() {
         <hr className="mb-5 mt-5" style={{color: '#000000'}}/>
         {/* create review form */}
         
+        
+
+        <div className="container px-5 py-10 mx-auto ">
+                <div className="flex flex-wrap -m-4">
+                    
+                    <div className="p-4 w-full">
+                        <div className="h-full px-8 py-10 review">
+                            <div className="flex flex-col items-center mb-3">
+                            {/* <div className=" my-5 w-full inline-flex items-center justify-center flex-shrink-0 h-10 mb-5 text-blue-500 bg-blue-100 rounded-full dark:bg-blue-500 dark:text-blue-100">
+                                <h2 className="px-8 font-bold text-xl title-font">Create or Update Reviews</h2>
+                            </div> */}
+
+
+
         <div className="flex justify-center mb-5 mt-5">
             <h1 className="mb-6 text-2xl font-semibold tracking-widest text-black uppercase title-font">Create or Update Reviews</h1>
         </div>
+        
+
+
         <div className="flex justify-center mb-5 mt-5">
                 {errorReviewCreate && <Message message={errorReviewCreate} />}
                 {successReviewCreate && <SuccessMessage message={"Review is added successfully"} />}
@@ -212,7 +229,7 @@ function ReviewScreen() {
 
 
         {userInfo ?
-        <div className='lg:px-20 mt-10 mr-5 ml-5 mb-10'>
+        <div className='lg:px-20 mt-10 mr-5 ml-5 mb-10 w-3/4'>
             <form ref={formRef}  id="myForm" onSubmit={handleSubmit}>
             {imageFile && !usingCamera && (
             <div className="container-aisearch">
@@ -262,7 +279,10 @@ function ReviewScreen() {
             </div>
             </form>
 
-        </div>: <>
+        </div>
+        
+        
+        : <>
         
         <div className="flex justify-center m-10">
             <div className="flex-grow  rounded-lg dark:border-red-800 
@@ -281,6 +301,13 @@ function ReviewScreen() {
         
         
         </>}
+
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+
 
         
     </div>

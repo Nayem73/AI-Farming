@@ -54,9 +54,17 @@ const DiseaseListScreen = () => {
 
 
     return (
-        <div className='px-5'>
-            <h1 className='text-xl font-bold py-3'>diseases</h1>
-            {loading ? <Loader /> : error ? <Message message={error} /> : <div className="overflow-x-auto">
+        <div className="container px-5 py-10 mx-auto ">
+                <div className="flex flex-wrap -m-4">
+                    
+                    <div className="lg:p-4 md:p-4 sm:p-1 w-full">
+                        <div className="h-full px-8 py-10 review">
+                            <div className="flex flex-col items-center mb-3">
+                            <div className=" my-5 w-full inline-flex items-center justify-center flex-shrink-0 lg:h-10 md:h-10 py-2 mb-5 text-blue-500 bg-blue-100 rounded-full dark:bg-blue-500 dark:text-blue-100">
+                                <h2 className="px-8 font-bold text-xl title-font">Diseases Info, Create & Update</h2>
+                            </div>
+
+            {loading ? <Loader /> : error ? <Message message={error} /> : <div className="overflow-x-auto w-full">
             <Link to={'/admin/disease/create/'}>
                 <button className='btn items-center justify-center mb-3'>ADD DISEASE</button>
             </Link>
@@ -115,6 +123,12 @@ const DiseaseListScreen = () => {
                 </div>
             </div>}
         
+
+
+        </div>
+        </div>
+        </div>
+        </div>
         </div>
     )
 }

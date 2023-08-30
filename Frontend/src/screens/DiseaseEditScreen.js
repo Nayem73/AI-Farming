@@ -49,19 +49,26 @@ const DiseaseEditScreeen = () => {
     console.log(disease.id)
 
     return (
+        
         <div className='lg:px-20 mt-10 mr-5 ml-5'>
+
+
+        
             {errorUpdate && <Message message={errorUpdate} />}
         <div className='py-4 flex justify-left'>
             <Link to={'/admin/disease/'}>
                 <button className=' btn btn-primary w-24'>Back</button>
             </Link>
         </div>
-        <h1 className='text-3xl font-bold justify-center items-center'>Update Disease</h1>
         {loading ? (<Loader />) : error ? (<Message message={error} />) :
             (Object.keys(disease).length > 0 && disease.id ? (
             <>
+
+
             <FormDisease existingData={disease} />
+
             <PictureAdmin disease_id={disease.id} />
+
             </>            
             ) : (
             <p>Loading...</p>

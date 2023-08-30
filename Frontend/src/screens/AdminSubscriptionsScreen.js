@@ -120,7 +120,7 @@ const SubcriptionsScreen = () => {
                 <h2 className="px-8 font-bold text-xl title-font">Payments</h2>
             </div>
 
-            {subscriptionsLoading ? <Loader /> : subscriptionsError ? <Message message={subscriptionsError} /> : <div className="overflow-x-auto mx-5">
+            {subscriptionsLoading ? <Loader /> : subscriptionsError ? <Message message={subscriptionsError} /> : <div className="overflow-x-auto mx-5 w-full">
                 <table className="table w-full">
                     <thead>
                         <tr>
@@ -148,7 +148,7 @@ const SubcriptionsScreen = () => {
                     </tbody>
                 </table>
                 
-                <div className="flex justify-center m-10">
+                <div className="flex justify-center m-10 w-full">
                     <Paginate pages={total_page} page={cur_page} dispatcher_action={listSubscriptions}/>
                 </div>
             </div>}

@@ -100,9 +100,17 @@ const AdminCropScreen = () => {
 
 
     return (
-        <div className='px-5'>
-            <h1 className='text-xl font-bold py-3'>Crops</h1>
-            {loading ? <Loader /> : error ? <Message message={error} /> : <div className="overflow-x-auto">
+        <div className="container px-5 py-10 mx-auto ">
+                <div className="flex flex-wrap -m-4">
+                    
+                    <div className="lg:p-4 md:p-4 w-full">
+                        <div className="h-full lg:px-8 md:px-8  py-10 review">
+                            <div className="flex flex-col items-center mb-3">
+                            <div className=" my-5 w-full inline-flex items-center justify-center flex-shrink-0 h-10 mb-5 text-blue-500 bg-blue-100 rounded-full dark:bg-blue-500 dark:text-blue-100">
+                                <h2 className="px-8 font-bold text-xl title-font">Crops Info, Create & Update</h2>
+                            </div>
+
+            {loading ? <Loader /> : error ? <Message message={error} /> : <div className="overflow-x-auto w-3/4">
 
            
 
@@ -176,6 +184,10 @@ const AdminCropScreen = () => {
                 }
                 
             </div>}
+            </div>
+        </div>
+        </div>
+        </div>
         </div>
     )
 }
