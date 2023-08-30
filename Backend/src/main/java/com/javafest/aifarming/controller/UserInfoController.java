@@ -156,6 +156,53 @@ public class UserInfoController {
         return "Logout failed";
     }
 
+    @PatchMapping("/changepassword/")
+    public ResponseEntity<?> resetPassword(
+            @RequestParam("currentPassword") String currentPassword,
+            @RequestParam("newPassword") String newPassword,
+            @RequestParam("confirmPassword") String confirmPassword,
+            Authentication authentication) {
+
+        Map<String, Object> response = new LinkedHashMap<>();
+        // Check if the user is authenticated (logged in)
+        if (authentication == null) {
+            response.put("message", "Please login first.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+        // Retrieve the email of the logged-in user from the Authentication object
+        String userName = authentication.getName();
+        // Retrieve the UserInfo entity for the logged-in user
+        UserInfo currentUser = userInfoRepository.getByUserName(userName);
+        // Check if UserInfo entity exists for the user
+        if (currentUser == null) {
+            response.put("message", "Please login first.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+
+        // Verify the current password
+        if (!passwordEncoder.matches(currentPassword, currentUser.getPassword())) {
+            response.put("message", "Current password is incorrect");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(response);
+        }
+
+        // Check if new password and confirm password match
+        if (!newPassword.equals(confirmPassword)) {
+            response.put("message", "New password and confirm password do not match");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(response);
+        }
+
+        // Encode the new password and save it
+        String encodedNewPassword = passwordEncoder.encode(newPassword);
+        currentUser.setPassword(encodedNewPassword);
+        userInfoRepository.save(currentUser);
+
+        response.put("message", "Password reset successful");
+        return ResponseEntity.ok(response);
+    }
+
+
 
     @GetMapping("/profile/")
     public ResponseEntity<Map<String, Object>> getProfile(Authentication authentication) {
