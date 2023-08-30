@@ -2,8 +2,12 @@ package com.javafest.aifarming.controller;
 
 import com.javafest.aifarming.model.Crop;
 import com.javafest.aifarming.model.Disease;
+import com.javafest.aifarming.model.NotificationInfo;
+import com.javafest.aifarming.model.UserInfo;
 import com.javafest.aifarming.repository.CropRepository;
 import com.javafest.aifarming.repository.DiseaseRepository;
+import com.javafest.aifarming.repository.NotificationInfoRepository;
+import com.javafest.aifarming.repository.UserInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -13,9 +17,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -29,11 +33,19 @@ public class DiseaseController {
 
     private final DiseaseRepository diseaseRepository;
     private final CropRepository cropRepository;
+    private final UserInfoRepository userInfoRepository;
+    private final NotificationInfoRepository notificationInfoRepository;
 
     @Autowired
-    public DiseaseController(DiseaseRepository diseaseRepository, CropRepository cropRepository) {
+    public DiseaseController(
+            DiseaseRepository diseaseRepository,
+            CropRepository cropRepository,
+            UserInfoRepository userInfoRepository,
+            NotificationInfoRepository notificationInfoRepository) {
         this.diseaseRepository = diseaseRepository;
         this.cropRepository = cropRepository;
+        this.userInfoRepository = userInfoRepository;
+        this.notificationInfoRepository = notificationInfoRepository;
     }
 
     @GetMapping("/disease/")
@@ -115,7 +127,8 @@ public class DiseaseController {
             @RequestParam("title") String title,
             @RequestParam("img") MultipartFile file,
             @RequestParam("description") String description,
-            @RequestParam("cropId") Long cropId
+            @RequestParam("cropId") Long cropId,
+            Authentication authentication
     ) throws IOException {
         Crop crop = cropRepository.findById(cropId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Crop ID: " + cropId));
@@ -166,6 +179,18 @@ public class DiseaseController {
 
         // Save the Disease object to the database
         diseaseRepository.save(disease);
+
+        String userName = authentication.getName();
+        // Retrieve the UserInfo entity for the logged-in user
+        UserInfo userInfo = userInfoRepository.getByUserName(userName);
+        NotificationInfo notificationInfo = new NotificationInfo();
+        notificationInfo.setUserInfo(userInfo);
+        notificationInfo.setNotificationType("Disease");
+        notificationInfo.setTitle("New disease " + title + " is added! Check out it's information.");
+        notificationInfo.setDisease(title);
+        notificationInfo.setCrop(crop.getTitle());
+        notificationInfo.setStatus(false);
+        notificationInfoRepository.save(notificationInfo);
 
         // Create a response with the link to the uploaded image
         Map<String, Object> response = new HashMap<>();

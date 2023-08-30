@@ -1,9 +1,11 @@
 package com.javafest.aifarming.controller;
 
+import com.javafest.aifarming.model.NotificationInfo;
 import com.javafest.aifarming.model.PaymentInfo;
 import com.javafest.aifarming.model.UserInfo;
 import com.javafest.aifarming.payment.TransactionInitiator;
 import com.javafest.aifarming.payment.TransactionResponseValidator;
+import com.javafest.aifarming.repository.NotificationInfoRepository;
 import com.javafest.aifarming.repository.PaymentInfoRepository;
 import com.javafest.aifarming.repository.SearchCountRepository;
 import com.javafest.aifarming.repository.UserInfoRepository;
@@ -28,13 +30,21 @@ public class PaymentController {
     private final PaymentInfoRepository paymentInfoRepository;
     private final SearchCountRepository searchCountRepository;
     private final SubscriptionAmountService subscriptionAmountService;
+    private final NotificationInfoRepository notificationInfoRepository;
 
-    public PaymentController(TransactionInitiator transactionInitiator, UserInfoRepository userInfoRepository, PaymentInfoRepository paymentInfoRepository, SearchCountRepository searchCountRepository, SubscriptionAmountService subscriptionAmountService) {
+    public PaymentController(
+            TransactionInitiator transactionInitiator,
+            UserInfoRepository userInfoRepository,
+            PaymentInfoRepository paymentInfoRepository,
+            SearchCountRepository searchCountRepository,
+            SubscriptionAmountService subscriptionAmountService,
+            NotificationInfoRepository notificationInfoRepository) {
         this.transactionInitiator = transactionInitiator;
         this.userInfoRepository = userInfoRepository;
         this.paymentInfoRepository = paymentInfoRepository;
         this.searchCountRepository = searchCountRepository;
         this.subscriptionAmountService = subscriptionAmountService;
+        this.notificationInfoRepository = notificationInfoRepository;
     }
 
     @GetMapping("/payment")
@@ -76,15 +86,15 @@ public class PaymentController {
                 PaymentInfo paymentInfo = paymentInfoRepository.findByTranId(responseParams.get("tran_id"));
                 UserInfo userInfo = paymentInfo.getUserInfo();
 
+                NotificationInfo notificationInfo = new NotificationInfo();
+                notificationInfo.setUserInfo(userInfo);
+                notificationInfo.setNotificationType("payment");
+                notificationInfo.setTitle("Subscription fee Tk " + responseParams.get("amount") + " received Successfully. Transaction Id: "+
+                        responseParams.get("tran_id"));
+                notificationInfo.setStatus(false);
+                notificationInfoRepository.save(notificationInfo);
+
                 Date currentDate = new Date();
-//                SearchCount searchCount = searchCountRepository.findByUserInfo(userInfo);
-//                if (searchCount == null) {
-//                    searchCount = new SearchCount(userInfo, 0);
-//                }
-//                searchCount.setLastResetDate(currentDate);
-//                searchCountRepository.save(searchCount);
-
-
                 long currentTimeMillis = currentDate.getTime();
 
                 long millisecondsInADay = 24 * 60 * 60 * 1000; // 24 hours * 60 minutes * 60 seconds * 1000 milliseconds
