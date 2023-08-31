@@ -63,8 +63,12 @@ function Header() {
 
 
 
+    //  _______________________________dropdown__________________________//
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-
+    const handleDropdownToggle = () => {
+        setIsDropdownOpen(!isDropdownOpen);
+    };
 
 
     //___________________________Header_______________________//
@@ -96,7 +100,7 @@ function Header() {
                     <div className="dropdown dropdown-end pl-3">
                         <Link to={'/aisearch/'}>
                             <div className=''>
-                                <label tabIndex={0} className="btn btn-ghost btn-circle">
+                                <label className="btn btn-ghost btn-circle">
                                     <div className="indicator">
                                         <i class="fa-solid fa-camera-retro fa-xl"></i>
                                     </div>
@@ -140,13 +144,16 @@ function Header() {
                     {
                         userInfo ?
 
-                            <div className="dropdown dropdown-end header_dropdown">
-                                <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+                            // <div className="dropdown dropdown-end header_dropdown">
+                            //     <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+                            <div className={`dropdown dropdown-end ${isDropdownOpen ? 'open' : ''} header_dropdown`}>
+                                <label tabIndex={0} className="btn btn-ghost btn-circle avatar" onClick={handleDropdownToggle}>
 
                                 <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8zm0-12c-2.209 0-4 1.791-4 4s1.791 4 4 4 4-1.791 4-4-1.791-4-4-4zm7 12h-2v-1c0-1.657-1.343-3-3-3H10c-1.657 0-3 1.343-3 3v1H5c-1.104 0-2 .896-2 2v2c0 1.104.896 2 2 2h14c1.104 0 2-.896 2-2v-2c0-1.104-.896-2-2-2zm-7 3a3 3 0 0 0 0-6 3 3 0 0 0 0 6z"></path>
                                 </svg>
                                 </label>
+                                {isDropdownOpen && (
                                 <ul tabIndex={0} className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
                                     
                                     <li className='searchBox_id2'>
@@ -183,6 +190,7 @@ function Header() {
 
                                     <li onClick={logOutHandler}><a>Logout</a></li>
                                 </ul>
+                                )}
                             </div> :
                             <div className="dropdown dropdown-end header_dropdown">
                                 <label tabIndex={1} className="btn btn-ghost btn-circle avatar">
