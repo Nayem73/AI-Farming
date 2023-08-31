@@ -32,6 +32,10 @@ import {
     PASSWORD_CHANGE_SUCCESS,
     PASSWORD_CHANGE_FAILED} from "../constants/userConstants"
 
+import {
+    NOTIFICATION_LIST_RESET
+} from "../constants/notificationConstants";
+
 
 export const login = (formData) => async (dispatch) => {
     // console.log('signin')
@@ -67,6 +71,8 @@ export const logout = () => (dispatch) => {
     localStorage.removeItem('userInfo');
     dispatch({ type: USER_LOGOUT });
     dispatch({ type: USER_DETAILS_RESET });
+    dispatch({ type: NOTIFICATION_LIST_RESET });
+
 }
 
 

@@ -10,7 +10,9 @@ import { listCrops } from '../actions/cropActions';
 // Components
 import SearchBox from './SearchBox';
 import { listDiseases } from '../actions/diseaseActions';
-import { listNotifications, deleteNotification } from '../actions/notificationActions';
+
+
+import NotificationMenu from '../components/NotificationMenu';
 
 
 function Header() {
@@ -59,31 +61,7 @@ function Header() {
         setSelectedOption(selected);
     }
 
-    // __________________Notificaton_____________________//
 
-    const [totalNotifications, setTotalNotifications] = useState(0);
-
-    const notificationList = useSelector(state => state.notificationList);
-    const { loading:notificationListLoading, error: notificationListError,  notifications} = notificationList;
-
-    const notificationDelete = useSelector(state => state.notificationDelete);
-    const { loading:notificationDeleteLoading, error: notificationDeleteError, success: notificationDeleteSuccess} = notificationDelete;
-
-    useEffect(() => {
-        dispatch(listNotifications())
-    }, [dispatch, notificationDeleteSuccess])
-
-    useEffect(() => {
-        if(notifications){
-            setTotalNotifications(notifications.length)
-        }
-    }, [notifications])
-
-    const deleteHandler = (id) => {
-        dispatch(deleteNotification(id))
-    }
-
-    // ________________Notificaton end___________________//
 
 
 
@@ -130,18 +108,31 @@ function Header() {
                     {/* ai search end */}
                     {/* notification */}
 
-                    <div className="dropdown dropdown-end">
-                        <Link to={'/cart'}>
-                            <div className=''>
-                                <label tabIndex={0} className="btn btn-ghost btn-circle">
-                                    <div className="indicator">
-                                    <i class="fa-solid fa-bell fa-xl"></i>
-                                        <span className="badge badge-sm indicator-item">{totalNotifications}</span>
-                                    </div>
-                                </label>
+
+
+                    {/* <div className="dropdown dropdown-end header_dropdown">
+                        <label tabIndex={1} className="btn btn-ghost btn-circle">
+                            <div className="indicator">
+                            <i class="fa-solid fa-bell fa-xl"></i>
+                                <span className="badge badge-sm indicator-item">{totalNotifications}</span>
                             </div>
-                        </Link>
-                    </div>
+                        </label>
+                        <ul tabIndex={1} className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
+                            {notifications.map((notification) => (
+                                    <li>
+                                        <button onClick={() => deleteHandler(notification)} className="btn btn-ghost btn-circle">
+                                            <div className="indicator">
+                                                <i class="fa-solid fa-trash fa-xl"></i>
+                                            </div>
+                                        </button>
+                                    </li>
+                                )
+                            )}
+                            
+                        </ul>
+                    </div>  */}
+
+                    <NotificationMenu userInfo={userInfo}/>
 
                     {/* notification end */}
 
@@ -152,7 +143,9 @@ function Header() {
                             <div className="dropdown dropdown-end header_dropdown">
                                 <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
 
-                                    <h3>{userInfo.username}</h3>
+                                <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8zm0-12c-2.209 0-4 1.791-4 4s1.791 4 4 4 4-1.791 4-4-1.791-4-4-4zm7 12h-2v-1c0-1.657-1.343-3-3-3H10c-1.657 0-3 1.343-3 3v1H5c-1.104 0-2 .896-2 2v2c0 1.104.896 2 2 2h14c1.104 0 2-.896 2-2v-2c0-1.104-.896-2-2-2zm-7 3a3 3 0 0 0 0-6 3 3 0 0 0 0 6z"></path>
+                                </svg>
                                 </label>
                                 <ul tabIndex={0} className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
                                     
@@ -166,8 +159,7 @@ function Header() {
                                     
                                     <li>
                                         <Link to={'/profile'} className="justify-between">
-                                            Profile
-                                            <span className="badge">New</span>
+                                            {userInfo.username}
                                         </Link>
                                     </li>
                                     <li>

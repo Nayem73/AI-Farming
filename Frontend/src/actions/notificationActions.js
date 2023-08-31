@@ -6,7 +6,13 @@ import {
 
     NOTIFICATION_DELETE_REQUEST,
     NOTIFICATION_DELETE_SUCCESS,
-    NOTIFICATION_DELETE_FAILED } from "../constants/notificationConstants";
+    NOTIFICATION_DELETE_FAILED,
+
+    NOTIFICATION_STATUS_REQUEST,
+    NOTIFICATION_STATUS_SUCCESS,
+    NOTIFICATION_STATUS_FAILED
+
+} from "../constants/notificationConstants";
 
 export const listNotifications = () => async (dispatch, getState) => {
     try {
@@ -36,6 +42,7 @@ export const listNotifications = () => async (dispatch, getState) => {
     }
 }
 
+
 export const deleteNotification = (id) => async (dispatch, getState) => {
     try {
         dispatch({
@@ -50,7 +57,7 @@ export const deleteNotification = (id) => async (dispatch, getState) => {
             }
         }
 
-        const { data } = await axios.delete(`/users/${id}`, config)
+        const { data } = await axios.delete(`/api/notification/${id}`, config)
 
         dispatch({
             type: NOTIFICATION_DELETE_SUCCESS,
@@ -58,6 +65,32 @@ export const deleteNotification = (id) => async (dispatch, getState) => {
     } catch (error) {
         dispatch({
             type: NOTIFICATION_DELETE_FAILED,
+            payload: error.response.data.message ? error.response.data.message :error.response? error.message : 'error'
+        })
+    }
+}
+
+
+export const statusNotification = (id) => async (dispatch, getState) => {
+    try {
+        dispatch({
+            type: NOTIFICATION_STATUS_REQUEST
+        })
+
+        const { userLogin: { userInfo } } = getState();
+
+        const config = {
+            headers: {
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        }
+        const { data } = await axios.get(`/api/notification/${id}`, config)
+        dispatch({
+            type: NOTIFICATION_STATUS_SUCCESS,
+        })
+    } catch (error) {
+        dispatch({
+            type: NOTIFICATION_STATUS_FAILED,
             payload: error.response.data.message ? error.response.data.message :error.response? error.message : 'error'
         })
     }

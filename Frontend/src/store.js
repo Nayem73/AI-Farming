@@ -54,7 +54,8 @@ import {
 
 import {
     notificationListReducer,
-    notificationDeleteReducer
+    notificationDeleteReducer,
+    notificationStatusReducer
     } from './reducers/notificationReducers';
 
 
@@ -100,7 +101,8 @@ const reducer = combineReducers({
     subscriptionsStatistic: subscriptionsStatisticReducer,
 
     notificationList: notificationListReducer,
-    notificationDelete: notificationDeleteReducer
+    notificationDelete: notificationDeleteReducer,
+    notificationStatus: notificationStatusReducer
 
 
 })
