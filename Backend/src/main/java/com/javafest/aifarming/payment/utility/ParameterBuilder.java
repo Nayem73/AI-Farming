@@ -37,9 +37,10 @@ public class ParameterBuilder {
     public static Map<String, String> constructRequestParameters(
             UserInfo userInfo,
             SubscriptionAmountService subscriptionAmountService,
-            PaymentInfoRepository paymentInfoRepository) {
+            PaymentInfoRepository paymentInfoRepository,
+            String baseUrl) {
         // CREATING LIST OF POST DATA
-        String baseUrl = "http://192.168.77.7:8080/api";//Request.Url.Scheme + "://" + Request.Url.Authority + Request.ApplicationPath.TrimEnd('/') + "/";
+        //String baseUrl = "/api";//Request.Url.Scheme + "://" + Request.Url.Authority + Request.ApplicationPath.TrimEnd('/') + "/";
         Map<String, String> postData = new HashMap<String, String>();
 
         postData.put("cus_name", userInfo.getUserName()); // Set the username
@@ -56,7 +57,7 @@ public class ParameterBuilder {
         String amount = Double.toString(subscriptionAmountService.getSubscriptionAmount());
         postData.put("total_amount", amount);
 
-        postData.put("success_url", baseUrl + "/ssl-success-page");
+        postData.put("success_url", baseUrl + "/api/ssl-success-page");
 //        postData.put("success_url", baseUrl + "/profile");
         postData.put("fail_url", "https://sandbox.sslcommerz.com/developer/fail.php");
         postData.put("cancel_url", "https://sandbox.sslcommerz.com/developer/cancel.php");

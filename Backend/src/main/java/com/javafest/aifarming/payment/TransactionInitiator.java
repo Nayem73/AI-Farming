@@ -16,7 +16,7 @@ import java.util.Map;
 @Component
 public class TransactionInitiator {
 
-    public String initTrnxnRequest(UserInfo userInfo, SubscriptionAmountService subscriptionAmountService, PaymentInfoRepository paymentInfoRepository) {
+    public String initTrnxnRequest(UserInfo userInfo, SubscriptionAmountService subscriptionAmountService, PaymentInfoRepository paymentInfoRepository, String serverUrl) {
         String response = "";
         try {
             /**
@@ -24,7 +24,7 @@ public class TransactionInitiator {
              * keep an eye on success fail url correctly.
              * insert your success and fail URL correctly in this Map
              */
-            Map<String, String> postData = ParameterBuilder.constructRequestParameters(userInfo, subscriptionAmountService, paymentInfoRepository);
+            Map<String, String> postData = ParameterBuilder.constructRequestParameters(userInfo, subscriptionAmountService, paymentInfoRepository, serverUrl);
             /**
              * Provide your SSL Commerz store Id and Password by this following constructor.
              * If Test Mode then insert true and false otherwise.

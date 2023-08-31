@@ -10,6 +10,7 @@ import com.javafest.aifarming.repository.PaymentInfoRepository;
 import com.javafest.aifarming.repository.SearchCountRepository;
 import com.javafest.aifarming.repository.UserInfoRepository;
 import com.javafest.aifarming.service.SubscriptionAmountService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -48,7 +49,9 @@ public class PaymentController {
     }
 
     @GetMapping("/payment")
-    public ResponseEntity<?> initiatePayment(Authentication authentication) {
+    public ResponseEntity<?> initiatePayment(
+            Authentication authentication,
+            HttpServletRequest request) {
          //Check if the user is authenticated (logged in)
         if (authentication == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Please login first.");
@@ -64,9 +67,12 @@ public class PaymentController {
         if (userInfo.isSubscribed()) {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("You are already a subscribed user.");
         }
+        String serverUrl = request.getRequestURL().toString().split("/api")[0];
 
-        String paymentUrl = transactionInitiator.initTrnxnRequest(userInfo, subscriptionAmountService, paymentInfoRepository);
+        System.out.println("1111111111111111111111111111111111 "+serverUrl);
+        String paymentUrl = transactionInitiator.initTrnxnRequest(userInfo, subscriptionAmountService, paymentInfoRepository, serverUrl);
 //        return "redirect:" + paymentUrl; // Redirect to the payment URL
+
 
         return ResponseEntity.ok(paymentUrl);
     }
@@ -115,7 +121,7 @@ public class PaymentController {
                 paymentInfoRepository.save(paymentInfo);
 //                return ResponseEntity.ok("Payment successful!");
                 return ResponseEntity.status(HttpStatus.SEE_OTHER)
-                        .header(HttpHeaders.LOCATION, "http://127.0.0.1:3000/profile")
+                        .header(HttpHeaders.LOCATION, "/profile")
                         .build();
             } else {
                 // Payment validation failed
