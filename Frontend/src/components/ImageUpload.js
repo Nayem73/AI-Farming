@@ -139,6 +139,7 @@ return (
         <div>
             <label htmlFor="crop">Crop ID:</label>
             <Select
+                required
                 options={cropOptions}
                 onChange={handleCropChange}
                 value={cropOptions.find((option) => option.value === formData.crop)}
