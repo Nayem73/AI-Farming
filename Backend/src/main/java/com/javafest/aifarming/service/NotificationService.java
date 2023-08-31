@@ -58,10 +58,27 @@ public class NotificationService {
         }
     }
 
-    public ResponseEntity<?> countNotifications(UserInfo userInfo, Boolean st) {
-        Long numberOfUnreadNotifications = notificationInfoRepository.countUnreadNotifications(userInfo, st);
+//    public ResponseEntity<?> countNotifications(UserInfo userInfo, Boolean st) {
+//        Long numberOfUnreadNotifications = notificationInfoRepository.countUnreadNotifications(userInfo, st);
+//        Map<String, Long> response = new LinkedHashMap<>();
+//        response.put("count", numberOfUnreadNotifications);
+//        return ResponseEntity.ok().body(response);
+//    }
+
+    public ResponseEntity<?> countLast5Notifications(UserInfo userInfo, Boolean st) {
+        List<NotificationInfo> latestNotifications = notificationInfoRepository.findLatestNotifications(userInfo);
+        int countUnread = 0;
+        int countTotalNotifications = 0;
+        for (NotificationInfo notificationInfo : latestNotifications) {
+            if (!notificationInfo.getStatus()) {
+                countUnread++;
+            }
+            countTotalNotifications++;
+            if (countTotalNotifications == 5L) break;
+        }
+
         Map<String, Long> response = new LinkedHashMap<>();
-        response.put("count", numberOfUnreadNotifications);
+        response.put("count", (long) countUnread);
         return ResponseEntity.ok().body(response);
     }
 

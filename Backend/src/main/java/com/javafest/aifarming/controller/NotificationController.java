@@ -44,7 +44,7 @@ public class NotificationController {
         return notificationService.getLast5Notifications(userInfo);
     }
 
-    @PostMapping("/{notificationId}")
+    @GetMapping("/{notificationId}")
     public ResponseEntity<?> markNotificationAsRead(
             @PathVariable Long notificationId,
             Authentication authentication) {
@@ -89,7 +89,7 @@ public class NotificationController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
 
-        return notificationService.countNotifications(userInfo, false);
+        return notificationService.countLast5Notifications(userInfo, false);
     }
 
     @DeleteMapping("/{notificationId}")
