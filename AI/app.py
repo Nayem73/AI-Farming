@@ -1,5 +1,5 @@
 
-from fastapi import FastAPI, File, UploadFile, Form, status, Response
+from fastapi import FastAPI, File, UploadFile, Form, status, Response, Request
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 import numpy as np
@@ -10,26 +10,20 @@ from ML_deseases.diseasesClassification import CropDiseaseML
 
 
 crop_disease_ml = CropDiseaseML()
-print(f"""
-_________________________HSAkash_________________________
-    Healthy Crops Prediction API is running
-_________________________________________________________
-""")
 
 app = FastAPI()
 
 origins = [
-    "http://localhost",
-    "http://localhost:3000",
-    '*'
+    'http://spring-boot-app'
 ]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"],
+    allow_headers=["*"]
 )
+
 
 
 def read_file_as_image(data) -> np.ndarray:
@@ -38,9 +32,8 @@ def read_file_as_image(data) -> np.ndarray:
 
 @app.post("/predict", status_code=status.HTTP_200_OK)
 # multiple parameters
-
 async def predict(
-    response: Response,file: UploadFile = File(...),  crop: str = Form(...)):  
+    response: Response,file: UploadFile = File(...),  crop: str = Form(...)):
     try:
         image = read_file_as_image(await file.read())
     except Exception as e:
@@ -49,7 +42,6 @@ async def predict(
             'massage': str(e)
         }
     disease = crop_disease_ml.predict(image, crop)
-    print(disease)
     if disease:
         return {
             'class': disease
