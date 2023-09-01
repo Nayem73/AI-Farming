@@ -2,32 +2,30 @@ package com.javafest.aifarming.service;
 
 import com.javafest.aifarming.model.UserInfo;
 import com.javafest.aifarming.repository.UserInfoRepository;
-import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SuperAdminService {
+public class SuperAdminService implements CommandLineRunner {
 
     private final UserInfoRepository userInfoRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
     public SuperAdminService(UserInfoRepository userInfoRepository, PasswordEncoder passwordEncoder) {
         this.userInfoRepository = userInfoRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
-    @PostConstruct
-    public void createSuperAdmin() {
-        String userName = "rakib";
-        String email = "rakib@gmail.com";
-        String password = "root";
+    @Override
+    public void run(String... args) {
+        String userName = (args.length > 0) ? args[0] : "defaultUsername";
+        String email = (args.length > 1) ? args[1] : "defaultEmail";
+        String password = (args.length > 2) ? args[2] : "defaultPassword";
         String role = "ROLE_SUPER_ADMIN";
 
         // Check if user already exists
-        if (!userInfoRepository.findByEmail(email).isPresent() && !userInfoRepository.findByUserName(userName).isPresent()) {
+        if (!email.equals("defaultEmail") && !userInfoRepository.findByEmail(email).isPresent() && !userInfoRepository.findByUserName(userName).isPresent()) {
             // Encode the password before saving
             String encodedPassword = passwordEncoder.encode(password);
 
