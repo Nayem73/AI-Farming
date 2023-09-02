@@ -19,9 +19,15 @@ public class SuperAdminService implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        String userName = (args.length > 0) ? args[0] : "defaultUsername";
-        String email = (args.length > 1) ? args[1] : "defaultEmail";
-        String password = (args.length > 2) ? args[2] : "defaultPassword";
+        // Check if the first argument starts with "--server.port=" and ignore it
+        int startIndex = 0;
+        if (args.length > 0 && args[0].startsWith("--server")) {
+            startIndex = 1;
+        }
+
+        String userName = (args.length > startIndex) ? args[startIndex] : "defaultUsername";
+        String email = (args.length > startIndex + 1) ? args[startIndex + 1] : "defaultEmail";
+        String password = (args.length > startIndex + 2) ? args[startIndex + 2] : "defaultPassword";
         String role = "ROLE_SUPER_ADMIN";
 
         // Check if user already exists
