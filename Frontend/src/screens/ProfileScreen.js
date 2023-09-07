@@ -124,7 +124,7 @@ const ProfileScreen = () => {
                                 </div>
                                 <div className="flex-grow">
                                     {/* <h2 className="mb-3 text-lg font-medium text-gray-900 title-font"><strong>Username : </strong>{user.userName}</h2> */}
-                                    <p className="text-sm text-gray-500">Turn your dreams into reality by becoming a gardener, farmer, or agricultural enthusiast. Monitor and identify common crop diseases with ease. Simply snap a picture, and access insights that were once out of reach for both hobbyists and full-timers alike. Unlock the potential with an AI Search subscription today! Get unlimited access for just Taka 500 !</p>
+                                    <p className="text-sm text-gray-500">Turn your dreams into reality by becoming a gardener, farmer, or agricultural enthusiast. Monitor and identify common crop diseases with ease. Simply snap a picture, and access insights that were once out of reach for both hobbyists and full-timers alike. Unlock the potential with an AI Search subscription today! Get unlimited access for just Taka <strong>{subscriptedUser.amount}</strong> !</p>
                                     <p className="text-sm text-gray-500"><strong>Subscription Amount : </strong>{subscriptedUser.amount} Taka</p>
                                     <div className='py-4 flex justify-center items-center'>
                                         {/* click button to subscribe */}
