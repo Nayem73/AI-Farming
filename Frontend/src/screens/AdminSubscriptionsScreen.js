@@ -8,7 +8,6 @@ import {
 
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import { useNavigate } from 'react-router-dom';
 import Paginate from '../components/Paginate';
 
 import FormContainer from '../components/FormContainer'
@@ -16,7 +15,6 @@ import SuccessMessage from '../components/SuccessMessage';
 
 const SubcriptionsScreen = () => {
     const dispatch = useDispatch();
-    const history = useNavigate();
 
     const subscriptionList = useSelector(state => state.subscriptionList);
     const { loading: subscriptionsLoading, error:subscriptionsError, subscriptions, cur_page, total_page } = subscriptionList;
@@ -25,15 +23,11 @@ const SubcriptionsScreen = () => {
     const { loading: subscriptionAmountLoading, error:subscriptionAmountError, subscription} = subscriptionAmount;
     
     const subscriptionAmountUpdate = useSelector(state => state.subscriptionAmountUpdate);
-    const { loading: subscriptionAmountUpdateLoading, error:subscriptionAmountUpdateError, success:subscriptionAmountUpdateSuccess} = subscriptionAmountUpdate;
+    const {  error:subscriptionAmountUpdateError, success:subscriptionAmountUpdateSuccess} = subscriptionAmountUpdate;
 
     const [amount, setAmount] = useState(0);
 
 
-    const userLogin = useSelector(state => state.userLogin);
-    const { userInfo } = userLogin;
-
-    
 
     useEffect(() => {
         dispatch(listSubscriptions())

@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import {  useNavigate, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { listPictures, deletePicture, createPicture, updatePicture } from '../actions/pictureActions';
-import Loader from './Loader';
-import Message from './Message';
+
 
 const PictureAdmin = ({disease_id}) => {
     const dispatch = useDispatch();

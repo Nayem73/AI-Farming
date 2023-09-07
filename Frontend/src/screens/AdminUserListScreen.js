@@ -32,7 +32,7 @@ const UserListScreen = () => {
         if (successUpdate) {
             setEdit_user_bool(false)
         }
-    }, [dispatch, successUpdate])
+    }, [dispatch,history, userInfo, successUpdate])
 
 
 

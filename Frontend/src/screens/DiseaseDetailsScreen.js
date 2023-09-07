@@ -44,7 +44,7 @@ const DiseaseDetailsScreen = () => {
         if (disease !== undefined) {
             dispatch(listPictures(disease.id))
         }
-    }, [disease])
+    }, [dispatch, disease])
 
     
     // console.log('pictures',)

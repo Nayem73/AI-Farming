@@ -1,12 +1,8 @@
 import { React, useEffect, useState, Fragment } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
-import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import { Link,useNavigate } from 'react-router-dom';
-
-
 import { listNotifications, deleteNotification, statusNotification } from '../actions/notificationActions';
 
 
@@ -27,14 +23,14 @@ export default function NotificationMenu({userInfo}) {
     const [notificationRedicrectUrl, setNotificationRedicrectUrl] = useState('');
 
     const notificationList = useSelector(state => state.notificationList);
-    const { loading:notificationListLoading, error: notificationListError,  notifications} = notificationList;
+    const {  notifications} = notificationList;
 
     const notificationDelete = useSelector(state => state.notificationDelete);
-    const { loading:notificationDeleteLoading, error: notificationDeleteError, success: notificationDeleteSuccess} = notificationDelete;
+    const {  success: notificationDeleteSuccess} = notificationDelete;
 
     
     const notificationStatus = useSelector(state => state.notificationStatus);
-    const { loading:notificationStatusLoading, error: notificationStatusError, success: notificationStatusSuccess} = notificationStatus;
+    const {  success: notificationStatusSuccess} = notificationStatus;
 
 
     useEffect(() => {
@@ -133,37 +129,6 @@ export default function NotificationMenu({userInfo}) {
                 </Fragment>
             )}
         </PopupState>
-
-
-    //     <PopupState variant="popover" popupId="demo-popup-menu" className="dropdown dropdown-end header_dropdown">
-    //     {/* <div className="dropdown dropdown-end header_dropdown"> */}
-        
-    //     <label tabIndex={1} className="btn btn-ghost btn-circle avatar">
-    //         <i class="fa-solid fa-bars"></i>
-    //     </label>
-    //     <ul tabIndex={1} className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
-            
-
-
-            
-            
-    //         <li>
-    //             <Link to={'/review'} className="justify-between">
-    //                 Review
-    //                 {/* <span className="badge">New</span> */}
-    //             </Link>
-    //         </li>
-
-    //         <li>
-    //             <Link to={'/login'} className="font-bold justify-between">
-    //                 Log in
-    //             </Link>
-    //         </li>
-            
-
-    //     </ul>
-    // {/* </div> */}
-    // </PopupState>
 
 
     );

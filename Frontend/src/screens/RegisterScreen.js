@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import FormContainer from '../components/FormContainer'
 import { register } from '../actions/userActions';
 import { USER_REGISTER_FAILED } from '../constants/userConstants';

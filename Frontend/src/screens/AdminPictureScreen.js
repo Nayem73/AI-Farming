@@ -59,7 +59,7 @@ const AdminPictureScreen = () => {
         if(successCreate){
             setCreate_picture_bool(false)
         }
-    }, [dispatch, history, userInfo, successDelete, successCreate, successUpdate])
+    }, [dispatch, history, userInfo,disease_id, successDelete, successCreate, successUpdate])
 
 
     const handleImageChange = (e) => {

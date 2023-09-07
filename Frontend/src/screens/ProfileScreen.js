@@ -19,11 +19,9 @@ const ProfileScreen = () => {
     const userLogin = useSelector(state => state.userLogin);
     const { userInfo } = userLogin;
 
-    const subscription = useSelector(state => state.subscription);
-    const { loading: loadingSubscription, error: errorSubscription, success: successSubscription } = subscription;
     
     const subscriptionCheck = useSelector(state => state.subscriptionCheck);
-    const { loading: loadingSubscriptedUser, error: errorSubscriptedUser, success: successSubscriptedUser, subscription:subscriptedUser } = subscriptionCheck;
+    const {  subscription:subscriptedUser } = subscriptionCheck;
 
 
     useEffect(() => {
@@ -32,7 +30,7 @@ const ProfileScreen = () => {
         }
         dispatch(getUserDetails());
         dispatch(checkSubscription());
-    }, [dispatch])
+    }, [dispatch, history, userInfo])
 
 
     // ______________change password______________ //

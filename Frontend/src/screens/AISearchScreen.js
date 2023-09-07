@@ -17,7 +17,7 @@ const AISearchScreen = () => {
         if (!userInfo) {
             history('/login')
         }
-    }, [])
+    }, [history, userInfo])
     
 
     return (

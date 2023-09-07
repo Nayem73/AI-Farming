@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Select from 'react-select';
 import { listCrops } from '../actions/cropActions.js';
@@ -6,17 +6,16 @@ import { aiSearch } from '../actions/diseaseActions.js';
 import { useNavigate } from 'react-router-dom'
 import {AI_SEARCH_RESET} from '../constants/diseaseConstants.js'
 import Message from '../components/Message';
-import Loader from '../components/Loader';
 import  {useDropzone} from 'react-dropzone';
 
 const ImageUpload = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const [message, setMassage] = useState(null)
+    const [ setMassage] = useState(null)
 
     const cropList = useSelector((state) => state.cropList);
-    const { loading: cropLoading, error: cropError, crops } = cropList;
+    const {  crops } = cropList;
 
     const aiSearchData = useSelector((state) => state.aiSearch);
     const { loading: aiLoading, error: aiError, crop, disease } = aiSearchData;

@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Select from 'react-select';
 import MDEditor from '@uiw/react-md-editor';
 import { listCrops } from '../actions/cropActions.js';
 import { createDisease, updateDisease} from '../actions/diseaseActions.js';
-import { DISEASE_CREATE_RESET, DISEASE_UPDATE_RESET } from '../constants/diseaseConstants.js';
-import Loader from '../components/Loader.js';
+import { DISEASE_CREATE_RESET } from '../constants/diseaseConstants.js';
 import Message from '../components/Message.js';
-import ClipboardJS from 'clipboard';
+
 
 const FormDisease = ({ existingData }) => {
     // console.log('form page', existingData)
     const dispatch = useDispatch();
-    const params = useParams();
     const history = useNavigate();
     const redirect_url = '/admin/disease/'
     const [formData, setFormData] = useState({
@@ -31,8 +29,8 @@ const FormDisease = ({ existingData }) => {
     
     
 
-    const { loading, error, crops } = cropList;
-    const { loading: loadingCreate, error: errorCreate, success: successCreate } = diseaseCreate;
+    const { crops } = cropList;
+    const {  error: errorCreate, success: successCreate } = diseaseCreate;
 
 
     useEffect(() => {

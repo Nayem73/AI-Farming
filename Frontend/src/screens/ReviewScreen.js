@@ -1,7 +1,7 @@
 // import '../ReviewBox.css'; // Import your CSS file for styling
 import React, { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link,useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Message from '../components/Message';
 import Paginate from '../components/Paginate'
 import SuccessMessage from '../components/SuccessMessage'
@@ -17,7 +17,6 @@ import {
 
 function ReviewScreen() {
     const dispatch = useDispatch()
-    const history = useNavigate();
 
     const userLogin = useSelector(state => state.userLogin);
     const { userInfo } = userLogin;
@@ -31,20 +30,19 @@ function ReviewScreen() {
 
 
     const reviewCreate = useSelector(state => state.reviewCreate);
-    const { loading: loadingReviewCreate, error: errorReviewCreate, success: successReviewCreate } = reviewCreate;
+    const {  error: errorReviewCreate, success: successReviewCreate } = reviewCreate;
 
     const reviewUpdate = useSelector(state => state.reviewUpdate);
-    const { loading: loadingReviewUpdate, error: errorReviewUpdate, success: successReviewUpdate, review: updatedReview } = reviewUpdate;
+    const {  error: errorReviewUpdate, success: successReviewUpdate} = reviewUpdate;
 
     const reviewList = useSelector(state => state.reviewList);
     const { loading: loadingReviewList, error: errorReviewList, reviews, cur_page, total_page } = reviewList;
 
     const reviewDelete = useSelector(state => state.reviewDelete);
-    const { loading: loadingReviewDelete, error: errorReviewDelete, success: successReviewDelete } = reviewDelete;
+    const {  success: successReviewDelete } = reviewDelete;
     
     
     const [editingReview, setEditingReview] = useState(false);
-    const [comment, setComment] = useState('')
     const [imageFile, setImageFile] = useState(null);
     const [usingCamera, setUsingCamera] = useState(false);
     const [reviewId, setReviewId] = useState(null);

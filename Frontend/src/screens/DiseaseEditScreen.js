@@ -43,7 +43,7 @@ const DiseaseEditScreeen = () => {
             history(redirect_url)
 
         }
-    }, [ dispatch, successUpdate, successUpdate ,crop_title, disease_title])
+    }, [ dispatch, history, userInfo, successUpdate ,crop_title, disease_title])
     
     // console.log('edit page',disease)
 
