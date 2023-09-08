@@ -31,17 +31,6 @@ public class SecurityConfig {
     @Bean
     //authentication stuff
     public UserDetailsService userDetailsService() {
-//        UserDetails admin = UserInfo.withUsername("nayem")
-//                .password(encoder.encode("root"))
-//                .roles("ADMIN")
-//                .build();
-//
-//        UserDetails user = UserInfo.withUsername("himel")
-//                .password(encoder.encode("root"))
-//                .roles("USER")
-//                .build();
-//
-//        return new InMemoryUserDetailsManager(admin, user);
         return new UserInfoUserDetailsService();
     }
 
