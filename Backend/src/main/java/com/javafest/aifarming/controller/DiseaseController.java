@@ -86,7 +86,6 @@ public class DiseaseController {
     }
 
     @GetMapping("/disease")
-//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Page<Disease>> getCropsByDisease(
             @RequestParam(value = "crop", required = false) String cropTitle,
             @RequestParam(value = "disease", required = false) String diseaseTitle,
