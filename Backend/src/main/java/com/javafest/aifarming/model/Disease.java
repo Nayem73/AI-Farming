@@ -43,10 +43,6 @@ public class Disease {
     private String description;
 
 
-//    @ManyToOne(
-//            cascade = CascadeType.ALL,
-//            fetch = FetchType.LAZY
-//    )
     @ManyToOne
     @JoinColumn(
             name = "disease_id",
