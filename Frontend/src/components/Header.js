@@ -167,8 +167,8 @@ function Header() {
                                     <li>
                                         <Link to={'/profile'} className="justify-between">
                                             {userInfo.username}
-                                            {userInfo.isSuperAdmin ? <span className="badge">Super Admin</span>
-                                            : userInfo.isAdmin ? <span className="badge">Admin</span>:
+                                            {userInfo.isSuperAdmin ? <span className="badge">S</span>
+                                            : userInfo.isAdmin ? <span className="badge">A</span>:
                                             <></>}
                                         </Link>
                                     </li>
