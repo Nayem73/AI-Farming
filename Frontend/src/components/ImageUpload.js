@@ -108,7 +108,7 @@ const {getRootProps, getInputProps, isDragActive} = useDropzone({
 return (
     <form  onSubmit={handleSubmit}>
         {aiError && <Message message={aiError} />}
-        <div className="container px-5 py-24 mx-auto  border-2 border-gray-200 rounded-lg dark:border-gray-800 ">
+        <div className=" aiSearch_id1 container px-5 py-24 mx-auto  border-2 border-gray-200 rounded-lg dark:border-gray-800 ">
             <div className="flex flex-wrap -m-4">
                 <div className="mx-5 my-3 lg:w-1/3 md:w-1/2">
                 <div className="h-full border-2 border-gray-200 rounded-lg dark:border-gray-100">
@@ -118,7 +118,6 @@ return (
                             {
                                 isDragActive ?<p>Drop the image</p>:<p>Drag the image || click here</p>
                             }
-                         
                         </div> 
                         
                     </label>
@@ -135,6 +134,31 @@ return (
 
             </div>
         </div>
+
+        <div className='aiSearch_id2 my-2'>
+            {!imageFile ? <div >
+                <div className="h-full border-2 border-gray-200 rounded-lg dark:border-gray-100">
+                    <label id="label-file-upload" htmlFor="input-file-upload" className={isDragActive ? "drag-active" : "" }>
+                        <div {...getRootProps()}>
+                            <input {...getInputProps()} />
+                            {
+                                isDragActive ?<p></p>:<p>click here</p>
+                            }
+                        </div> 
+                        
+                    </label>
+                </div> 
+            </div> :
+            <div >
+                <div className="h-full rounded-lg">
+                    
+                        <img src={imageFile && URL.createObjectURL(imageFile)} alt="preview" className="preview-image" />
+                    
+                </div>
+            </div>}
+                    
+        </div>
+
         <div>
             <label htmlFor="crop">Crop ID:</label>
             <Select

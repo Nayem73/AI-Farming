@@ -218,6 +218,24 @@ input[type=submit]:hover {
   }
 }
 
+/* Mobile */
+.aiSearch_id1{
+  display: block;
+}
+.aiSearch_id2{
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .aiSearch_id1 {
+    display: none;
+  }
+  .aiSearch_id2 {
+    display: block;
+  }
+}
+/* Mobile */
+
 
 #p_wrap {
   white-space: pre-line;
