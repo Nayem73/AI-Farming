@@ -59,10 +59,16 @@ public class UserInfoController {
             @RequestParam("email") String email,
             @RequestParam("password") String password) {
 
+        Map<String, Object> response = new LinkedHashMap<>();
+        if (userName.length() > 10) {
+            response.put("message", "userName is too large!");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(response);
+        }
+
         Optional<UserInfo> existingUser = userInfoRepository.findByUserName(userName);
         Optional<UserInfo> existingUserByEmail = userInfoRepository.findByEmail(email);
 
-        Map<String, Object> response = new LinkedHashMap<>();
         if (existingUser.isPresent()) {
             response.put("message", "User already exists with the same userName or email");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
