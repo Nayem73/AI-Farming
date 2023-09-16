@@ -21,6 +21,10 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+// ________________hemel___________________//
+import org.springframework.beans.factory.annotation.Value;
+
+//_________________hemel___________________//
 
 @RestController
 @RequestMapping("/api")
@@ -30,6 +34,12 @@ public class ForwardController {
     private DiseaseRepository diseaseRepository;
     private SearchCountRepository searchCountRepository;
     private UserInfoRepository userInfoRepository;
+
+    // ________________hemel___________________//
+    @Value("${AI_SERVICE_URL:http://localhost:8080}")
+    private String predictionURL;
+
+    //_________________hemel___________________//
 
     @Autowired
     public ForwardController(RestTemplate restTemplate, ObjectMapper objectMapper, DiseaseRepository diseaseRepository, SearchCountRepository searchCountRepository, UserInfoRepository userInfoRepository) {
@@ -112,8 +122,11 @@ public class ForwardController {
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
         // Step 4: Define the URL of the other server (localhost:8000/predict)
-        String predictionURL = "http://localhost:8000/predict";
-
+        // String predictionURL = "http://localhost:8000/predict";
+        // System.out.println("1111111111111111111111111111111111 "+predictionURL);
+        // System.out.println("1111111111111111111111111111111111 "+predictionURL);
+        // System.out.println("1111111111111111111111111111111111 "+predictionURL);
+        // System.out.println("1111111111111111111111111111111111 "+predictionURL);
         // Step 5: Make the POST request to the other server
         ResponseEntity<String> response = restTemplate.exchange(
                 predictionURL,
@@ -126,8 +139,8 @@ public class ForwardController {
         String predictionClass = jsonNode.get("class").asText();
 
         // Step 7: Print the response
-        System.out.println("???????????????????????" + text);
-        System.out.println("???????????????????????" + predictionClass);
+        // System.out.println("???????????????????????" + text);
+        // System.out.println("???????????????????????" + predictionClass);
         Map<String, Object> returnResponse = new LinkedHashMap<>();
         returnResponse.put("crop",  text);
         returnResponse.put("disease", predictionClass);

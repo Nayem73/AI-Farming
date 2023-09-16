@@ -22,6 +22,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+// ________________hemel___________________//
+import org.springframework.beans.factory.annotation.Value;
+
+//_________________hemel___________________//
+
+
+
 @Controller
 @RequestMapping("/api")
 public class PaymentController {
@@ -32,6 +39,12 @@ public class PaymentController {
     private final SearchCountRepository searchCountRepository;
     private final SubscriptionAmountService subscriptionAmountService;
     private final NotificationInfoRepository notificationInfoRepository;
+
+    // ________________hemel___________________//
+    @Value("${PAYMENT_SERVICE_URL:http://localhost:8080}")
+    private String serverUrl;
+
+    //_________________hemel___________________//
 
     public PaymentController(
             TransactionInitiator transactionInitiator,
@@ -67,9 +80,9 @@ public class PaymentController {
         if (userInfo.isSubscribed()) {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("You are already a subscribed user.");
         }
-        String serverUrl = request.getRequestURL().toString().split("/api")[0];
+        // String serverUrl = request.getRequestURL().toString().split("/api")[0];
 
-        System.out.println("1111111111111111111111111111111111 "+serverUrl);
+        // System.out.println("1111111111111111111111111111111111 "+serverUrl);
         String paymentUrl = transactionInitiator.initTrnxnRequest(userInfo, subscriptionAmountService, paymentInfoRepository, serverUrl);
 //        return "redirect:" + paymentUrl; // Redirect to the payment URL
 
@@ -83,9 +96,9 @@ public class PaymentController {
         try {
             // Validate the payment response using the TransactionResponseValidator class
             TransactionResponseValidator transactionResponseValidator = new TransactionResponseValidator(subscriptionAmountService);
-            System.out.println("----------------------------------------------------------------------------------------------------");
-            System.out.println(responseParams);
-            System.out.println("----------------------------------------------------------------------------------------------------");
+            // System.out.println("----------------------------------------------------------------------------------------------------");
+            // System.out.println(responseParams);
+            // System.out.println("----------------------------------------------------------------------------------------------------");
             if (transactionResponseValidator.receiveSuccessResponse(responseParams)) {
                 // Payment was successful
                 // Perform any necessary actions for successful payment, e.g., updating the order status
