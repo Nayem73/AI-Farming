@@ -97,6 +97,11 @@ const ProfileScreen = () => {
                                 <div className="flex-grow">
                                     <h2 className="mb-3 text-lg font-medium text-gray-900 title-font"><strong>Username : </strong>{user.userName}</h2>
                                     <p className="text-sm text-gray-500"><strong>Email : </strong>{user.email}</p>
+                                    {userInfo.isSuperAdmin ? <p className="text-sm text-gray-500"><strong>User Type : </strong>Super Admin</p>
+                                    : userInfo.isAdmin ? <p className="text-sm text-gray-500"><strong>Accout Type : </strong>Admin</p>:
+                                    <></>
+                                    }
+                                    
                                     <p className="text-sm text-gray-500"><strong>Search Left : </strong>{user.searchLeft}</p>
                                     {(subscriptedUser !== undefined && subscriptedUser.is_subscribed)?
                                     <>
