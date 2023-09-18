@@ -82,12 +82,15 @@ function Header() {
     return (
         <nav className='navbar bg-base-100 top-0 shadow-xl'>
             <div className=" container  top-0 mx-auto flex">
+                <Link to={'/'}><img src="/logo.svg" alt="logo" className="w-10 h-10 mr-2" /></Link>
                 <div className="flex-auto ">
-                    {/* <Link to='/' className="btn btn-outline normal-case text-xl">AI-Farming</Link> */}
-                    <button onClick={reloadAndNavigate} className="btn btn-outline normal-case text-xl">AI-Farming</button>
+                    <button onClick={reloadAndNavigate} className="normal-case text-xl text-[#009100] font-semibold font-serif" >AI-Farming</button>
                 </div>
+                {/* <div className="flex-auto ">
+                    <button onClick={reloadAndNavigate} className="btn btn-outline normal-case text-xl">AI-Farming</button>
+                </div> */}
                 <div className='searchBox_id1'>
-                    <Select className='shadow-lg p-0 bg-dark rounded-lg '
+                    <Select className='shadow-lg mr-1 bg-dark rounded-lg '
                     options={options}
                     onChange={selectedCrop}
                     />
@@ -111,30 +114,6 @@ function Header() {
 
                     {/* ai search end */}
                     {/* notification */}
-
-
-
-                    {/* <div className="dropdown dropdown-end header_dropdown">
-                        <label tabIndex={1} className="btn btn-ghost btn-circle">
-                            <div className="indicator">
-                            <i class="fa-solid fa-bell fa-xl"></i>
-                                <span className="badge badge-sm indicator-item">{totalNotifications}</span>
-                            </div>
-                        </label>
-                        <ul tabIndex={1} className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
-                            {notifications.map((notification) => (
-                                    <li>
-                                        <button onClick={() => deleteHandler(notification)} className="btn btn-ghost btn-circle">
-                                            <div className="indicator">
-                                                <i class="fa-solid fa-trash fa-xl"></i>
-                                            </div>
-                                        </button>
-                                    </li>
-                                )
-                            )}
-                            
-                        </ul>
-                    </div>  */}
 
                     <NotificationMenu userInfo={userInfo}/>
 
