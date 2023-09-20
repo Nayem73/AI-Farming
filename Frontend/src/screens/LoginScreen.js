@@ -59,7 +59,7 @@ const LoginScreen = () => {
                         <button type='submit' className=' btn btn-primary w-24'>Login</button>
                     </div>
                     <div>
-                        <h3>Doesn't have any account?  <Link to={redirect ? `/register?redirect=${redirect}` : `/register`}> <strong>Create account</strong> </Link>
+                        <h3>Don't have any account?  <Link to={redirect ? `/register?redirect=${redirect}` : `/register`}> <strong>Create account</strong> </Link>
                         </h3>
                     </div>
                 </form>
