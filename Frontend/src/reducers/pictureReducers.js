@@ -2,6 +2,7 @@ import {
     PICTURE_LIST_REQUEST,
     PICTURE_LIST_SUCCESS,
     PICTURE_LIST_FAILED,
+    PICTURE_LIST_RESET,
 
     PICTURE_DELETE_REQUEST,
     PICTURE_DELETE_SUCCESS,
@@ -28,6 +29,8 @@ export const pictureListReducer = (state = {pictures: []}, action) => {
             return { loading: true, pictures: [] }
         case PICTURE_LIST_SUCCESS:
             return { loading: false, pictures: action.payload }
+        case PICTURE_LIST_RESET:
+            return { pictures: [] }
         case PICTURE_LIST_FAILED:
             return { loading: false, error: action.payload }
         default:

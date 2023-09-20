@@ -3,8 +3,12 @@
 import ImageUpload from '../components/ImageUpload.js';
 
 import React, {  useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom';
+
+// constants
+import {PICTURE_LIST_RESET} from '../constants/pictureConstants'
+import {DISEASE_DETAIL_RESET} from '../constants/diseaseConstants'
 
 
 const AISearchScreen = () => {
@@ -12,8 +16,12 @@ const AISearchScreen = () => {
     const userLogin = useSelector(state => state.userLogin);
     const { userInfo } = userLogin;
     const history = useNavigate();
+    const dispatch = useDispatch();
+
 
     useEffect(() => {
+        dispatch({type: PICTURE_LIST_RESET})
+        dispatch({type: DISEASE_DETAIL_RESET})
         if (!userInfo) {
             history('/login')
         }

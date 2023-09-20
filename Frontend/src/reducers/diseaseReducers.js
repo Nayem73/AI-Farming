@@ -11,6 +11,7 @@ import {
     DISEASE_DETAIL_FAILED,
     DISEASE_DETAIL_REQUEST,
     DISEASE_DETAIL_SUCCESS,
+    DISEASE_DETAIL_RESET,
 
     DISEASE_LIST_FAILED,
     DISEASE_LIST_REQUEST,
@@ -62,12 +63,14 @@ export const aiSearchReducer = (state = {crop:'', disease:''}, action) => {
     }
 }
 
-export const diseaseDetailReducer = (state = {disease: {reviews: []}}, action) => {
+export const diseaseDetailReducer = (state = {disease: []}, action) => {
     switch (action.type) {
         case DISEASE_DETAIL_REQUEST:
             return { loading: true, ...state }
         case DISEASE_DETAIL_SUCCESS:
             return { loading: false, disease: action.payload }
+        case DISEASE_DETAIL_RESET:
+            return { disease: [] }
         case DISEASE_DETAIL_FAILED:
             return { loading: false, error: action.payload }
         default:
