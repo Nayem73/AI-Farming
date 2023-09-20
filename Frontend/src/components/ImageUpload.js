@@ -37,6 +37,7 @@ const ImageUpload = () => {
         navigate(`/disease/${crop_titles}/${disease_titles}`);
         }
         if(aiError){
+            // console.log('aierror', aiError)
             setMassage(aiError)
         }
     }, [aiLoading, aiError, crop, disease]);
@@ -70,11 +71,58 @@ const ImageUpload = () => {
         }));
     };
 
-    const handleSubmit = (e) => {
+    // image resize
+    const resizeImage = (file) => {
+        return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const img = new Image();
+            img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const maxWidth = 300; // Set your desired maximum width
+            const maxHeight = 300; // Set your desired maximum height
+            let width = img.width;
+            let height = img.height;
+    
+            if (width > height) {
+                if (width > maxWidth) {
+                height *= maxWidth / width;
+                width = maxWidth;
+                }
+            } else {
+                if (height > maxHeight) {
+                width *= maxHeight / height;
+                height = maxHeight;
+                }
+            }
+    
+            canvas.width = width;
+            canvas.height = height;
+    
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            canvas.toBlob((blob) => {
+                resolve(new File([blob], file.name, { type: 'image/jpeg' }));
+            }, 'image/jpeg');
+            };
+            img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+        });
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        // Ensure formData.file is a valid File object
+        if (!formData.file instanceof File) {
+            console.error('Invalid file.');
+            return;
+        }
+        const resizedFile = await resizeImage(formData.file);
         const formDataToSend = new FormData();
         formDataToSend.append('crop', formData.crop);
-        formDataToSend.append('file', formData.file);
+        // formDataToSend.append('file', formData.file);
+        formDataToSend.append('file', resizedFile);
         dispatch(aiSearch(formDataToSend));
     };
 
@@ -89,7 +137,7 @@ const {getRootProps, getInputProps, isDragActive} = useDropzone({
             ...prevFormData,
             file: acceptedFiles[0],
             }));
-            console.log(acceptedFiles[0])
+            // console.log(acceptedFiles[0])
             if (acceptedFiles[0]) {
             setImageFile(acceptedFiles[0]);
             }
