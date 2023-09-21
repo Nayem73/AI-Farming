@@ -69,9 +69,9 @@ const RegisterScreen = () => {
                     <h1 className='text-3xl'>Sign Up</h1>
                     <br />
                     <label className="label">
-                        <span className="label-text">Name</span>
+                        <span className="label-text">Username</span>
                     </label>
-                    <input  placeholder="Enter your Name" className="input input-bordered w-full max-w-xs" onChange={(e) => setName(e.target.value)} />
+                    <input  placeholder="Enter your Username" className="input input-bordered w-full max-w-xs" onChange={(e) => setName(e.target.value)} />
                 </div>
                 <div className="form-control w-full  ">
                     <label className="label">
