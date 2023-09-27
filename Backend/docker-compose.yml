@@ -1,0 +1,35 @@
+version: "3.7"
+services:
+  spring-boot-container:
+    build: .
+    restart: always
+    ports:
+      - 8080:8080    # Map port 9090 on the host to port 9090 in the container
+    environment:
+      SPRING_DATASOURCE_DRIVER-CLASS-NAME: com.mysql.cj.jdbc.Driver
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:3306/world
+      SPRING_DATASOURCE_USERNAME: nayemapp
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_JPA_HIBERNATE_DDL-AUTO: update
+      SPRING_JPA_SHOW-SQL: "true"
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQL8Dialect
+      SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: "true"
+      PAYMENT_SERVICE_URL: http://localhost:8080
+      AI_SERVICE_URL: http://localhost:8000/predict
+    depends_on:
+      - mysql-container      # This ensures that the Spring Boot app starts after the MySQL container
+    volumes:
+      - C:\Users\nayem\OneDrive\Desktop\docker-volumes:/path/in/container
+
+  mysql-container:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root  # Replace with your desired MySQL root password
+      MYSQL_DATABASE: world
+      MYSQL_USER: nayemapp
+      MYSQL_PASSWORD: root
+    ports:
+      - 3306:3306    # Map port 3307 on the host to port 3306 in the container
+    volumes:
+      - C:\Users\nayem\OneDrive\Desktop\docker-volumes:/path/in/container
