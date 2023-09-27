@@ -2,16 +2,22 @@ package com.javafest.aifarming.controller;
 
 import com.javafest.aifarming.model.Crop;
 import com.javafest.aifarming.model.Disease;
+import com.javafest.aifarming.model.NotificationInfo;
+import com.javafest.aifarming.model.UserInfo;
 import com.javafest.aifarming.repository.CropRepository;
 import com.javafest.aifarming.repository.DiseaseRepository;
+import com.javafest.aifarming.repository.UserInfoRepository;
+import com.javafest.aifarming.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,10 +25,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api")
@@ -30,30 +33,59 @@ public class DiseaseController {
 
     private final DiseaseRepository diseaseRepository;
     private final CropRepository cropRepository;
+    private final UserInfoRepository userInfoRepository;
+    private final NotificationService notificationService;
 
     @Autowired
-    public DiseaseController(DiseaseRepository diseaseRepository, CropRepository cropRepository) {
+    public DiseaseController(
+            DiseaseRepository diseaseRepository,
+            CropRepository cropRepository,
+            UserInfoRepository userInfoRepository,
+            NotificationService notificationService) {
         this.diseaseRepository = diseaseRepository;
         this.cropRepository = cropRepository;
+        this.userInfoRepository = userInfoRepository;
+        this.notificationService = notificationService;
     }
 
     @GetMapping("/disease/")
-    public ResponseEntity<Page<Disease>> getAllDisease(
+    public ResponseEntity<Page<Map<String, Object>>> getAllDisease(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
         Pageable pageable = PageRequest.of(page, size);
         Page<Disease> diseasePage = diseaseRepository.findAll(pageable);
-        return ResponseEntity.ok(diseasePage);
+
+        List<Map<String, Object>> response = new ArrayList<>();
+
+        for (Disease disease : diseasePage.getContent()) {
+            Map<String, Object> res = new LinkedHashMap<>();
+            res.put("id", disease.getId());
+            res.put("title", disease.getTitle());
+            res.put("img", disease.getImg());
+            res.put("crop", disease.getCrop());
+
+            response.add(res);
+        }
+
+        return ResponseEntity.ok()
+                .body(new PageImpl<>(response, pageable, diseasePage.getTotalElements()));
     }
 
+
     @GetMapping("/disease/{cropTitle}/{diseaseTitle}")
-    public Disease getCropsByCategoryTitleAndDisease(@PathVariable String cropTitle, @PathVariable String diseaseTitle) {
-        return diseaseRepository.findByCropTitleAndDiseaseTitleExact(cropTitle, diseaseTitle);
+    public ResponseEntity<?> getCropsByCategoryTitleAndDisease(@PathVariable String cropTitle, @PathVariable String diseaseTitle) {
+        Disease disease = diseaseRepository.findByCropTitleAndDiseaseTitleExact(cropTitle, diseaseTitle);
+        if (disease == null || disease.getTitle().isEmpty()) {
+            //return new ResponseEntity<>("Disease not found", HttpStatus.NOT_FOUND);
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Disease not found");
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
+        return new ResponseEntity<>(disease, HttpStatus.OK);
     }
 
     @GetMapping("/disease")
-//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Page<Disease>> getCropsByDisease(
             @RequestParam(value = "crop", required = false) String cropTitle,
             @RequestParam(value = "disease", required = false) String diseaseTitle,
@@ -142,9 +174,10 @@ public class DiseaseController {
 //        disease.setImg(targetPath.toString());
         Disease disease = new Disease(title, "/api/picture?link=images/" + fileName, description, crop);
 
-
         // Save the Disease object to the database
         diseaseRepository.save(disease);
+        //save notifications for all users
+        notificationService.saveDiseaseNotificationForAllUsers(title, crop.getTitle());
 
         // Create a response with the link to the uploaded image
         Map<String, Object> response = new HashMap<>();

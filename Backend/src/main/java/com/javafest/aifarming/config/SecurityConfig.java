@@ -31,17 +31,6 @@ public class SecurityConfig {
     @Bean
     //authentication stuff
     public UserDetailsService userDetailsService() {
-//        UserDetails admin = UserInfo.withUsername("nayem")
-//                .password(encoder.encode("root"))
-//                .roles("ADMIN")
-//                .build();
-//
-//        UserDetails user = UserInfo.withUsername("himel")
-//                .password(encoder.encode("root"))
-//                .roles("USER")
-//                .build();
-//
-//        return new InMemoryUserDetailsManager(admin, user);
         return new UserInfoUserDetailsService();
     }
 
@@ -51,7 +40,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(rQ -> {
             rQ.requestMatchers("/api/**", "/signup/", "/signin/").permitAll();
-            rQ.requestMatchers("/api/search/", "/api/profile/", "/signout/").authenticated();
+            rQ.requestMatchers("/api/search/", "/api/profile/", "/api/issubscribed/", "/signout/").authenticated();
         });
         http.sessionManagement(sessionAuthenticationStrategy ->
                 sessionAuthenticationStrategy.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

@@ -3,6 +3,8 @@ package com.javafest.aifarming.model;
 import jakarta.persistence.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import static jakarta.persistence.GenerationType.SEQUENCE;
@@ -55,7 +57,6 @@ public class UserInfo {
     )
     private String role;
 
-
     @OneToOne(mappedBy = "userInfo", cascade = CascadeType.ALL, orphanRemoval = true)
     private SearchCount searchCount;
 
@@ -65,6 +66,13 @@ public class UserInfo {
             cascade = CascadeType.ALL
     )
     private List<UserReview> userReviews;
+
+    @OneToMany(
+            mappedBy = "userInfo",
+            orphanRemoval = true,
+            cascade = CascadeType.ALL
+    )
+    private List<PaymentInfo> paymentInfos;
 
     public UserInfo() {
     }
@@ -124,5 +132,44 @@ public class UserInfo {
         this.searchCount = searchCount;
     }
 
+    public boolean isSubscribed() {
+        if ("ROLE_SUPER_ADMIN".equals(role) || "ROLE_ADMIN".equals(role)) {
+            return true; // Admin roles are always subscribed
+        }
+
+        if (paymentInfos.isEmpty()) {
+            return false; // No payment information available
+        }
+
+        PaymentInfo lastPayment = paymentInfos.get(paymentInfos.size() - 1);
+        Date expiryDate = lastPayment.getExpiryDate();
+        Date currentDate = new Date();
+
+        return expiryDate != null && expiryDate.after(currentDate); //expiredDate is after currentDate
+    }
+
+    public String getExpiryDate() {
+        if (paymentInfos != null && !paymentInfos.isEmpty()) {
+            PaymentInfo lastPayment = paymentInfos.get(paymentInfos.size() - 1);
+            Date expiryDate = lastPayment.getExpiryDate();
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // Define your desired date format
+            String formattedExpiryDate = dateFormat.format(expiryDate);
+
+            return formattedExpiryDate;
+        } else {
+            return "No payment information available.";
+        }
+    }
+
+    public String getPaymentDate() {
+        if (paymentInfos != null && !paymentInfos.isEmpty()) {
+            PaymentInfo lastPayment = paymentInfos.get(paymentInfos.size() - 1);
+            String paymentDate = lastPayment.getTranDate();
+            return paymentDate;
+        } else {
+            return "No payment information available.";
+        }
+    }
 
 }

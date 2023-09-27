@@ -21,6 +21,10 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+// ________________hemel___________________//
+import org.springframework.beans.factory.annotation.Value;
+
+//_________________hemel___________________//
 
 @RestController
 @RequestMapping("/api")
@@ -30,6 +34,12 @@ public class ForwardController {
     private DiseaseRepository diseaseRepository;
     private SearchCountRepository searchCountRepository;
     private UserInfoRepository userInfoRepository;
+
+    // ________________hemel___________________//
+    @Value("${AI_SERVICE_URL:http://localhost:8080}")
+    private String predictionURL;
+
+    //_________________hemel___________________//
 
     @Autowired
     public ForwardController(RestTemplate restTemplate, ObjectMapper objectMapper, DiseaseRepository diseaseRepository, SearchCountRepository searchCountRepository, UserInfoRepository userInfoRepository) {
@@ -65,35 +75,38 @@ public class ForwardController {
             response.put("message", "Please login first.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
-        // Retrieve the SearchCount entity for the logged-in user
-        SearchCount searchCount = searchCountRepository.findByUserInfo(userInfo);
 
-        // Check if SearchCount entity exists for the user, if not create it
-        Date currentDate = new Date();
-        if (searchCount == null) {
-            searchCount = new SearchCount(userInfo, 0);
-            searchCount.setLastResetDate(currentDate);
-            searchCountRepository.save(searchCount);
-        } else {
-            if (is30DaysAgo(searchCount.getLastResetDate(), currentDate)) {
-                searchCount.setCount(0);
+        if (!userInfo.isSubscribed()) {
+            // Retrieve the SearchCount entity for the logged-in user
+            SearchCount searchCount = searchCountRepository.findByUserInfo(userInfo);
+
+            // Check if SearchCount entity exists for the user, if not create it
+            Date currentDate = new Date();
+            if (searchCount == null) {
+                searchCount = new SearchCount(userInfo, 0);
                 searchCount.setLastResetDate(currentDate);
                 searchCountRepository.save(searchCount);
+            } else {
+                if (is30DaysAgo(searchCount.getLastResetDate(), currentDate)) {
+                    searchCount.setCount(0);
+                    searchCount.setLastResetDate(currentDate);
+                    searchCountRepository.save(searchCount);
+                }
             }
-        }
 
-        // Check if the user has exceeded the maximum allowed request count
-        int requestCount = searchCount.getCount();
-        if (requestCount >= maxRequestCountPerMonth) {
-            // If the user has exceeded the request limit, return an error response
-            Map<String, Object> response = new LinkedHashMap<>();
-            response.put("message", "You have exceeded your search limit. Please try again later.");
-            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(response);
-        }
+            // Check if the user has exceeded the maximum allowed request count
+            int requestCount = searchCount.getCount();
+            if (requestCount >= maxRequestCountPerMonth) {
+                // If the user has exceeded the request limit, return an error response
+                Map<String, Object> response = new LinkedHashMap<>();
+                response.put("message", "You have exceeded your search limit. Please try again later.");
+                return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(response);
+            }
 
-        // Increment the user's request count for today
-        searchCount.setCount(requestCount + 1);
-        searchCountRepository.save(searchCount);
+            // Increment the user's request count for today
+            searchCount.setCount(requestCount + 1);
+            searchCountRepository.save(searchCount);
+        }
 
 
         // Step 1: Prepare the request body as form-data
@@ -109,8 +122,11 @@ public class ForwardController {
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
         // Step 4: Define the URL of the other server (localhost:8000/predict)
-        String predictionURL = "http://localhost:8000/predict";
-
+        // String predictionURL = "http://localhost:8000/predict";
+        // System.out.println("1111111111111111111111111111111111 "+predictionURL);
+        // System.out.println("1111111111111111111111111111111111 "+predictionURL);
+        // System.out.println("1111111111111111111111111111111111 "+predictionURL);
+        // System.out.println("1111111111111111111111111111111111 "+predictionURL);
         // Step 5: Make the POST request to the other server
         ResponseEntity<String> response = restTemplate.exchange(
                 predictionURL,
@@ -123,8 +139,8 @@ public class ForwardController {
         String predictionClass = jsonNode.get("class").asText();
 
         // Step 7: Print the response
-        System.out.println("???????????????????????" + text);
-        System.out.println("???????????????????????" + predictionClass);
+        // System.out.println("???????????????????????" + text);
+        // System.out.println("???????????????????????" + predictionClass);
         Map<String, Object> returnResponse = new LinkedHashMap<>();
         returnResponse.put("crop",  text);
         returnResponse.put("disease", predictionClass);

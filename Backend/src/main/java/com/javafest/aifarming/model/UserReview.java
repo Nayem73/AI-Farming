@@ -2,6 +2,8 @@ package com.javafest.aifarming.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 @Entity(name = "UserReview")
@@ -33,6 +35,9 @@ public class UserReview {
     @Column(name = "img")
     private String img;
 
+    @Column(name = "review_date_time") // Add the new dateTime field
+    private LocalDateTime localDateTime;
+
     @ManyToOne
     @JoinColumn(
             name = "user_review_id",
@@ -47,10 +52,11 @@ public class UserReview {
     public UserReview() {
     }
 
-    public UserReview(String description, String img, UserInfo userInfo) {
+    public UserReview(String description, String img, UserInfo userInfo, LocalDateTime localDateTime) {
         this.description = description;
         this.img = img;
         this.userInfo = userInfo;
+        this.localDateTime = localDateTime;
     }
 
     public Long getId() {
@@ -75,6 +81,14 @@ public class UserReview {
 
     public void setImg(String img) {
         this.img = img;
+    }
+
+    public LocalDateTime getLocalDateTime() {
+        return localDateTime;
+    }
+
+    public void setLocalDateTime(LocalDateTime localDateTime) {
+        this.localDateTime = localDateTime;
     }
 
     public UserInfo getUserInfo() {

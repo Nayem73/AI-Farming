@@ -14,6 +14,8 @@ services:
       SPRING_JPA_SHOW-SQL: "true"
       SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQL8Dialect
       SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: "true"
+      PAYMENT_SERVICE_URL: http://localhost:8080
+      AI_SERVICE_URL: http://localhost:8000/predict
     depends_on:
       - mysql-container      # This ensures that the Spring Boot app starts after the MySQL container
     volumes:

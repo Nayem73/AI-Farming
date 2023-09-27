@@ -1,11 +1,11 @@
 package com.javafest.aifarming.controller;
 
-import com.javafest.aifarming.model.Disease;
 import com.javafest.aifarming.model.SearchCount;
 import com.javafest.aifarming.model.UserInfo;
 import com.javafest.aifarming.repository.SearchCountRepository;
 import com.javafest.aifarming.repository.UserInfoRepository;
 import com.javafest.aifarming.service.JwtService;
+import com.javafest.aifarming.service.SubscriptionAmountService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,37 +28,55 @@ import java.util.*;
 @RequestMapping("/api")
 public class UserInfoController {
     private final UserInfoRepository userInfoRepository;
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
-    private AuthenticationManager authenticationManager;
-    private ForwardController forwardController;
-    private SearchCountRepository searchCountRepository;
+    private final AuthenticationManager authenticationManager;
+    private final ForwardController forwardController;
+    private final SearchCountRepository searchCountRepository;
+    private final SubscriptionAmountService subscriptionAmountService;
 
     @Autowired
-    public UserInfoController(UserInfoRepository userInfoRepository, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager, ForwardController forwardController, SearchCountRepository searchCountRepository) {
+    public UserInfoController(
+            UserInfoRepository userInfoRepository,
+            PasswordEncoder passwordEncoder,
+            JwtService jwtService,
+            AuthenticationManager authenticationManager,
+            ForwardController forwardController,
+            SearchCountRepository searchCountRepository,
+            SubscriptionAmountService subscriptionAmountService) {
         this.userInfoRepository = userInfoRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
         this.forwardController = forwardController;
         this.searchCountRepository = searchCountRepository;
+        this.subscriptionAmountService = subscriptionAmountService;
     }
 
     @PostMapping("/signup/")
-    public ResponseEntity<String> addNewUser(
+    public ResponseEntity<?> addNewUser(
             @RequestParam("userName") String userName,
             @RequestParam("email") String email,
             @RequestParam("password") String password) {
+
+        Map<String, Object> response = new LinkedHashMap<>();
+        if (userName.length() > 10) {
+            response.put("message", "userName is too large!");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(response);
+        }
 
         Optional<UserInfo> existingUser = userInfoRepository.findByUserName(userName);
         Optional<UserInfo> existingUserByEmail = userInfoRepository.findByEmail(email);
 
         if (existingUser.isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Error: User already exists!");
+            response.put("message", "User already exists with the same userName or email");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(response);
         } else if (existingUserByEmail.isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Error: User with this email already exists");
+            response.put("message", "User already exists with the same userName or email");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(response);
         } else {
             // Encode the password and save the new user
             String encodedPassword = passwordEncoder.encode(password);
@@ -126,7 +144,8 @@ public class UserInfoController {
         } catch (AuthenticationException e) {
             // Create the response map
             Map<String, Object> response = new LinkedHashMap<>();
-            response.put("message", "Authentication failed: " + e.getMessage());
+//            response.put("message", "Authentication failed: " + e.getMessage());
+            response.put("message", "Invalid username or password");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(response);
         }
@@ -142,6 +161,53 @@ public class UserInfoController {
         }
         return "Logout failed";
     }
+
+    @PatchMapping("/changepassword/")
+    public ResponseEntity<?> resetPassword(
+            @RequestParam("currentPassword") String currentPassword,
+            @RequestParam("newPassword") String newPassword,
+            @RequestParam("confirmPassword") String confirmPassword,
+            Authentication authentication) {
+
+        Map<String, Object> response = new LinkedHashMap<>();
+        // Check if the user is authenticated (logged in)
+        if (authentication == null) {
+            response.put("message", "Please login first.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+        // Retrieve the email of the logged-in user from the Authentication object
+        String userName = authentication.getName();
+        // Retrieve the UserInfo entity for the logged-in user
+        UserInfo currentUser = userInfoRepository.getByUserName(userName);
+        // Check if UserInfo entity exists for the user
+        if (currentUser == null) {
+            response.put("message", "Please login first.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+
+        // Verify the current password
+        if (!passwordEncoder.matches(currentPassword, currentUser.getPassword())) {
+            response.put("message", "Current password is incorrect");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(response);
+        }
+
+        // Check if new password and confirm password match
+        if (!newPassword.equals(confirmPassword)) {
+            response.put("message", "New password and confirm password do not match");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(response);
+        }
+
+        // Encode the new password and save it
+        String encodedNewPassword = passwordEncoder.encode(newPassword);
+        currentUser.setPassword(encodedNewPassword);
+        userInfoRepository.save(currentUser);
+
+        response.put("message", "Password reset successful");
+        return ResponseEntity.ok(response);
+    }
+
 
 
     @GetMapping("/profile/")
@@ -172,8 +238,41 @@ public class UserInfoController {
         response.put("id", userInfo.getId());
         response.put("userName", userInfo.getUserName());
         response.put("email", userInfo.getEmail());
-        response.put("searchLeft", forwardController.maxRequestCountPerMonth - searchCount);
+        if (userInfo.isSubscribed()) {
+            response.put("searchLeft", "Unlimited");
+        } else {
+            response.put("searchLeft", forwardController.maxRequestCountPerMonth - searchCount);
+        }
 
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/issubscribed/")
+    public ResponseEntity<?> getSubscriptionStatus(Authentication authentication) {
+        // Check if the user is authenticated (logged in)
+        if (authentication == null) {
+            Map<String, Object> response = new LinkedHashMap<>();
+            response.put("message", "Please login first.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+        // Retrieve the email of the logged-in user from the Authentication object
+        String userName = authentication.getName();
+        // Retrieve the UserInfo entity for the logged-in user
+        UserInfo userInfo = userInfoRepository.getByUserName(userName);
+        // Check if UserInfo entity exists for the user
+        if (userInfo == null) {
+            Map<String, Object> response = new LinkedHashMap<>();
+            response.put("message", "Please login first.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put("is_subscribed", userInfo.isSubscribed());
+        if (userInfo.isSubscribed()) {
+            response.put("subscriptionDate", userInfo.getPaymentDate());
+            response.put("expiryDate", userInfo.getExpiryDate());
+        } else {
+            response.put("amount", subscriptionAmountService.getSubscriptionAmount());
+        }
         return ResponseEntity.ok(response);
     }
 
@@ -192,6 +291,9 @@ public class UserInfoController {
             userResponse.put("id", user.getId());
             userResponse.put("userName", user.getUserName());
             userResponse.put("email", user.getEmail());
+            if ("ROLE_SUPER_ADMIN".equals(user.getRole()) || "ROLE_ADMIN".equals(user.getRole())) {
+                userResponse.put("isSubscribed", true);
+            }
             userResponse.put("isSuperAdmin", "ROLE_SUPER_ADMIN".equals(user.getRole()));
             if ("ROLE_SUPER_ADMIN".equals(user.getRole())) {
                 userResponse.put("isAdmin", true);
@@ -228,6 +330,7 @@ public class UserInfoController {
 
         if (isAdmin) {
             userInfo.setRole("ROLE_ADMIN");
+//            userInfo.setSubscribed(true);
             userInfoRepository.save(userInfo); // Save the changes
             response.put("Success", "User " + userInfo.getUserName() + " is now Admin");
             return ResponseEntity.ok(response);
