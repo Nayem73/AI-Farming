@@ -40,6 +40,10 @@ const PictureAdmin = ({disease_id}) => {
         if(successUpdate){
             setEdit_picture_bool(false)
         }
+        if(successCreate){
+            // img_upload
+            document.getElementById('img_upload').reset();
+        }
     }, [dispatch, successDelete, successCreate, successUpdate])
 
     // console.log(pictures)
@@ -195,7 +199,7 @@ const PictureAdmin = ({disease_id}) => {
                     <h2 className="px-8 font-bold text-xl title-font">Upload Images</h2>
                 </div>
 
-                <form className='py-4 px-2' onSubmit={uploadPictureHandler}>
+                <form  id='img_upload' className='py-4 px-2' onSubmit={uploadPictureHandler}>
                     <div className="form-control w-full">
                         <input
                             type="file"
