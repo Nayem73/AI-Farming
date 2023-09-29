@@ -33,44 +33,23 @@ spec:
               value:  http://fastapi-app-service.ai-farming:8000/predict
               
             # ________________________hemel________________________#
-            # - name: SPRING_DATASOURCE_DRIVER_CLASS_NAME
-            #   value: com.mysql.cj.jdbc.Driver
-            # - name: SPRING_DATASOURCE_URL
-            #   value: jdbc:mysql://mysql-service.ai-farming:3306/world
-            # - name: SPRING_DATASOURCE_USERNAME
-            #   value: nayemapp
-            # - name: SPRING_DATASOURCE_PASSWORD
-            #   value: root
-            # - name: SPRING_JPA_HIBERNATE_DDL-AUTO
-            #   value: update
-            # - name: SPRING_JPA_SHOW-SQL
-            #   value: "true"
-            # - name: SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT
-            #   value: org.hibernate.dialect.MySQL8Dialect
-            # - name: SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL
-            #   value: "true"
-            - name: CLOUD_NAME
-              value: "dxjdhsiyu"
-            - name: CLOUD_API_KEY
-              value: "316498961683183"
-            - name: CLOUD_API_SECRET
-              value: WSY9mDMtycQAh5_YlQaK9dZ4B4M 
             - name: SPRING_DATASOURCE_DRIVER_CLASS_NAME
               value: com.mysql.cj.jdbc.Driver
             - name: SPRING_DATASOURCE_URL
-              value: jdbc:mysql://ai-farming-mysql.mysql.database.azure.com:3306/aifarming?useSSL=true&requireSSL=false
-            - name : SPRING_DATASOURCE_USERNAME
-              value: hemel
+              value: jdbc:mysql://mysql-service.ai-farming:3306/world
+            - name: SPRING_DATASOURCE_USERNAME
+              value: nayemapp
             - name: SPRING_DATASOURCE_PASSWORD
-              value: sqlakashpass1234@
+              value: root
             - name: SPRING_JPA_HIBERNATE_DDL-AUTO
               value: update
             - name: SPRING_JPA_SHOW-SQL
               value: "true"
             - name: SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT
               value: org.hibernate.dialect.MySQL8Dialect
-            - name : SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL
-              value : "true"
+            - name: SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL
+              value: "true"
+            
 
 ---
 apiVersion: v1
