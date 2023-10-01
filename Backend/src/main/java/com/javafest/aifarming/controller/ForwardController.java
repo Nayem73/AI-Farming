@@ -114,20 +114,13 @@ public class ForwardController {
         body.add("crop", text);
         body.add("file", image.getResource());
 
-        // Step 2: Prepare headers for the request
+        // Step 2: Prepare headers to specify HTTP headers for the request
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
         // Step 3: Prepare the request entity with body and headers
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
-        // Step 4: Define the URL of the other server (localhost:8000/predict)
-        // String predictionURL = "http://localhost:8000/predict";
-        // System.out.println("1111111111111111111111111111111111 "+predictionURL);
-        // System.out.println("1111111111111111111111111111111111 "+predictionURL);
-        // System.out.println("1111111111111111111111111111111111 "+predictionURL);
-        // System.out.println("1111111111111111111111111111111111 "+predictionURL);
-        // Step 5: Make the POST request to the other server
         ResponseEntity<String> response = restTemplate.exchange(
                 predictionURL,
                 HttpMethod.POST,
@@ -139,8 +132,6 @@ public class ForwardController {
         String predictionClass = jsonNode.get("class").asText();
 
         // Step 7: Print the response
-        // System.out.println("???????????????????????" + text);
-        // System.out.println("???????????????????????" + predictionClass);
         Map<String, Object> returnResponse = new LinkedHashMap<>();
         returnResponse.put("crop",  text);
         returnResponse.put("disease", predictionClass);
