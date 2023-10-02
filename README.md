@@ -21,7 +21,7 @@ Visit our website [AI-Farming](https://aifarming.tech/)
 
 ### Live Demonstration
 `
-Live demonstration of using a mobile phone to capture images and upload them to the AI-Farming website for disease detection.
+Live demonstration of using a mobile phone to capture images and upload them to the AI-Farming website for plant disease detection.
 `
 <div align="center">
   <img src="https://i.ibb.co/ZSCHLD7/MVI-7903-MOV-20231002-074842-480.jpg" alt="Step 1: Capture Image" width="33%" style="margin: 0 10px;">
