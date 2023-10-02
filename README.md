@@ -102,3 +102,7 @@ Live demonstration of using a mobile phone to capture images and upload them to 
 Feel free to explore our GitHub repositories for more details on each AI model and their implementations.
 
 Thank you for your interest in AI-Farming! We are dedicated to using cutting edge technologies like AI to improve agricultural practices and crop health.
+
+## Reference
+
+* ***`Hemel Sharker Akash`***, Md Abdur Rahim, Abu Saleh Musa Miah, Yuichi Okuyama, Yoichi Tomioka and Jungpil Shin, “Generalized Technique for Potato Leaves Disease Classification using Convolutional Neural Network,” in 8th International Conference on ICT for Sustainable Development, August 3rd -4th, 2023, Goa, India. [Accepted]
