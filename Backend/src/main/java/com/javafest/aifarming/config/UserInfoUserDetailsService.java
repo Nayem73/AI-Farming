@@ -24,5 +24,4 @@ public class UserInfoUserDetailsService implements UserDetailsService {
                 .orElseThrow(()->new UsernameNotFoundException("User not found"+username));
     }
 
-
 }
