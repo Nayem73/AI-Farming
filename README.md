@@ -77,7 +77,7 @@ Live demonstration of using a mobile phone to capture images and upload them to 
 ### Potato Disease Prediction Model
 
 - GitHub Repository: [Potato-Leaf-Disease-Dataset](https://github.com/HSAkash/Potato-Leaf-Disease-Dataset)
-- Accuracy: 99.67% (Test Data) and 98% (Validation Data)
+- Accuracy: 99.98% (Test Data) and 99.92% (Validation Data)
 
 ### Guava Disease Prediction Model
 
