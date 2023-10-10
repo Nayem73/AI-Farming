@@ -1,6 +1,0 @@
-tflite-runtime
-fastapi
-uvicorn
-Pillow
-python-multipart
-
