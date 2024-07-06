@@ -25,7 +25,7 @@ https://github.com/Nayem73/AI-Farming/assets/111779609/ffb79120-d610-4351-a824-2
 
 | Click on AI-Camera | Capture affected leaf photo | Upload | Result |
 | -------- | -------- | -------- | -------- |
-| ![](https://i.ibb.co/9WRpjBP/01-mp4-20231002-071838-067.jpg) | ![](https://i.ibb.co/zrMQfVD/01-mp4-20231002-072023-157.jpg) | ![](https://i.ibb.co/MRK3WnV/again.jpg) | ![](https://i.ibb.co/BTtSHkC/01-mp4-20231002-074304-904.jpg) |
+| ![](https://i.ibb.co/9WRpjBP/01-mp4-20231002-071838-067.jpg) | ![](https://i.ibb.co/zrMQfVD/01-mp4-20231002-072023-157.jpg) | ![](https://i.ibb.co/MRK3WnV/again.jpg) | ![](https://i.ibb.co/QHGRkGM/01-mp4-20231002-074304-904.jpg) |
 
 ### Live Demonstration
 `
@@ -34,11 +34,11 @@ Live demonstration of using a mobile phone to capture images and upload them to 
 <div align="center">
   <img src="https://i.ibb.co/ZSCHLD7/MVI-7903-MOV-20231002-074842-480.jpg" alt="Step 1: Capture Image" width="33%" style="margin: 0 10px;">
   <img src="https://i.ibb.co/nkLhNZm/MVI-7906-MOV-20231002-075335-419.jpg" alt="Step 2: Upload Image" width="33%" style="margin: 0 10px;">
-  <img src="https://i.ibb.co/km7dvYB/MVI-7906-MOV-20231002-075413-742.jpg" alt="Step 3: Get Results" width="33%" style="margin: 0 10px;">
+  <img src="https://i.ibb.co/sHY1Ws7/68747470733a2f2f692e6962622e636f2f6b6d37647659422f4d56492d373930362d4d4f562d32303233313030322d303735.jpg" alt="Step 3: Get Results" width="33%" style="margin: 0 10px;">
 </div>
 
 ### Medications
-<img src="https://i.ibb.co/tcKHbcK/medication.png" alt="Step 1: Capture Image" width="50%" style="margin: 0 10px;">
+<img src="https://i.ibb.co/wJzxWtX/68747470733a2f2f692e6962622e636f2f74634b4862634b2f6d656469636174696f6e2e706e67.png" alt="Step 1: Capture Image" width="50%" style="margin: 0 10px;">
 
 
 ## AI Models
